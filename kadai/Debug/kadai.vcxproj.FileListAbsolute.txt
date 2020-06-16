@@ -1,0 +1,2 @@
+C:\Users\yamasiroyuta\source\repos\kadai\Debug\kadai.exe
+C:\Users\yamasiroyuta\source\repos\kadai\Debug\kadai.pdb
