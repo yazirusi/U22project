@@ -9,17 +9,28 @@ int g_KeyFlg;  //入力キー情報
 int	g_OldKey;  // 前回の入力キー
 int	g_NowKey;	// 今回の入力キー
 
-int p_x, p_y;  //プレイヤーの座標
-int px,py;	//プレイヤー描画の座標
+int p_x, p_y,sp_y;  //プレイヤーの座標
+int px,py, spy;	//プレイヤー描画の座標
 //int l_x, l_y; //押されている間の処理
 
-//int jlong = 1;    //押した長さでジャンプ力を変える
-//int jlength = 1;    //一回SHIFTを離してから入力を受け付ける
-//int jflag = 1;
-//int hozonY = py;    //ジャンプした瞬間の座標
-//int jy = py;        //ジャンプした瞬間の座標
-//int py = py - 8.8;     //ジャンプの加速度
+//ジャンプ変数
+int jlong;    //押した長さでジャンプ力を変える
+int jlength;    //一回SHIFTを離してから入力を受け付ける
+int jflag;	//ジャンプフラグ
+int hozonY;    //ジャンプした瞬間の座標
+int jy;        //ジャンプした瞬間の座標
+int tempY;
 
+//notes関数の変数
+int nx[10]; //ノーツの座標
+int nf[10];//ノーツごとのフラグ
+int bcnt;	//ブレンドのカウント
+int hf = 0;	//パーフェクト判定
+
+//notesjudge関数の変数
+int P[4]; //Pefect判定（イラスト）
+int G[2]; //Great判定
+int dc;	//表示する時間のカウント
 
 int	g_GameState = 1;		// ゲームステータス
 
@@ -61,6 +72,11 @@ void PlayerMove(void);          //プレイヤー移動
 void DrawMap(void);      //マップ描画
 void mapcopy(void);				//各ステージの初期値を保存する
 void PlayerJamp(void);			//プレイヤーのジャンプ
+
+void notes(void);
+void notesjudge(void);
+
+int LoadImages();			//画像読み込み
 /***********************************************
  * プログラムの開始
  ***********************************************/
@@ -68,11 +84,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
 	SetMainWindowText("マップ");
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
-	SetGraphMode(1280, 850, 32);
+	//SetGraphMode(1280, 850, 32);
+	SetGraphMode(1280, 850,32,600);
 
 	if (DxLib_Init() == -1) return -1;	// DXライブラリの初期化処理
 
 	SetDrawScreen(DX_SCREEN_BACK);	// 描画先画面を裏にする
+
+	if (LoadImages() == -1)return -1;	//画像読み込み関数を呼び出し
+
 	// ゲームループ
 	while (ProcessMessage() == 0 && g_GameState != 99) {
 
@@ -113,6 +133,9 @@ void GameInit(void)
 		px = 40;
 		py = 680;
 	}
+	for (int i = 0; i < 10; i++) {
+		nx[i] = 200;
+	}
 	g_GameState = 2;	// ゲームメイン処理へ
 	mapcopy();
 }
@@ -123,6 +146,10 @@ void GameMain(void)
 {
 	PlayerMove();
 	DrawMap();
+	notesjudge();
+	notes();
+	DrawFormatString(50, 100, 0xffffff, "%d", p_y);
+	//DrawFormatString(100, 100, 0xffffff, "%d", nx[9]);//最初だけずらす、後ループ
 	//SetFontSize(30);
 	//DrawFormatString(590, 20, 0xffffff, "%d", Time);
 	//DrawBox(39 * p_x, 39 * p_y, 39 * p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
@@ -133,12 +160,12 @@ void GameMain(void)
 void DrawMap(void) {
 
 	for (int y = 0; y < HEIGHT; y++) {   //
-		for (int x = 0 ; x < WIDTH; x++) {
-			if (g_StageData[0][y][x + mx] == 0 || g_StageData[0][y][x + mx] == 2) {
-				DrawBox(40 * x - (px-40), 40 * y, 40 * x + 40 - (px-40), 40 * y + 40, 0x22aa33, TRUE);
+		for (int x = 0; x < WIDTH; x++) {
+			if (g_StageData[0][y][x + mx - 1] == 0 || g_StageData[0][y][x + mx - 1] == 2) {
+				DrawBox(40 * (x - 1) - (px - 40), 40 * y, 40 * (x - 1) + 40 - (px - 40), 40 * y + 40, 0x22aa33, TRUE);
 			}
-			if (g_StageData[0][y][x + mx] == 1) {
-				DrawBox(40 * x - (px-40), 40 * y, 40 * x + 40 - (px-40), 40 * y + 40, 0x2222ff, TRUE);
+			if (g_StageData[0][y][x + mx - 1] == 1) {
+				DrawBox(40 * (x - 1) - (px - 40), 40 * y, 40 * (x - 1) + 40 - (px - 40), 40 * y + 40, 0x2222ff, TRUE);
 			}
 		}
 	}
@@ -148,7 +175,7 @@ void DrawMap(void) {
 		}
 	}
 
-	DrawBox(40 * 1, 40 * 17, 40 * 1 + 40, 40 * 17 + 40, 0xffffff, TRUE);
+	DrawBox(40 * 1, py, 40 * 1 + 40, py + 40, 0xffffff, TRUE);
 }
 /*******************************
 *プレイヤーの移動処理
@@ -158,7 +185,7 @@ void PlayerMove(void) {
 	if (CheckHitKey(KEY_INPUT_LEFT) == 1) {
 		if (g_StageData[0][p_y][p_x - 1] == 0 || g_StageData[0][p_y][p_x - 1] == 2) {
 			if (px >= 0) {
-				px--;
+				px -= 2;
 			}
 			else {
 				px = 40;
@@ -172,7 +199,7 @@ void PlayerMove(void) {
 	if (CheckHitKey(KEY_INPUT_RIGHT) == 1) {
 		if (g_StageData[0][p_y][p_x + 1] == 0 || g_StageData[0][p_y][p_x + 1] == 2) {
 			if (px <= 80) {
-				px++;
+				px += 2;
 			}
 			else {
 				px = 40;
@@ -180,6 +207,41 @@ void PlayerMove(void) {
 				g_StageData[0][p_y][p_x + 1] = 2;
 				p_x += 1;
 				mx++;
+			}
+		}
+	}
+
+	//ジャンプフラグ（スペースキー）
+	if (g_NowKey & PAD_INPUT_10 && jflag == 0) {
+		jflag = 1;	//ジャンプフラグ
+		hozonY = py;	//ジャンプした瞬間の座標
+		spy = py;
+		sp_y = p_y;
+		py = py - 20;	//ジャンプの加速度
+	}
+	//ジャンプ処理（放物線）
+	if (jflag == 1) {
+		//ジャンプの座標の動き
+		tempY = py;
+		py += (py - hozonY) + 1;
+		hozonY = tempY;
+
+		//ジャンプした時のマップ配列の動き
+		p_y = (py + (sp_y * 40) -spy) / 40;
+
+		if (py - hozonY < 0 && p_y != sp_y) {	//上昇してるとき
+			g_StageData[0][p_y + 1][p_x] = 0;
+			g_StageData[0][p_y][p_x] = 2;
+		}
+		if (py - hozonY > 0 && p_y != sp_y - 6) {	//下降してるとき
+			g_StageData[0][p_y - 1][p_x] = 0;
+			g_StageData[0][p_y][p_x] = 2;
+		}
+		
+		if (g_StageData[0][p_y + 1][p_x] == 1) {
+			if (py + 40  >= (p_y + 1) * 40) {
+				py = -40 + (p_y + 1) * 40;
+				jflag = 0;
 			}
 		}
 	}
@@ -201,4 +263,93 @@ void mapcopy(void) {
 			map[i][j] = g_StageData[g_stage][i][j];
 		}
 	}*/
+}
+/********************
+*ノーツ
+********************/
+void notes(void) {
+	//下の枠
+	DrawLine(0, 800, 200, 800, 0xFFFFFF, 4);
+	DrawLine(200, 798, 200, 850, 0xFFFFFF, 4);
+	DrawLine(1080, 800, 1280, 800, 0xFFFFFF, 4);
+	DrawLine(1080, 798, 1080, 850, 0xFFFFFF, 4);
+	//DrawBox(0, 800, 200, 850, 0xFFFFFF, FALSE);	//下の枠
+	//DrawBox(1080, 800, 1280, 850, 0xFFFFFF, FALSE);
+
+	int maxn = 8;	//表示するノーツ数の数
+	int widthn = 55; //ノーツとノーツの間隔(WIDTH/maxn)
+
+	for (int i = 0; i < maxn; i++) {
+		if (nf[maxn + 1] == 1 || (nx[0] - 200) >= i * widthn)	//最初だけずらす、後ループ
+			nx[i]++;
+
+		if (nx[i] != 640) {	//真ん中に来たら
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, nx[i] - 200);	//透明度
+			if (nf[i] == 0 && nx[i] != 200) {
+				DrawLine(nx[i], 800, nx[i], 850, 0x99FFFF, 8);
+				DrawLine(1280 - nx[i], 800, 1280 - nx[i], 850, 0x99FFFF, 8);
+			}
+			if (g_NowKey & PAD_INPUT_1 && nx[i] >= 610 && nf[maxn] == 0) {	//Zキーを押したら
+				if (nx[i] >= 635)
+					hf = 1; //パーフェクト判定
+				if (nx[i] >= 615 && nx[i] < 635)
+					hf = 2;
+				nf[i] = 1;	//フラグ
+				nf[maxn] = 1;	//判定用のフラグ
+				nx[maxn] = nx[i];	//判定用の変数
+			}
+		}
+		else {
+			nf[maxn + 1] = 1;	//ループフラグ
+			nx[i] = 200;	//初期位置に戻す
+			nf[i] = 0;
+		}
+		if (nf[i] == 1 || nf[maxn] == 1 && bcnt != 255) {
+			bcnt++;	//透明度用カウント
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - (bcnt));
+			DrawLine(nx[maxn], 800, nx[maxn], 850, 0x00FF00, 8);
+			DrawLine(1280 - nx[maxn], 800, 1280 - nx[maxn], 850, 0x00FF00, 8);
+		}
+		else {
+			bcnt = 0;
+			nf[maxn] = 0;
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);	//透明度の初期化
+	//DrawFormatString(100, 100, 0xffffff, "%d", nx[0]);//最初だけずらす、後ループ
+}
+/********************
+*ノーツの判定表示
+********************/
+void notesjudge(void) {
+
+	if (hf == 1 && (dc++) < 40) {
+		DrawGraph(540, 730, P[(dc) / 4 % 4], TRUE);
+	}
+	if (hf == 2 && hf != 0 && (dc++) < 40) {
+		DrawGraph(540, 730, G[(dc) / 4 % 2], TRUE);
+	}
+	if (dc >= 40) {
+		dc = 0;
+		hf = 0;
+	}
+}
+/**********************************************
+*  画像読み込み
+***********************************************/
+int LoadImages()
+{
+	if ((P[0] = LoadGraph("images/Perfect(白色).png")) == -1) return -1;
+
+	if ((P[1] = LoadGraph("images/Perfect(水色).png")) == -1) return -1;
+
+	if ((P[2] = LoadGraph("images/Perfect(赤色).png")) == -1) return -1;
+
+	if ((P[3] = LoadGraph("images/Perfect(黄色).png")) == -1) return -1;
+
+	if ((G[0] = LoadGraph("images/great(白色).png")) == -1) return -1;
+
+	if ((G[1] = LoadGraph("images/great(水色).png")) == -1) return -1;
+
+	return 0;
 }
