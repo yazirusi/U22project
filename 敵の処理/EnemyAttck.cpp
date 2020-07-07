@@ -7,15 +7,16 @@
 *ƒGƒlƒ~[‚ÌUŒ‚
 ***************************************/
 void EnemyAttck(void) {
-	
+
 	//ƒvƒŒƒCƒ„[‚ªˆê’è”ÍˆÍ‚É“ü‚Á‚Ä‚«‚½‚ç“®‚«‚ğ~‚ß‚é
-	if (Enemy.x - Enemy.Move - Enemy.MoveD - Enemy.Perception < px + 40/*&&Enemy.x + Enemy.Perception > px*/
+	if (Enemy.x - Enemy.Move - Enemy.Perception < px + 40
 		&& Enemy.Attck == false) {
-		Enemy.ax = Enemy.x - Enemy.Move /*- Enemy.MoveD*/ - 40;//UŒ‚‚ÌÀ•W
+		Enemy.ax = Enemy.x - Enemy.Move - 40;//UŒ‚‚ÌÀ•W
 		Enemy.Attck = true;//UŒ‚‚ğ•`‰æ‚·‚é‚½‚ß‚Ìƒtƒ‰ƒO
 	}
+	//ƒvƒŒƒCƒ„[‚ª“G‚ÌUŒ‚”ÍˆÍ“à‚É“ü‚Á‚½‚çUŒ‚
 	if (Enemy.Attck == true) {
-		DrawBox(Enemy.ax, Enemy.y, Enemy.ax + 40, Enemy.y + 40, 0xffffff, TRUE);//UŒ‚‚ğ•`‰æ‚·‚é
-		Enemy.ax -= (1+Enemy.MoveD);//UŒ‚‚ğˆÚ“®‚·‚é
+		DrawGraph(Enemy.ax - Enemy.MoveD, Enemy.y, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
+		Enemy.ax -= (2);//UŒ‚‚ğˆÚ“®‚·‚é
 	}
 }
