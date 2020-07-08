@@ -35,7 +35,7 @@ void PlayerAttack() {
 			player.ay[i] = 0;
 		}
 		//“G‚É“–‚½‚Á‚½ê‡
-		if ((player.pa[i] + 120) > (Enemy.x - Enemy.Move) && (Enemy.x - Enemy.Move + Enemy.size) > (player.pa[i] + 80)) {
+		if ((player.pa[i] + 120  ) > (Enemy.x - Enemy.Move + msx) && (Enemy.x - Enemy.Move + Enemy.size + msx) > (player.pa[i] + 80)) {
 			player.pa[i] = 0;
 			player.af[i] = 0;
 			player.ay[i] = 0;
@@ -53,4 +53,6 @@ void PlayerAttack() {
 	//DrawFormatString(50, 190, 0xffffff, "%d", (player.pa[0] + 80));//“G‚Ì‚˜À•W
 	//DrawFormatString(50, 160, 0xffffff, "%d", Enemy.x - Enemy.Move);//“G‚Ì‚˜À•W
 	//DrawFormatString(50, 220, 0xffffff, "%d", player.apx[0]);//“G‚Ì‚˜À•W
+
+	DrawFormatString(50, 190, 0xffffff, "%d", player.px);//“G‚Ì‚˜À•W
 }

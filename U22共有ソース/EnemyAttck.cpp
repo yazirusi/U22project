@@ -2,6 +2,7 @@
 #include"EnemyMove.h"
 #include"player.h"
 #include"EnemyAttck.h"
+#include"map.h"
 
 /***************************************
 *ƒGƒlƒ~[‚ÌUŒ‚
@@ -16,7 +17,7 @@ void EnemyAttck(void) {
 	}
 	//ƒvƒŒƒCƒ„[‚ª“G‚ÌUŒ‚”ÍˆÍ“à‚É“ü‚Á‚½‚çUŒ‚
 	if (Enemy.Attck == true) {
-		DrawGraph(Enemy.ax - Enemy.MoveD, Enemy.y, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
+		DrawGraph(Enemy.ax - Enemy.MoveD + msx, Enemy.y, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
 		Enemy.ax -= (2);//UŒ‚‚ğˆÚ“®‚·‚é
 	}
 }

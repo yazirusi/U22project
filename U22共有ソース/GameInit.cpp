@@ -21,6 +21,7 @@ void GameInit()
 		//プレイヤーの座標
 		player.px = 40;
 		player.py = 680;
+		//player.py = 640;
 	}
 
 	//ノーツ位置の初期化

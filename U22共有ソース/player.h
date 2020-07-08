@@ -25,4 +25,4 @@ struct PLAYER
 
 //関数の宣言
 void PlayerMove();	//プレイヤー移動
-int CheckHitBlock();	//ブロックとの当たり判定
+int CheckHitBlock(int j);	//ブロックとの当たり判定
