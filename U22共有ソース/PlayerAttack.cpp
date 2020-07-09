@@ -23,7 +23,7 @@ void PlayerAttack() {
 		//ブロックとの当たり判定
 		if (player.af[i] == 1 && CheckHitBlock(6,i) == 0) {
 			DrawBox(a_x[i], player.ay[i],a_x[i] + Xsize, player.ay[i] + Ysize, 0xCC33FF, TRUE);
-			player.pa[i] += 2;
+			player.pa[i] += 4;
 		}
 		//ブロックにぶつかった場合初期化
 		else {
@@ -32,12 +32,15 @@ void PlayerAttack() {
 			player.ay[i] = 0;
 		}
 		//敵に当たった場合
-		if (( a_x[i] + Xsize ) > (Enemy.x - Enemy.Move + msx) 
-		&&(Enemy.x - Enemy.Move + Enemy.size + msx) > a_x[i]) {
+		if (( a_x[i] + Xsize ) > (Enemy.x - Enemy.Move + msx) && (Enemy.x - Enemy.Move + Enemy.size + msx) > a_x[i]
+		&& player.ay[i] < Enemy.y + Enemy.size && player.ay[i] + Ysize > Enemy.y) {
 			player.pa[i] = 0;
 			player.af[i] = 0;
 			player.ay[i] = 0;
 			player.apx[i] = 0;
+			Enemy.x = 0;
+			Enemy.y = 0;//敵の座標の初期化
+			Enemy.drawf = 0;
 		}
 		//射程距離(マップチップ３個分)になったら初期化
 		if (player.pa[i] == 120) {

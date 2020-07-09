@@ -74,7 +74,6 @@ void PlayerMove() {
 		player.tempY = player.py;
 		player.py += (player.py - player.hozonY) + 1;
 		player.hozonY = player.tempY;
-
 		player.p_y = player.py / 40;
 
 		//ã¸‚µ‚Ä‚é‚Æ‚«

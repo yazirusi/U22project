@@ -14,7 +14,7 @@ void EnemyAttck(void) {
 	if (Enemy.x - Enemy.Move - Enemy.Perception < player.px + 40
 		&& Enemy.x - Enemy.Move + Enemy.Perception + Enemy.size>player.px
 		 ) {
-		if (Enemy.Attck == false&&Hitcheck(Enemy.x, Enemy.y, Enemy.direction) != 1) {
+		if (Enemy.Attck == false&&Hitcheck(Enemy.x, Enemy.y, Enemy.direction) != 1 && Enemy.drawf == 1) {
 			Enemy.ax = Enemy.x - Enemy.Move - 40;//攻撃の座標
 			Enemy.Attck = true;//攻撃を描画するためのフラグ
 			Enemy.MoveFlg = true;//エネミーの動きを止める

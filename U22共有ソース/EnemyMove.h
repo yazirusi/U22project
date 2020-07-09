@@ -18,6 +18,7 @@ struct ENEMY
 	int ax;
 	int Attackimage[1];
 	int count = 0;
+	int drawf = 1;	//0”ñ•\¦@‚P•\¦
 };extern ENEMY Enemy;
 
 void EnemyMove();
