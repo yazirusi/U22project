@@ -20,16 +20,9 @@ void PlayerMove() {
 		//左端に来たら止まる
 		if (msx < 0) {
 			//ブロックとの当たり判定
-			if (CheckHitBlock(1) == 0) {
+			if (CheckHitBlock(1,0) == 0) {
 				msx += 2;
 				player.px -= 2;
-
-				//攻撃描画座標の微調整
-				for (int ai = 0; ai < 5; ai++) {
-					if (player.af[ai] == 1) {
-						player.apx[0] += 2;
-					}
-				}
 
 				//マップチップの座標
 				if (player.px % 40 == 38) {
@@ -45,7 +38,7 @@ void PlayerMove() {
 	if (CheckHitKey(KEY_INPUT_RIGHT) == 1) {
 		
 		//ブロックとの当たり判定
-		if (CheckHitBlock(2) == 0) {
+		if (CheckHitBlock(2,0) == 0) {
 			msx -= 2;
 			player.px += 2;
 
@@ -67,7 +60,7 @@ void PlayerMove() {
 
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (g_KeyFlg & PAD_INPUT_10 && player.jflag == 0 && CheckHitBlock(3) == 0) {
+	if (g_KeyFlg & PAD_INPUT_10 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
 		player.spy = player.py;		//640
@@ -87,7 +80,7 @@ void PlayerMove() {
 		//上昇してるとき
 		if (player.py - player.hozonY < 0 && player.p_y != player.sp_y) {
 			//頭上にブロックがあった場合
-			if (CheckHitBlock(3) == 1) {
+			if (CheckHitBlock(3,0) == 1) {
 				player.hozonY = player.py;	//落ちる瞬間の座標
 				player.spy = player.py;
 				player.sp_y = player.p_y;
@@ -110,7 +103,7 @@ void PlayerMove() {
 				g_StageData[0][player.p_y][player.p_x] = 2;
 
 			//真下にブロックがあったらジャンプ処理終了
-			if (CheckHitBlock(4) == 1) {
+			if (CheckHitBlock(4,0) == 1) {
 				player.dflag = 0;
 				player.jflag = 0;
 			}
@@ -118,7 +111,7 @@ void PlayerMove() {
 	}
 
 	//自由落下処理
-	if (player.jflag == 0 && CheckHitBlock(5) == 1) {
+	if (player.jflag == 0 && CheckHitBlock(5,0) == 1) {
 		player.jflag = 1;
 		player.dflag = 1;
 		player.hozonY = player.py;	//落ちる瞬間の座標
@@ -131,22 +124,24 @@ void PlayerMove() {
 /***********************************
 *プレイヤーとブロックの当たり判定
 *引数
+*ｊ
 *１：左移動の当たり判定
 *２：右移動の当たり判定
 *３：上昇中の頭上のブロック
 *４：下降中の下の足場
 *５：横移動した先の足場
+*６：攻撃の当たり判定	a：攻撃配列の添え字
 *戻り値 1:ブロックに当たる
 ***********************************/
-int CheckHitBlock(int j) {
+int CheckHitBlock(int j,int a) {
 
 	//左移動
 	if (j == 1) {
 		for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
-				if (g_StageData[0][y][x] == 1 && x * 40 + 40 == player.px
-					&& ((y * 40 <= player.py && y * 40 + 40 >= player.py)	//下半身
+				if (g_StageData[0][y][x] == 1 && x * 40 + 40 == player.px	//x座標の当たり判定
+					&& ((y * 40 <= player.py && y * 40 + 40 >= player.py)	//y座標の判定(下半身)
 						|| (y * 40 < player.py - 40 && y * 40 + 40 > player.py - 40))) {	//上半身
 					return 1;
 				}
@@ -159,8 +154,8 @@ int CheckHitBlock(int j) {
 		for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
-				if (g_StageData[0][y][x] == 1 && x * 40 == player.px + 40
-					&& ((y * 40 <= player.py && y * 40 + 40 >= player.py)	//下半身
+				if (g_StageData[0][y][x] == 1 && x * 40 == player.px + 40	//x座標の当たり判定
+					&& ((y * 40 <= player.py && y * 40 + 40 >= player.py)	//y座標の判定(下半身)
 					|| (y * 40 < player.py - 40 && y * 40 + 40 > player.py - 40))) {	//上半身
 					return 1;
 				}
@@ -174,9 +169,9 @@ int CheckHitBlock(int j) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 1
-					&& (y * 40 <= player.py - 40 && y * 40 + 40 >= player.py - 40)
-					&& ((x * 40 <= player.px && x * 40 + 40 > player.px)
-						|| (x * 40 < player.px + 40 && x * 40 + 40 >= player.px + 40))) {
+					&& (y * 40 <= player.py - 50 && y * 40 + 40 >= player.py - 50)//y座標
+					&& ((x * 40 <= player.px && x * 40 + 40 > player.px)//x座標
+						|| (x * 40 < player.px + 40 && x * 40 + 40 >= player.px + 40))) {//x座標
 					return 1;
 				}
 			}
@@ -189,9 +184,9 @@ int CheckHitBlock(int j) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 1 
-					&& (y * 40 <= player.py + 40 && y * 40 + 40 >= player.py + 40)
-					&& ((x * 40 <= player.px && x * 40 + 40 > player.px)
-					|| (x * 40 < player.px + 40 && x * 40 + 40 >= player.px + 40))) {
+					&& (y * 40 <= player.py + 40 && y * 40 + 40 >= player.py + 40)//y座標
+					&& ((x * 40 <= player.px && x * 40 + 40 > player.px)//x座標
+					|| (x * 40 < player.px + 40 && x * 40 + 40 >= player.px + 40))) {//x座標
 
 					//プレイヤーの位置
 					player.py = y * 40 - 40;
@@ -207,9 +202,24 @@ int CheckHitBlock(int j) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 0
-					&& (y * 40 == player.py + 40)
-					&& (x * 40 == player.px)) {
+					&& (y * 40 == player.py + 40)//y座標
+					&& (x * 40 == player.px)) {//x座標
 					return 1;
+				}
+			}
+		}
+	}
+
+	//攻撃
+	if (j == 6) {
+		for (int y = 0; y < MAPHEIGHT; y++) {
+			for (int x = 0; x < MAPWIDTH; x++) {
+				//ブロックとの当たり判定
+				if (g_StageData[0][y][x] == 1) {
+					if (x * 40 < player.pa[a] + 80 + player.apx[a] && x * 40  + 40 > player.pa[a] + 40	+ player.apx[a]	//x座標の当たり判定
+					&& y * 40 < player.ay[a] + 40 && y * 40 + 40 > player.ay[a]) {	//y座標の当たり判定
+						return 1;
+					}
 				}
 			}
 		}

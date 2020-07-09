@@ -5,6 +5,7 @@
 #include "key.h"
 #include "sounds.h"
 #include "main.h"
+#include "map.h"
 
 //notesŠÖ”‚Ì•Ï”
 int nx[100]; //ƒm[ƒc‚ÌÀ•W
@@ -99,7 +100,7 @@ void notes() {
 						if (player.af[ai] == 0) {
 							player.af[ai] = 1;
 							player.ay[ai] = player.py;
-							player.apx[ai] = 0;
+							player.apx[ai] = player.px;
 							break;
 						}
 					}
@@ -115,7 +116,7 @@ void notes() {
 						if (player.af[ai] == 0) {
 							player.af[ai] = 1;
 							player.ay[ai] = player.py;
-							player.apx[ai] = 0;
+							player.apx[ai] = player.px;
 							break;
 						}
 					}
