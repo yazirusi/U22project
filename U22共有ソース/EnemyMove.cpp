@@ -29,7 +29,7 @@ void EnemyMove(void) {
 		Enemy.Moveflg = 0;
 	}
 
-	//if (Enemy.Attck == false) {
+	if (Enemy.MoveFlg == false) {
 		//敵の座標とマップチップの当たり判定を調べる
 		if (Enemy.direction == false) {//左に移動してる時の処理
 			if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
@@ -50,7 +50,7 @@ void EnemyMove(void) {
 				Enemy.direction = false;//左にするためのフラグ
 			}
 		}
-	//}
+	}
 }
 /**************************************
 *当たり判定
