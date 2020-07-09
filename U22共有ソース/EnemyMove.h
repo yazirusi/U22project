@@ -14,8 +14,9 @@ struct ENEMY
 	bool Attck = false;//攻撃するためのフラグ:0なら範囲外：１なら範囲内
 	int Moveflg = 0;//
 	int Perception = 9 * 40;//敵の感知範囲
-	int ax = 0;
+	int ax;
 	int Attackimage[1];
+	int count = 0;
 };extern ENEMY Enemy;
 
 void EnemyMove();
