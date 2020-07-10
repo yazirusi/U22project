@@ -10,6 +10,8 @@
 #include"EnemyMove.h"
 #include"EnemyAttck.h"
 #include"PlayerAttack.h"
+#include "BackgroundMove.h"
+
 
 /***********************************************
  * 関数のプロトタイプ宣言
@@ -63,6 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
  ***********************************************/
 void GameMain(void)
 {
+	BackScrool();
 	DrawMap();
 	PlayerMove();
 	EnemyMove();

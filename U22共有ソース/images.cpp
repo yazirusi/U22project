@@ -7,6 +7,8 @@ int p[6];	//プレイヤーのイラスト
 int P[4]; //Pefect判定（イラスト）
 int G[2]; //Great判定
 
+int Backimg;  //背景イラスト
+
 /**********************************************
 *  画像読み込み
 ***********************************************/
@@ -37,6 +39,8 @@ int LoadImages()
 	if ((p[5] = LoadGraph("images/run-6.png")) == -1) return -1;
 
 	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
+
+	if ((Backimg = LoadGraph("images/backimg.bmp")) == -1)return -1;
 
 	return 0;
 }
