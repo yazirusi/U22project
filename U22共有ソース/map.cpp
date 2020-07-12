@@ -38,10 +38,10 @@ void DrawMap() {
 	//マップ表示
 	for (int y = 0; y < MAPHEIGHT; y++) {
 		for (int x = 0; x < MAPWIDTH; x++) {
-			if (g_StageData[0][y][x] == 0 || g_StageData[0][y][x] == 2
+			/*if (g_StageData[0][y][x] == 0 || g_StageData[0][y][x] == 2
 				|| g_StageData[0][y][x] == 3) {
 				DrawBox((40 * x) + msx, 40 * y, (40 * x) + 40 + msx, 40 * y + 40, 0x22aa33, TRUE);
-			}
+			}*/
 			if (g_StageData[0][y][x] == 1) {
 				DrawBox((40 * x) + msx, 40 * y, (40 * x) + 40 + msx, 40 * y + 40, 0x2222ff, TRUE);
 			}

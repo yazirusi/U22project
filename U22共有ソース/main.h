@@ -1,5 +1,7 @@
 #pragma once
 #include "DxLib.h"
+#include <time.h>
+#include <stdio.h>
 #define WIDTH 1280 //‰æ–ÊƒTƒCƒY
 #define HEIGHT 850
 
@@ -9,3 +11,10 @@
 extern int g_KeyFlg;
 extern int g_OldKey;
 extern int g_NowKey;
+
+typedef struct {
+	int month;         //ŒŽ
+	int day;         //“ú
+	int hour;      //Žž
+	int min;        //•ª
+} SaveData_t;
