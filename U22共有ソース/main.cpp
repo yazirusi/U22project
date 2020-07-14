@@ -83,10 +83,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 
 	}
-	//更新日を書き込む
-	/*Data = { imanojikan.tm_mon + 1, imanojikan.tm_mday,imanojikan.tm_hour,imanojikan.tm_min };
+	/*//更新日を書き込む
+	Data = { imanojikan.tm_mon + 1, imanojikan.tm_mday,imanojikan.tm_hour,imanojikan.tm_min };
 
-	fopen_s(&fp, "time.txt", "w");//バイナリファイルを開く
+	fopen_s(&fp, "time.txt", "w");//ファイルを開く
 	if (fp == NULL) {//エラーが起きたらNULLを返す
 		return 0;
 	}
