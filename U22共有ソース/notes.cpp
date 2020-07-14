@@ -87,7 +87,7 @@ void notes() {
 			}
 
 			//ZƒL[‚ð‰Ÿ‚µ‚½‚ç
-			if (g_NowKey & PAD_INPUT_1 && nx[i] >= 580 && nf[i] == 0) {
+			if (g_NowKey & PAD_INPUT_6 && nx[i] >= 580 && nf[i] == 0) {
 				bcnt = 0;
 				nf[maxn] = 0;
 				hf = 0;

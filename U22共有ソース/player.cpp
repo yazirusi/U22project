@@ -16,7 +16,7 @@ PLAYER player;
 ********************************/
 void PlayerMove() {
 	//左移動
-	if (CheckHitKey(KEY_INPUT_LEFT) == 1) {
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0) {
 
 		//左端に来たら止まる
 		if (msx < 0) {
@@ -40,7 +40,7 @@ void PlayerMove() {
 	}
 	else {
 		//右移動
-		if (CheckHitKey(KEY_INPUT_RIGHT) == 1) {
+		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0) {
 
 			//ブロックとの当たり判定
 			if (CheckHitBlock(2, 0) == 0) {
@@ -74,7 +74,7 @@ void PlayerMove() {
 
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (g_KeyFlg & PAD_INPUT_10 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {
+	if (g_KeyFlg & PAD_INPUT_1 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
 		player.spy = player.py;		//640

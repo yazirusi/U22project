@@ -6,6 +6,9 @@
 int g_KeyFlg;
 int g_OldKey;
 int g_NowKey;
+int Pad1;
+
+//Pad1 = GetJoypadInputState(DX_INPUT_PAD1);
 
 void key (){
 	//“ü—ÍƒL[æ“¾
