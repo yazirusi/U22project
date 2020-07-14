@@ -26,7 +26,7 @@ void GameMain(void);		//ゲームメイン処理
  ***********************************************/
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
-	SetMainWindowText("マップ");
+	SetMainWindowText("U22");
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 	//SetGraphMode(1280, 850, 32);
 	SetGraphMode(1280, 850, 32, 600);
@@ -76,8 +76,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		//最終更新日の表示
 		SetFontSize(32);
-		DrawFormatString(50, 5, 0xffffff, "更新日時　%d月 %d日 %d時　%d分", Data.month, Data.day, Data.hour, Data.min);
-		DrawFormatString(1000, 5, 0xffffff, "ESC:終了");
+		DrawFormatString(50, 5, 0x000000, "更新日時　%d月 %d日 %d時　%d分", Data.month, Data.day, Data.hour, Data.min);
+		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映

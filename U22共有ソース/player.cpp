@@ -6,6 +6,7 @@
 #include"EnemyMove.h"
 #include"EnemyAttck.h"
 #include "PlayerAttack.h"
+#include "BackgroundMove.h"
 
 //player構造体
 PLAYER player;
@@ -21,8 +22,9 @@ void PlayerMove() {
 		if (msx < 0) {
 			//ブロックとの当たり判定
 			if (CheckHitBlock(1,0) == 0) {
-				msx += 2;
-				player.px -= 2;
+				msx += 2;		//マップチップのスクロール
+				player.px -= 2;	//プレイヤーの座標
+				scrool += spd;	//イラストのスクロール
 
 				//マップチップの座標
 				if (player.px % 40 == 38) {
@@ -32,30 +34,42 @@ void PlayerMove() {
 				}
 			}
 		}
-	}
-
-	//右移動
-	if (CheckHitKey(KEY_INPUT_RIGHT) == 1) {
-		
-		//ブロックとの当たり判定
-		if (CheckHitBlock(2,0) == 0) {
-			msx -= 2;
-			player.px += 2;
-
-			//マップチップの座標
-			if (player.px % 40 == 0) {
-				g_StageData[0][player.p_y][player.p_x + 1] = 2;
-				g_StageData[0][player.p_y][player.p_x] = 0;
-				player.p_x = player.px / 40;
-			}
-		}
-
-		//プレイヤーの画像（右向き）
-		DrawExtendGraph(-5, player.py - 80, 191, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+		player.direF = 1;
+		//プレイヤーの画像（左向き）
+		DrawExtendGraph(-5 - 65, player.py - 80, 191 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
 	}
 	else {
-		//右向きで立ち止まってるとき
-		DrawExtendGraph(-5, player.py - 80 , 191, player.py + 65, p[0], TRUE);
+		//右移動
+		if (CheckHitKey(KEY_INPUT_RIGHT) == 1) {
+
+			//ブロックとの当たり判定
+			if (CheckHitBlock(2, 0) == 0) {
+				msx -= 2;		//マップチップのスクロール
+				player.px += 2;	//プレイヤーの座標
+				scrool -= spd;	//イラストのスクロール
+
+				//マップチップの座標
+				if (player.px % 40 == 0) {
+					g_StageData[0][player.p_y][player.p_x + 1] = 2;
+					g_StageData[0][player.p_y][player.p_x] = 0;
+					player.p_x = player.px / 40;
+				}
+			}
+
+			player.direF = 0;
+			//プレイヤーの画像（右向き）
+			DrawExtendGraph(-5, player.py - 80, 191, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+		}
+		else {
+
+			//立ち止まっているとき
+			if (player.direF == 0) {	//右向き
+				DrawExtendGraph(-5, player.py - 80, 191, player.py + 65, p[0], TRUE);
+			}
+			if (player.direF == 1) {	//左向き
+				DrawExtendGraph(-5 - 65, player.py - 80, 191 - 65, player.py + 65, p[6], TRUE);
+			}
+		}
 	}
 
 
@@ -117,7 +131,7 @@ void PlayerMove() {
 		player.spy = player.py;
 		player.sp_y = player.p_y;
 	}
-	DrawFormatString(50, 220, 0xffffff, "%d", player.jflag);
+	DrawFormatString(50, 220, 0x000000, "px%d", player.px);
 }
 
 /***********************************

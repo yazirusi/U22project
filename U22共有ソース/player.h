@@ -14,6 +14,7 @@ struct PLAYER
 	int hozonY;    //ジャンプした瞬間の座標
 	int tempY;	//ジャンプ時に使う入れ替え処理の変数
 	int dflag;	//下降フラグ
+	int direF;	//向きフラグ 0:右向き　1:左向き
 
 	//playerattack用変数(最大５個同時描画)
 	int af[5];	//攻撃フラグ	0:なし 1:攻撃

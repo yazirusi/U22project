@@ -3,7 +3,7 @@
 #include"EnemyMove.h"
 
 //変数の定義
-int p[6];	//プレイヤーのイラスト
+int p[12];	//プレイヤーのイラスト
 int P[4]; //Pefect判定（イラスト）
 int G[2]; //Great判定
 
@@ -37,6 +37,18 @@ int LoadImages()
 	if ((p[4] = LoadGraph("images/run-5.png")) == -1) return -1;
 
 	if ((p[5] = LoadGraph("images/run-6.png")) == -1) return -1;
+
+	if ((p[6] = LoadGraph("images/Iidle-1.png")) == -1) return -1;
+
+	if ((p[7] = LoadGraph("images/Irun-1.png")) == -1) return -1;
+
+	if ((p[8] = LoadGraph("images/Irun-3.png")) == -1) return -1;
+
+	if ((p[9] = LoadGraph("images/Irun-4.png")) == -1) return -1;
+
+	if ((p[10] = LoadGraph("images/Irun-5.png")) == -1) return -1;
+
+	if ((p[11] = LoadGraph("images/Irun-6.png")) == -1) return -1;
 
 	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
 
