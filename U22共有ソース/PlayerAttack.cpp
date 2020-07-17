@@ -17,12 +17,21 @@ void PlayerAttack() {
 
 	//UŒ‚‚Ì•`‰æ
 	for (int i = 0; i < 5; i++) {
+		if (player.px >= 640) {
 
-		if (player.adireF[i] == 0){//‰EŒü‚«
-			a_x[i] = player.pa[i] + 80 + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
-		}
-		if (player.adireF[i] == 1) {//¶Œü‚«
-			a_x[i] = player.pa[i] + 0 + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+			if (player.adireF[i] == 0) {//‰EŒü‚«
+				a_x[i] = player.pa[i] + 640 + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+			}
+			if (player.adireF[i] == 1) {//¶Œü‚«
+				a_x[i] = player.pa[i] + 600 + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+			}
+		}else{
+			if (player.adireF[i] == 0) {//‰EŒü‚«
+				a_x[i] = player.pa[i] + (player.px +40) + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+			}
+			if (player.adireF[i] == 1) {//¶Œü‚«
+				a_x[i] = player.pa[i] + player.px + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+			}
 		}
 
 		//ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è(‰EŒü‚«)
@@ -47,7 +56,7 @@ void PlayerAttack() {
 
 
 		//“G‚É“–‚½‚Á‚½ê‡
-		if (( a_x[i] + Xsize ) > (Enemy.x - Enemy.Move + msx) && (Enemy.x - Enemy.Move + Enemy.size + msx) > a_x[i]
+		if (( a_x[i] + Xsize ) > (Enemy.x - Enemy.Move + sx) && (Enemy.x - Enemy.Move + Enemy.size + sx) > a_x[i]
 		&& player.ay[i] < Enemy.y + Enemy.size && player.ay[i] + Ysize > Enemy.y) {
 			player.pa[i] = 0;
 			player.af[i] = 0;

@@ -51,7 +51,7 @@ void EnemyAttck(void) {
 			}
 			for (int i = 0; i < j; i++)
 			{
-				DrawGraph(Enemy.ax[i] - Enemy.MoveD + msx, Enemy.y, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
+				DrawGraph(Enemy.ax[i] - Enemy.MoveD + sx, Enemy.y, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
 				Enemy.ax[i] -= (AttackSpeed);//UŒ‚‚ðˆÚ“®‚·‚é
 			}
 		//}
@@ -66,7 +66,7 @@ void EnemyAttck(void) {
 			Enemy.ax[i] = 0;
 			//Enemy.Attck = false;//UŒ‚‚ð‚È‚­‚·
 		}
-		if (Enemy.ax[i] >= WIDTH || Enemy.ax[i] + 40 <= 0 - msx)
+		if (Enemy.ax[i] >= WIDTH || Enemy.ax[i] + 40 <= 0 - sx)
 		{
 			Enemy.ax[i] = 0;
 			//DeleteGraph(Enemy.Attackimage[0]);

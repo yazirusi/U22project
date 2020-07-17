@@ -23,11 +23,14 @@ void PlayerMove() {
 		//左端に来たら止まる
 		if (msx < 0) {
 			//ブロックとの当たり判定
-			if (CheckHitBlock(1,0) == 0) {
+			if (CheckHitBlock(1, 0) == 0) {
 				msx += 2;		//マップチップのスクロール
 				player.px -= 2;	//プレイヤーの座標
-				scrool += spd;	//イラストのスクロール
 
+				if (player.px >= 640) {
+					scrool += spd;	//イラストのスクロール
+					sx += 2;
+				}
 				//マップチップの座標
 				if (player.px % 40 == 38) {
 					g_StageData[0][player.p_y][player.p_x - 1] = 2;
@@ -37,19 +40,28 @@ void PlayerMove() {
 			}
 		}
 		player.direF = 1;
-		//プレイヤーの画像（左向き）
-		DrawExtendGraph(-5 - 65, player.py - 80, 191 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+		if (player.px >= 640) {
+			//プレイヤーの画像（左向き）
+			DrawExtendGraph(640 - 45 - 65, player.py - 80,640 + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+		}else{
+			//プレイヤーの画像（左向き）
+			DrawExtendGraph(player.px - 45 - 65, player.py - 80,player.px + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+		}
 	}
 	else {
 		//右移動
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0 
+		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
 			|| CheckHitKey(KEY_INPUT_RIGHT) == 1) {
 
 			//ブロックとの当たり判定
 			if (CheckHitBlock(2, 0) == 0) {
 				msx -= 2;		//マップチップのスクロール
 				player.px += 2;	//プレイヤーの座標
-				scrool -= spd;	//イラストのスクロール
+
+				if (player.px >= 640) {
+					scrool -= spd;	//イラストのスクロール
+					sx -= 2;
+				}
 
 				//マップチップの座標
 				if (player.px % 40 == 0) {
@@ -60,20 +72,35 @@ void PlayerMove() {
 			}
 
 			player.direF = 0;
-			//プレイヤーの画像（右向き）
-			DrawExtendGraph(-5, player.py - 80, 191, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+			if (player.px >= 640) {
+				//プレイヤーの画像（右向き）
+				DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+			}
+			else {
+				//プレイヤーの画像（右向き）
+				DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+			}
 		}
 		else {
-
+		if (player.px >= 640) {
 			//立ち止まっているとき
 			if (player.direF == 0) {	//右向き
-				DrawExtendGraph(-5, player.py - 80, 191, player.py + 65, p[0], TRUE);
+				DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[0], TRUE);
 			}
 			if (player.direF == 1) {	//左向き
-				DrawExtendGraph(-5 - 65, player.py - 80, 191 - 65, player.py + 65, p[6], TRUE);
+				DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[6], TRUE);
+			}
+		}
+		else {			//立ち止まっているとき
+			if (player.direF == 0) {	//右向き
+				DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[0], TRUE);
+			}
+			if (player.direF == 1) {	//左向き
+				DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[6], TRUE);
 			}
 		}
 	}
+}
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
 	if (g_KeyFlg & PAD_INPUT_1 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {

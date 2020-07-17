@@ -6,6 +6,7 @@
 int map[MAPHEIGHT][MAPWIDTH];
 int g_stage = 0;   //ステージ管理
 int msx;	//マップスクロール
+int sx;
 
 int	g_StageData[STAGE][MAPHEIGHT][MAPWIDTH] = {
 {	//0ステージ
@@ -43,7 +44,7 @@ void DrawMap() {
 				DrawBox((40 * x) + msx, 40 * y, (40 * x) + 40 + msx, 40 * y + 40, 0x22aa33, TRUE);
 			}*/
 			if (g_StageData[0][y][x] == 1) {
-				DrawBox((40 * x) + msx, 40 * y, (40 * x) + 40 + msx, 40 * y + 40, 0x2222ff, TRUE);
+				DrawBox((40 * x) + sx, 40 * y, (40 * x) + 40 + sx, 40 * y + 40, 0x2222ff, TRUE);
 			}
 		}
 	}

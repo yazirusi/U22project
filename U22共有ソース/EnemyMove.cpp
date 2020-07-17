@@ -12,8 +12,8 @@ void EnemyMove(void) {
 	DrawFormatString(50, 130, 0xffffff, "%d", Enemy.x);//敵のｘ座標
 
 	if (Enemy.drawf == 1) {
-		DrawBox((Enemy.x - Enemy.Move + msx), (Enemy.y),
-			(Enemy.x + Enemy.size - Enemy.Move + msx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//敵の描画
+		DrawBox((Enemy.x - Enemy.Move + sx), (Enemy.y),
+			(Enemy.x + Enemy.size - Enemy.Move + sx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//敵の描画
 	}
 
 	//プレイヤーが動いたフラグ＆キーを押してるか
