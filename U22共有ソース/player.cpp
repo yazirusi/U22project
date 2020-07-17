@@ -7,6 +7,7 @@
 #include"EnemyAttck.h"
 #include "PlayerAttack.h"
 #include "BackgroundMove.h"
+#include "sounds.h"
 
 //player構造体
 PLAYER player;
@@ -76,6 +77,7 @@ void PlayerMove() {
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
 	if (g_KeyFlg & PAD_INPUT_1 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {
+		PlaySoundMem(jpse, DX_PLAYTYPE_BACK, TRUE);
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
 		player.spy = player.py;		//640

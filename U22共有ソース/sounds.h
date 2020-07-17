@@ -4,5 +4,8 @@
 //BGM
 extern int rockBGM;
 extern int bpm;
+extern int prse;
+extern int grse;
+extern int jpse;
 
 int LoadSounds();	//‰¹Šy“Ç‚İ‚İ

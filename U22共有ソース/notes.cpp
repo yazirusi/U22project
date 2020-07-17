@@ -94,7 +94,7 @@ void notes() {
 				dc = 0;
 				//パーフェクト判定
 				if (nx[i] >= 625) {
-
+					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
 						if (player.af[ai] == 0) {
@@ -113,6 +113,7 @@ void notes() {
 
 				//グレート
 				if (nx[i] >= 605 && nx[i] < 625) {
+					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
 						if (player.af[ai] == 0) {
