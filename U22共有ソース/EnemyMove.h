@@ -12,11 +12,11 @@ struct ENEMY
 	int Move = 0;//移動量
 	int MoveD = 0;//マップチップ上での座標
 	bool Attck = false;//攻撃するためのフラグ:0なら範囲外：１なら範囲内
-	bool MoveFlg = false;//敵が動くためのフラグ:trueなら動く：falseなら止まる
+	//bool MoveFlg = false;//敵が動くためのフラグ:trueなら動く：falseなら止まる
 	int Moveflg = 0;//
 	int Perception = 9 * 40;//敵の感知範囲
-	int ax;
-	int Attackimage[1];
+	int ax[3] = { 0,0,0 };
+	int Attackimage[1] = { 0 };
 	int count = 0;
 	int drawf = 1;	//0非表示　１表示
 };extern ENEMY Enemy;

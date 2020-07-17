@@ -56,7 +56,7 @@ void DrawMap() {
 	//DrawFormatString(50,100, 0xffffff, "%d", player.px);
 	//DrawBox(40, py - 40, 40 + 40, py + 40, 0xffffff, TRUE);
 
-	if(Enemy.drawf == 1)
-	DrawBox((Enemy.x - Enemy.Move + msx), (Enemy.y),
-		(Enemy.x + Enemy.size - Enemy.Move + msx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//“G‚Ì•`‰æ
+	//if(Enemy.drawf == 1)
+	//DrawBox((Enemy.x - Enemy.Move + msx), (Enemy.y),
+	//	(Enemy.x + Enemy.size - Enemy.Move + msx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//“G‚Ì•`‰æ
 }

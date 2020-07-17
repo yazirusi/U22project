@@ -11,6 +11,11 @@ void EnemyMove(void) {
 	DrawFormatString(50, 100, 0xffffff, "%d", Enemy.ax);//敵の攻撃のｘ座標
 	DrawFormatString(50, 130, 0xffffff, "%d", Enemy.x);//敵のｘ座標
 
+	if (Enemy.drawf == 1) {
+		DrawBox((Enemy.x - Enemy.Move + msx), (Enemy.y),
+			(Enemy.x + Enemy.size - Enemy.Move + msx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//敵の描画
+	}
+
 	//プレイヤーが動いたフラグ＆キーを押してるか
 	if (Enemy.Moveflg == 1 && CheckHitKey(KEY_INPUT_RIGHT) != 1) {
 		Enemy.Move -= 2;//敵キャラの移動に加算するスクロール量
@@ -29,7 +34,7 @@ void EnemyMove(void) {
 		Enemy.Moveflg = 0;
 	}
 
-	if (Enemy.MoveFlg == false) {
+	//if (Enemy.MoveFlg == false) {
 		//敵の座標とマップチップの当たり判定を調べる
 		if (Enemy.direction == false) {//左に移動してる時の処理
 			if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
@@ -50,7 +55,7 @@ void EnemyMove(void) {
 				Enemy.direction = false;//左にするためのフラグ
 			}
 		}
-	}
+	//}
 }
 /**************************************
 *当たり判定
