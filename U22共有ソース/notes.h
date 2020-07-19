@@ -4,14 +4,13 @@
 //notes関数の変数
 extern int nx[100]; //ノーツの座標
 extern int nf[100];//ノーツごとのフラグ
+extern int nbf[100];//ノーツごとの出現フラグ
+extern int mcnt[100];//メトロノーム
+extern int mcntf[100];//メトロノーム用フラグ
 extern int bcnt;	//ブレンドのカウント
 extern int hf;	//パーフェクト判定
+extern int conbo;
 
-/*//BPMの構造体
-extern struct BPM {
-};
-struct BPM bpm;
-*/
 //notesjudge関数の変数
 extern int dc;	//表示する時間のカウント
 

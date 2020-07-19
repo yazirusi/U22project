@@ -11,6 +11,11 @@ void EnemyMove(void) {
 	DrawFormatString(50, 100, 0xffffff, "%d", Enemy.ax);//“G‚ÌUŒ‚‚Ì‚˜À•W
 	DrawFormatString(50, 130, 0xffffff, "%d", Enemy.x);//“G‚Ì‚˜À•W
 
+	//“G‚Ì€–S”»’è	0:€–S@1:•\¦
+	if (Enemy.drawf == 0) {
+		return;
+	}
+
 	if (Enemy.drawf == 1) {
 		DrawBox((Enemy.x - Enemy.Move + sx), (Enemy.y),
 			(Enemy.x + Enemy.size - Enemy.Move + sx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//“G‚Ì•`‰æ

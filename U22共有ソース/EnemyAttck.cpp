@@ -18,6 +18,12 @@ void EnemyAttck(void) {
 	DrawFormatString(100, 300, 0xffffff, "%d", count);
 	DrawFormatString(100, 330, 0xffffff, "%d", j);
 	DrawFormatString(100, 360, 0xffffff, "%d", Enemy.Attck);
+
+	//敵の死亡判定	0:死亡　1:表示
+	if (Enemy.drawf == 0) {
+		return;
+	}
+
 	//プレイヤーが一定範囲に入ってきたら動きを止める
 	if (Enemy.x - Enemy.Move - Enemy.Perception < player.px + 40
 		&& Enemy.x - Enemy.Move + Enemy.Perception + Enemy.size>player.px
