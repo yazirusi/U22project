@@ -8,7 +8,6 @@ ENEMY Enemy;
 *エネミーの動き
 ***************************************/
 void EnemyMove(void) {
-	DrawFormatString(50, 100, 0xffffff, "%d", Enemy.ax);//敵の攻撃のｘ座標
 	DrawFormatString(50, 130, 0xffffff, "%d", Enemy.x);//敵のｘ座標
 
 	//敵の死亡判定	0:死亡　1:表示
