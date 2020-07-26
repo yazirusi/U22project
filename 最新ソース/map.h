@@ -7,10 +7,13 @@
 //変数の宣言
 
 extern int map[MAPHEIGHT][MAPWIDTH];
-extern int mx;		//マップの移動
 extern int g_stage;   //ステージ管理
 
 extern int	g_StageData[STAGE][MAPHEIGHT][MAPWIDTH];
+
+extern int sx;///マップ描画のスクロール変数
+
+extern int msx;	//マップスクロール用変数
 
 //関数の宣言
 void DrawMap();      //マップ描画

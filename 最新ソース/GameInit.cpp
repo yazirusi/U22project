@@ -15,24 +15,27 @@ void GameInit()
 {
 	if (g_stage == 0) {
 		//マップ配列のプレイヤー位置
-		p_x = 1;
-		p_y = 17;
+		player.p_x = 1;
+		player.p_y = 17;
 
 		//プレイヤーの座標
-		px = 40;
-		py = 680;
+		player.px = 40;
+		player.py = 680;
+		//player.py = 640;
 	}
+	//プレイヤーのステータスの初期化
+	player.hp = 100;
 
-	//ノーツ位置の初期化
-	for (int i = 0; i < 10; i++) {
-		nx[i] = 200;
+	//ノーツの初期化
+	for (int i = 0; i < 100; i++) {
+		notesinit(i);
 	}
 	g_GameState = 2;
 
 	for (int y = 0; y < MAPHEIGHT; y++) {
 		for (int x = 0; x < MAPWIDTH; x++) {
 			if (g_StageData[0][y][x] == 3) {
-				Enemy.Mapx = x;//敵のマップ上のｘ座標を入れる
+				Enemy.MapX = x;//敵のマップ上のｘ座標を入れる
 				Enemy.MapY = y;//敵のマップ上のy座標を入れる
 				Enemy.x = (x * 40);//敵の初期x座標
 				Enemy.y = (y * 40);//敵の初期y座標
