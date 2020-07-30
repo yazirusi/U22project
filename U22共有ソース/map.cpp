@@ -52,7 +52,7 @@ void DrawMap() {
 
 	for (int y = 0; y < MAPHEIGHT; y++) {
 		for (int x = 0; x < MAPWIDTH; x++) {
-			DrawFormatString(100 + 30 * x, 50 + 30 * y, 0x000000, "%d", g_StageData[0][y][x]);
+			//DrawFormatString(100 + 30 * x, 50 + 30 * y, 0x000000, "%d", g_StageData[0][y][x]);
 		}
 	}
 	//DrawFormatString(50,100, 0xffffff, "%d", player.px);

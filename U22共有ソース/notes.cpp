@@ -54,8 +54,8 @@ void notes() {
 	DrawFormatString(30, 490, 0xFFFFFF, "%d", nx[0]);
 	DrawFormatString(30, 520, 0xFFFFFF, "%d", mcnt[0]);
 	DrawFormatString(30, 550, 0xFFFFFF, "%d", mcnt[1]);
-	DrawFormatString(30, 580, 0xFFFFFF, "%d", mcnt[2]);*/
-	DrawFormatString(30, 580, 0xFFFFFF, "%d", player.protect);
+	DrawFormatString(30, 580, 0xFFFFFF, "%d", mcnt[2]);
+	DrawFormatString(30, 580, 0xFFFFFF, "%d", player.protect);*/
 
 	//コンボ数の表示
 	if (note.conbo != 0) {
@@ -70,7 +70,7 @@ void notes() {
 		if (note.nbf[i] == 0 && note.nxbf == 1) {//ビートフラグが１の時
 			note.nbf[i] = 1;
 			note.mcntf[i] = 1;
-			if(note.encnt % 2 == 0){
+			if(note.encnt % 3 == 0){
 				note.nbf[i] = 2;
 			}
 			note.encnt++;
@@ -99,8 +99,12 @@ void notes() {
 		}
 
 		//真ん中に来るまで
-		if (note.nx[i] != 640) {
+		if (note.nx[i] != 660) {
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, note.nx[i] - 300);	//透明度
+
+			if (note.nx[i] == 640) {
+				PlaySoundMem(bpm, DX_PLAYTYPE_BACK, TRUE);
+			}
 
 			//ノーツの表示
 			if (note.nbf[i] == 1) {
@@ -111,15 +115,14 @@ void notes() {
 				DrawLine(note.nx[i], 760, note.nx[i], 850, 0xFF3366, 8);
 				DrawLine(1280 - note.nx[i], 760, 1280 - note.nx[i], 850, 0xFF3366, 8);
 			}
-			
 
 			//左方向キーを押したら
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
-				|| CheckHitKey(KEY_INPUT_LEFT) == 1 && note.nx[i] >= 610) {
+			if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
+				|| CheckHitKey(KEY_INPUT_LEFT) == 1) && note.nx[i] >= 610) {
 				player.right = false;
 				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (note.nx[i] >= 632) {
+				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					player.left = true;
 					note.hf = 1;
@@ -130,7 +133,7 @@ void notes() {
 				}
 
 				//グレート(10F)
-				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					player.left = true;
 					note.hf = 2;
@@ -138,7 +141,7 @@ void notes() {
 				}
 
 				//ミス
-				if (note.nx[i] < 620) {
+				if (abs(note.nx[i] - 640) > 10 * note.spd) {
 					note.conbo = 0;
 					player.left = false;
 					player.speed = 1;
@@ -158,12 +161,12 @@ void notes() {
 			}
 
 			//右方向キーを押したら
-			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
-				|| CheckHitKey(KEY_INPUT_RIGHT) == 1 && note.nx[i] >= 610) {
+			if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
+				|| CheckHitKey(KEY_INPUT_RIGHT) == 1) && note.nx[i] >= 610) {
 				player.left = false;
 				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (note.nx[i] >= 632) {
+				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					player.right = true;
 					note.hf = 1;
@@ -174,7 +177,7 @@ void notes() {
 				}
 
 				//グレート(10F)
-				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					player.right = true;
 					player.move = 40;
@@ -183,7 +186,7 @@ void notes() {
 				}
 
 				//ミス
-				if (note.nx[i] < 620) {
+				if (abs(note.nx[i] - 640) > 10 * note.spd) {
 					note.conbo = 0;
 					player.right = false;
 					player.speed = 1;
@@ -206,7 +209,7 @@ void notes() {
 			if (g_NowKey & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && note.nx[i] >= 610) {
 				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (note.nx[i] >= 632) {
+				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					if (player.jflag == 0) {
 						player.jump = true;
@@ -216,7 +219,7 @@ void notes() {
 				}
 
 				//グレート(10F)
-				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					if (player.jflag == 0) {
 						player.jump = true;
@@ -226,7 +229,7 @@ void notes() {
 				}
 
 				//ミス
-				if (note.nx[i] < 620) {
+				if (abs(note.nx[i] - 640) > 10 * note.spd) {
 					note.conbo = 0;
 					player.jump = false;
 					player.left = false;
@@ -253,7 +256,7 @@ void notes() {
 				player.left = false;
 				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (note.nx[i] >= 632) {
+				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
@@ -273,7 +276,7 @@ void notes() {
 				}
 
 				//グレート(10F)
-				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
@@ -293,7 +296,7 @@ void notes() {
 				}
 
 				//ミス
-				if (note.nx[i] < 620) {
+				if (abs(note.nx[i] - 640) > 10 * note.spd) {
 					note.conbo = 0;
 					player.speed = 1;
 				}
@@ -328,7 +331,7 @@ void notes() {
 				player.left = false;
 				player.speed = 1;
 				//パーフェクト判定(+4F)
-				if (note.nx[i] >= 632) {
+				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					player.protect = true;
 					note.hf = 1;
@@ -336,7 +339,7 @@ void notes() {
 				}
 
 				//グレート(10F)
-				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					player.protect = true;
 					note.hf = 2;
@@ -344,7 +347,7 @@ void notes() {
 				}
 
 				//ミス
-				if (note.nx[i] < 620) {
+				if (abs(note.nx[i] - 640) > 10 * note.spd) {
 					note.conbo = 0;
 					player.protect = false;
 				}
@@ -362,7 +365,7 @@ void notes() {
 				judgeinit(i);//ノーツの初期化
 			}
 		}
-		else {	//真ん中来たら
+		else {	//判定しなかったら
 			note.conbo = 0;
 			player.right = false;
 			player.left = false;
@@ -383,7 +386,6 @@ void notes() {
 				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, FALSE);
 				note.bgmflg = 1;
 			}
-			PlaySoundMem(bpm, DX_PLAYTYPE_BACK, TRUE);
 			player.protect = false;//防御終了
 			note.nx[i] = 300;	//初期位置に戻す
 			note.nf[i] = 0;

@@ -24,6 +24,7 @@ struct NOTES
 	int beatcnt = 0;	//77小節
 	double f = 0.0;
 	int dc = 0;	//表示する時間のカウント
+	int spd = 2;
 }; extern NOTES note;
 /*extern int nx[100]; //ノーツの座標
 extern int nf[100];//ノーツごとのフラグ

@@ -21,9 +21,9 @@ void PlayerMove() {
 	SetFontSize(24);
 	DrawFormatString(10, 770, 0xffffff, "モチベーション：%d", player.hp);
 	SetFontSize(16);
-	DrawFormatString(30, 200, 0xffffff, "px%d", player.px);
-	DrawFormatString(30, 230, 0xffffff, "py%d", player.py);
-	DrawFormatString(30, 260, 0xffffff, "jflag%d", player.jflag);
+	//DrawFormatString(30, 200, 0xffffff, "px%d", player.px);
+	//DrawFormatString(30, 230, 0xffffff, "py%d", player.py);
+	//DrawFormatString(30, 260, 0xffffff, "jflag%d", player.jflag);
 
 	//hp０以下で死亡
 	if (player.hp <= 0) {

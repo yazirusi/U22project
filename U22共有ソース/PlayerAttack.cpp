@@ -32,10 +32,10 @@ void PlayerAttack() {
 			}
 		}else{
 			if (player.adireF[i] == 0) {//‰EŒü‚«
-				a_x[i] = player.pa[i] + (player.px +40) + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+				a_x[i] = player.pa[i] + (player.px + 40) + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
 			}
 			if (player.adireF[i] == 1) {//¶Œü‚«
-				a_x[i] = player.pa[i] + player.px + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
+				a_x[i] = player.pa[i] + (player.px - 40) + player.apx[i] - player.px;	//UŒ‚‚ÌxÀ•W
 			}
 		}
 
