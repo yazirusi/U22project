@@ -23,10 +23,12 @@ void GameInit()
 		player.py = 680;
 		//player.py = 640;
 	}
+	//プレイヤーのステータスの初期化
+	player.hp = 100;
 
-	//ノーツ位置の初期化
-	for (int i = 0; i < 10; i++) {
-		nx[i] = 200;
+	//ノーツの初期化
+	for (int i = 0; i < 100; i++) {
+		notesinit(i);
 	}
 	g_GameState = 2;
 

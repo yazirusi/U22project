@@ -16,62 +16,95 @@ PLAYER player;
 *プレイヤーの移動処理
 ********************************/
 void PlayerMove() {
-	//左移動
-	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
-		|| CheckHitKey(KEY_INPUT_LEFT) == 1) {
 
-		//左端に来たら止まる
+	//プレイヤーのステータス描画
+	SetFontSize(24);
+	DrawFormatString(10, 770, 0xffffff, "モチベーション：%d", player.hp);
+	SetFontSize(16);
+	DrawFormatString(30, 200, 0xffffff, "px%d", player.px);
+	DrawFormatString(30, 230, 0xffffff, "py%d", player.py);
+	DrawFormatString(30, 260, 0xffffff, "jflag%d", player.jflag);
+
+	//hp０以下で死亡
+	if (player.hp <= 0) {
+		return;
+	}
+	//敵の攻撃を食らったら点滅用カウントを加算する
+	if (player.hit == true) {
+		player.hitcnt++;
+	}
+	//無敵時間が切れたら
+	if (player.hitcnt == player.invit) {
+		player.hit = false;
+		player.hitcnt = 0;
+	}
+	//左移動
+	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
+		|| CheckHitKey(KEY_INPUT_LEFT) == 1) {*/
+	if(player.left == true){
+		//左端に来るまで
 		if (msx < 0) {
 			//ブロックとの当たり判定
 			if (CheckHitBlock(1, 0) == 0) {
-				msx += 2;		//マップチップのスクロール
-				player.px -= 2;	//プレイヤーの座標
-
+				msx += player.speed;		//マップチップのスクロール
+				player.px -= player.speed;	//プレイヤーの座標
 				if (player.px >= 640) {
-					scrool += spd;	//イラストのスクロール
-					sx += 2;
+					scrool += player.speed;	//イラストのスクロール
+					sx += player.speed;
 				}
-				//マップチップの座標
+				/*//マップチップの座標
 				if (player.px % 40 == 38) {
 					g_StageData[0][player.p_y][player.p_x - 1] = 2;
 					g_StageData[0][player.p_y][player.p_x] = 0;
 					player.p_x = player.px / 40;
-				}
+				}*/
 			}
+		}
+		else {
+			player.left = false;
 		}
 		player.direF = 1;
-		if (player.px >= 640) {
-			//プレイヤーの画像（左向き）
-			DrawExtendGraph(640 - 45 - 65, player.py - 80,640 + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
-		}else{
-			//プレイヤーの画像（左向き）
-			DrawExtendGraph(player.px - 45 - 65, player.py - 80,player.px + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+		//攻撃を食らったら点滅させる
+		if ((player.hitcnt % 10) < 5) {
+			if (player.px >= 640) {
+				//プレイヤーの画像（左向き）
+				DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+			}
+			else {
+				//プレイヤーの画像（左向き）
+				DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
+			}
 		}
 	}
-	else {
-		//右移動
-		if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
-			|| CheckHitKey(KEY_INPUT_RIGHT) == 1) {
+	//右移動
+	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
+		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) {*/
 
-			//ブロックとの当たり判定
-			if (CheckHitBlock(2, 0) == 0) {
-				msx -= 2;		//マップチップのスクロール
-				player.px += 2;	//プレイヤーの座標
+	if (player.right == true) {
+		//ブロックとの当たり判定
+		if (CheckHitBlock(2, 0) == 0) {
+			msx -= player.speed;		//マップチップのスクロール
+			player.px += player.speed;	//プレイヤーの座標
 
-				if (player.px >= 640) {
-					scrool -= spd;	//イラストのスクロール
-					sx -= 2;
-				}
-
-				//マップチップの座標
-				if (player.px % 40 == 0) {
-					g_StageData[0][player.p_y][player.p_x + 1] = 2;
-					g_StageData[0][player.p_y][player.p_x] = 0;
-					player.p_x = player.px / 40;
-				}
+			if (player.px >= 640) {
+				scrool -= player.speed;	//イラストのスクロール
+				sx -= player.speed;
 			}
 
-			player.direF = 0;
+			/*//マップチップの座標
+			if (player.px % 40 == 0) {
+				g_StageData[0][player.p_y][player.p_x + 1] = 2;
+				g_StageData[0][player.p_y][player.p_x] = 0;
+				player.p_x = player.px / 40;
+			}*/
+		}
+		else {
+			printf("a");
+		}
+
+		player.direF = 0;
+		//攻撃を食らったら点滅させる
+		if ((player.hitcnt % 10) < 5) {
 			if (player.px >= 640) {
 				//プレイヤーの画像（右向き）
 				DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
@@ -81,40 +114,53 @@ void PlayerMove() {
 				DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
 			}
 		}
-		else {
-		if (player.px >= 640) {
-			//立ち止まっているとき
-			if (player.direF == 0) {	//右向き
-				DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[0], TRUE);
+	}
+
+	if (player.right == false && player.left == false) {
+		//攻撃を食らったら点滅させる
+		if ((player.hitcnt % 10) < 5) {
+			if (player.px >= 640) {
+				//立ち止まっているとき
+				if (player.direF == 0) {	//右向き
+					DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[0], TRUE);
+				}
+				if (player.direF == 1) {	//左向き
+					DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[6], TRUE);
+				}
 			}
-			if (player.direF == 1) {	//左向き
-				DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[6], TRUE);
-			}
-		}
-		else {			//立ち止まっているとき
-			if (player.direF == 0) {	//右向き
-				DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[0], TRUE);
-			}
-			if (player.direF == 1) {	//左向き
-				DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[6], TRUE);
+			else {			//立ち止まっているとき
+				if (player.direF == 0) {	//右向き
+					DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[0], TRUE);
+				}
+				if (player.direF == 1) {	//左向き
+					DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[6], TRUE);
+				}
 			}
 		}
 	}
-}
+
+	//自由落下処理
+	if (player.jflag == 0 && CheckHitBlock(5, 0) == 1) {
+		player.jflag = 1;
+		player.dflag = 1;
+		player.hozonY = player.py;	//落ちる瞬間の座標
+		player.spy = player.py;
+		player.sp_y = player.p_y;
+	}
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (g_KeyFlg & PAD_INPUT_1 && player.jflag == 0 && CheckHitBlock(3,0) == 0) {
+	if (player.jump == true) {
 		PlaySoundMem(jpse, DX_PLAYTYPE_BACK, TRUE);
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
 		player.spy = player.py;		//640
-		player.sp_y = player.p_y;		//17
+		player.sp_y = player.p_y;	//17
 		player.py = player.py - 20;	//ジャンプの加速度
+		player.jump = false;
 	}
 
 	//ジャンプ処理（放物線）
 	if (player.jflag == 1) {
-
 		//ジャンプの座標の動き
 		player.tempY = player.py;
 		player.py += (player.py - player.hozonY) + 1;
@@ -153,23 +199,6 @@ void PlayerMove() {
 			}
 		}
 	}
-
-	//自由落下処理
-	if (player.jflag == 0 && CheckHitBlock(5,0) == 1) {
-		player.jflag = 1;
-		player.dflag = 1;
-		player.hozonY = player.py;	//落ちる瞬間の座標
-		player.spy = player.py;
-		player.sp_y = player.p_y;
-	}
-
-	//プレイヤーのステータス描画
-	SetFontSize(24);
-	DrawFormatString(10, 770, 0xffffff, "モチベーション：%d", player.hp);
-	SetFontSize(16);
-
-	DrawFormatString(50, 220, 0x000000, "px%d", player.px);//デバッグ
-	DrawFormatString(50, 250, 0x000000, "py%d", player.py);//デバッグ
 }
 
 /***********************************
@@ -189,7 +218,7 @@ int CheckHitBlock(int j,int a) {
 
 	//左移動
 	if (j == 1) {
-		for (int y = 0; y < MAPHEIGHT; y++) {
+		/*for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 1 && x * 40 + 40 == player.px	//x座標の当たり判定
@@ -198,20 +227,33 @@ int CheckHitBlock(int j,int a) {
 					return 1;
 				}
 			}
+		}*/
+		if (g_StageData[0][player.py / 40][(player.px - 1) / 40] == 1) {
+			return 1;
+		}
+		if (g_StageData[0][(player.py - 40) / 40][(player.px - 1) / 40] == 1) {
+			return 1;
 		}
 	}
 
 	//右移動
 	if (j == 2) {
-		for (int y = 0; y < MAPHEIGHT; y++) {
+		/*for (int y = 0; y < MAPHEIGHT; y++) {
 			for (int x = 0; x < MAPWIDTH; x++) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 1 && x * 40 == player.px + 40	//x座標の当たり判定
 					&& ((y * 40 < player.py + 40 && y * 40 + 40 > player.py)	//y座標の判定(下半身)
 					|| (y * 40 < player.py && y * 40 + 40 > player.py - 40))) {	//上半身
+
 					return 1;
 				}
 			}
+		}*/
+		if (g_StageData[0][player.py / 40][(player.px + 40) / 40] == 1) {
+			return 1;
+		}
+		if (g_StageData[0][(player.py - 40) / 40][(player.px + 40) / 40] == 1) {
+			return 1;
 		}
 	}
 
@@ -228,6 +270,9 @@ int CheckHitBlock(int j,int a) {
 				}
 			}
 		}
+		/*if (g_StageData[0][player.py / 40][player.px / 40] == 1) {
+			return 1;
+		}*/
 	}
 
 	//下降中(足場の当たり判定)
@@ -246,6 +291,12 @@ int CheckHitBlock(int j,int a) {
 				}
 			}
 		}
+		/*if ((g_StageData[0][player.py / 40 + 1][(player.px + 40) / 40 - 1] == 1
+		  || g_StageData[0][player.py / 40 + 1][(player.px + 40) / 40] == 1)) {
+			//プレイヤーの位置
+			player.py = player.py - (player.py % 40);
+			return 1;
+		}*/
 	}
 
 	//自由落下
@@ -255,11 +306,14 @@ int CheckHitBlock(int j,int a) {
 				//ブロックとの当たり判定
 				if (g_StageData[0][y][x] == 0
 					&& (y * 40 == player.py + 40)//y座標
-					&& (x * 40 == player.px)) {//x座標
+					&& (x * 40 < player.px + 40 && x * 40 + 40 < player.px ) ){//x座標
 					return 1;
 				}
 			}
 		}
+		/*if (g_StageData[0][player.py / 40 + 1][(player.px + 40) / 40 - 1] != 1) {
+			return 1;
+		}*/
 	}
 
 	//攻撃(右向き)

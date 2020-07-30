@@ -6,70 +6,39 @@
 #include "sounds.h"
 #include "main.h"
 #include "map.h"
+#include "EnemyMove.h"
 
-//notes関数の変数
-int nx[100]; //ノーツの座標
-int nf[100];//ノーツごとの押したときのフラグ
-int nbf[100];//ノーツごとの出現フラグ
-int mcnt[100];//メトロノーム
-int mcntf[100];//メトロノーム用フラグ
-int bcnt;	//ブレンドのカウント
-int hf = 0;	//パーフェクト判定
-int conbo;	//コンボ数
+//notes構造体
+NOTES note;
 
 //BPM
 const double rockbgm = 182.03;
 const double fps = 1.0 / 60.0;	//１フレーム当たりの秒数
 
-//8分音符が来るまでの時間(ms)
-double nps = (60.0 / rockbgm) * 2;
-
-//notesjudge関数の変数
-int dc;	//表示する時間のカウント
+//1小節が来るまでの時間(ms)
+const double nps = (60.0 / rockbgm) * 2;
 
 /********************
 *ノーツ
 ********************/
 void notes() {
-	int widthn = 80;//(WIDTH - 400)/(maxn*2); //ノーツとノーツの間隔(WIDTH/maxn)
-	int maxn = ((680 / 2) / widthn) + 1;	//表示するノーツ数の数
-
-	static int bgmflg;		//bgmを流すフラグ
-	static int notesInitflg;	//初期化のフラグ
-	static int nxf;		//ループのフラグ
-	static int min;		//ノーツの座標の最小値
-	static int nxbf;
-	static int sbf;
-	static int beatcnt;	//77小節
-
-	static double f = 0.0;
-
-	//ノーツの初期化
-	if (notesInitflg == 0) {
-		for (int i = 0; i < 100; i++) {
-			nx[i] = 300;
-			mcnt[i] = 300;
-		}
-		notesInitflg = 1;
-	}
-
 	//1フレームをmsに変換
-	f += fps;
+	note.f += fps;
 
 	//1小節あたりのmsと現在のフレーム(ms)を比較
-	if (nps < f) {
-		nxbf = 1;
-		f = f - nps;
-		beatcnt++;
+	if (nps < note.f) {
+		note.nxbf = 1;
+		note.f = note.f - nps;
+		note.beatcnt++;
 	}
 
-	if (beatcnt == 68) {
-		beatcnt = 0;
-		f = 0;
+	if (note.beatcnt == 68) {
+		note.beatcnt = 0;
+		note.f = 0;
 	}
 
-	if (CheckSoundMem(rockBGM) == 0 && bgmflg == 1) {
-		bgmflg = 0;
+	if (CheckSoundMem(rockBGM) == 0 && note.bgmflg == 1) {
+		note.bgmflg = 0;
 	}
 
 	//DrawFormatString(30, 430, 0xFFFFFF, "%d", CheckSoundMem(rockBGM));
@@ -83,59 +52,208 @@ void notes() {
 	/*DrawFormatString(30, 400, 0xFFFFFF, "%lf", fps);
 	DrawFormatString(30, 460, 0xFFFFFF, "%d", beatcnt);
 	DrawFormatString(30, 490, 0xFFFFFF, "%d", nx[0]);
-	DrawFormatString(30, 520, 0xFFFFFF, "%d", mcnt[0]);*/
+	DrawFormatString(30, 520, 0xFFFFFF, "%d", mcnt[0]);
+	DrawFormatString(30, 550, 0xFFFFFF, "%d", mcnt[1]);
+	DrawFormatString(30, 580, 0xFFFFFF, "%d", mcnt[2]);*/
+	DrawFormatString(30, 580, 0xFFFFFF, "%d", player.protect);
 
 	//コンボ数の表示
-	if (conbo != 0) {
+	if (note.conbo != 0) {
 		SetFontSize(32);
-		DrawFormatString(800, 750, 0xffffff, "%dコンボ", conbo);
+		DrawFormatString(800, 750, 0xffffff, "%dコンボ", note.conbo);
 		SetFontSize(16);
 	}
 
 	//ノーツの表示
-	for (int i = 0; i < maxn; i++) {
+	for (int i = 0; i < note.maxn; i++) {
 
-		if (nbf[i] == 0 && nxbf == 1) {//ビートフラグが１の時
-			nbf[i] = 1;
-			mcntf[i] = 1;
-			nxbf = 0;//１個フラグを建てたら通らない
+		if (note.nbf[i] == 0 && note.nxbf == 1) {//ビートフラグが１の時
+			note.nbf[i] = 1;
+			note.mcntf[i] = 1;
+			if(note.encnt % 2 == 0){
+				note.nbf[i] = 2;
+			}
+			note.encnt++;
+			note.nxbf = 0;//１個フラグを建てたら通らない
 		}
 
-		if (nbf[i] == 1) {	//出現フラグが１ならノーツが動く
-			nx[i] += 2;
+		if (note.nbf[i] != 0) {
+			note.nx[i] += 2;
 		}
 
 		
-		if (mcntf[i] == 1) {
-			mcnt[i] += 2;
+		if (note.mcntf[i] == 1) {
+			note.mcnt[i] += 2;
 		}
 
-		//反応しなかったとき
-		if (mcnt[i] == 640) {
-			if (bgmflg == 0) {
+		//BGMを流す
+		if (note.mcnt[i] == 640) {
+			if (note.bgmflg == 0) {
 				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, FALSE);
-				bgmflg = 1;
-				mcnt[i] = 300;
-				mcntf[i] = 0;
+				note.bgmflg = 1;
+				note.mcnt[i] = 300;
+				note.mcntf[i] = 0;
 			}
+			note.mcnt[i] = 300;
+			note.mcntf[i] = 0;
 		}
 
 		//真ん中に来るまで
-		if (nx[i] != 640) {
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, nx[i] - 300);	//透明度
+		if (note.nx[i] != 640) {
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, note.nx[i] - 300);	//透明度
 
 			//ノーツの表示
-			DrawLine(nx[i], 760, nx[i], 850, 0x99FFFF, 8);
-			DrawLine(1280 - nx[i], 760, 1280 - nx[i], 850, 0x99FFFF, 8);
+			if (note.nbf[i] == 1) {
+				DrawLine(note.nx[i], 760, note.nx[i], 850, 0x99FFFF, 8);
+				DrawLine(1280 - note.nx[i], 760, 1280 - note.nx[i], 850, 0x99FFFF, 8);
+			}
+			else {
+				DrawLine(note.nx[i], 760, note.nx[i], 850, 0xFF3366, 8);
+				DrawLine(1280 - note.nx[i], 760, 1280 - note.nx[i], 850, 0xFF3366, 8);
+			}
+			
 
-			//Zキーを押したら
-			if (g_NowKey & PAD_INPUT_6 && nx[i] >= 600) {
-				bcnt = 0;
-				nf[maxn] = 0;
-				hf = 0;
-				dc = 0;
+			//左方向キーを押したら
+			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
+				|| CheckHitKey(KEY_INPUT_LEFT) == 1 && note.nx[i] >= 610) {
+				player.right = false;
+				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (nx[i] >= 632) {
+				if (note.nx[i] >= 632) {
+					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
+					player.left = true;
+					note.hf = 1;
+					note.conbo++;
+					if (player.speed < 5 && note.conbo % 3 == 0) {
+						player.speed++;
+					}
+				}
+
+				//グレート(10F)
+				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
+					player.left = true;
+					note.hf = 2;
+					note.conbo++;
+				}
+
+				//ミス
+				if (note.nx[i] < 620) {
+					note.conbo = 0;
+					player.left = false;
+					player.speed = 1;
+				}
+
+				//敵の行動ノーツだったら
+				if (note.nbf[i] == 2) {
+					if (Enemy.Attck == false) {
+						Enemy.MoveFlg = true;
+					}
+					else {
+						Enemy.AttckFlg = true;
+					}
+				}
+				player.protect = false;//防御終了
+				judgeinit(i);//ノーツの初期化
+			}
+
+			//右方向キーを押したら
+			if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
+				|| CheckHitKey(KEY_INPUT_RIGHT) == 1 && note.nx[i] >= 610) {
+				player.left = false;
+				Enemy.MoveFlg = false;
+				//パーフェクト判定(+4F)
+				if (note.nx[i] >= 632) {
+					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
+					player.right = true;
+					note.hf = 1;
+					note.conbo++;
+					if (player.speed < 5 && note.conbo % 3 == 0) {
+						player.speed++;
+					}
+				}
+
+				//グレート(10F)
+				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
+					player.right = true;
+					player.move = 40;
+					note.hf = 2;
+					note.conbo++;
+				}
+
+				//ミス
+				if (note.nx[i] < 620) {
+					note.conbo = 0;
+					player.right = false;
+					player.speed = 1;
+				}
+
+				//敵の行動ノーツだったら
+				if (note.nbf[i] == 2) {
+					if (Enemy.Attck == false) {
+						Enemy.MoveFlg = true;
+					}
+					else {
+						Enemy.AttckFlg = true;
+					}
+				}
+				player.protect = false;//防御終了
+				judgeinit(i);//ノーツの初期化
+			}
+
+			//ジャンプ(ZキーorBボタン)
+			if (g_NowKey & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && note.nx[i] >= 610) {
+				Enemy.MoveFlg = false;
+				//パーフェクト判定(+4F)
+				if (note.nx[i] >= 632) {
+					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
+					if (player.jflag == 0) {
+						player.jump = true;
+					}
+					note.hf = 1;
+					note.conbo++;
+				}
+
+				//グレート(10F)
+				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
+					if (player.jflag == 0) {
+						player.jump = true;
+					}
+					note.hf = 2;
+					note.conbo++;
+				}
+
+				//ミス
+				if (note.nx[i] < 620) {
+					note.conbo = 0;
+					player.jump = false;
+					player.left = false;
+					player.right = false;
+					player.speed = 1;
+				}
+
+				//敵の行動ノーツだったら
+				if (note.nbf[i] == 2) {
+					if (Enemy.Attck == false) {
+						Enemy.MoveFlg = true;
+					}
+					else {
+						Enemy.AttckFlg = true;
+					}
+				}
+				player.protect = false;//防御終了
+				judgeinit(i);//ノーツの初期化
+			}
+
+			//DキーかR1を押したら(攻撃)
+			if (g_NowKey & PAD_INPUT_6 && note.nx[i] >= 610) {
+				player.right = false;
+				player.left = false;
+				Enemy.MoveFlg = false;
+				//パーフェクト判定(+4F)
+				if (note.nx[i] >= 632) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
@@ -145,16 +263,17 @@ void notes() {
 							player.apx[ai] = player.px;
 							player.adireF[ai] = player.direF;
 							player.ajudge[ai] = 0;
+							player.at[ai] = 20;
 							break;
 						}
 					}
 
-					hf = 1;
-					conbo++;
+					note.hf = 1;
+					note.conbo++;
 				}
 
 				//グレート(10F)
-				if (nx[i] >= 620 && nx[i] < 632) {
+				if (note.nx[i] >= 620 && note.nx[i] < 632) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
 					//攻撃フラグ(最大５個同時描画)
 					for (int ai = 0; ai < 5; ai++) {
@@ -164,24 +283,32 @@ void notes() {
 							player.apx[ai] = player.px;
 							player.adireF[ai] = player.direF;
 							player.ajudge[ai] = 1;
+							player.at[ai] = 20;
 							break;
 						}
 					}
 
-					hf = 2;
-					conbo++;
+					note.hf = 2;
+					note.conbo++;
 				}
 
 				//ミス
-				if (nx[i] < 620) {
-					conbo = 0;
+				if (note.nx[i] < 620) {
+					note.conbo = 0;
+					player.speed = 1;
 				}
 
-				nf[i] = 1;	//フラグ
-				nf[maxn] = 1;	//判定用のフラグ
-				nx[maxn] = nx[i];	//判定用の変数
-				nbf[i] = 0;
-				nx[i] = 300;
+				//敵の行動ノーツだったら
+				if (note.nbf[i] == 2) {
+					if (Enemy.Attck == false) {
+						Enemy.MoveFlg = true;
+					}
+					else {
+						Enemy.AttckFlg = true;
+					}
+				}
+				player.protect = false;//防御終了
+				judgeinit(i);//ノーツの初期化
 
 				//デバッグ用
 				//攻撃フラグ(最大５個同時描画)
@@ -194,36 +321,92 @@ void notes() {
 						break;
 					}
 				}*/
-				nxf = 1;
+			}
+			//Xキーを押したら防御
+			if (g_NowKey & PAD_INPUT_B && note.nx[i] >= 610) {
+				player.right = false;
+				player.left = false;
+				player.speed = 1;
+				//パーフェクト判定(+4F)
+				if (note.nx[i] >= 632) {
+					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
+					player.protect = true;
+					note.hf = 1;
+					note.conbo++;
+				}
+
+				//グレート(10F)
+				if (note.nx[i] >= 620 && note.nx[i] < 632) {
+					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
+					player.protect = true;
+					note.hf = 2;
+					note.conbo++;
+				}
+
+				//ミス
+				if (note.nx[i] < 620) {
+					note.conbo = 0;
+					player.protect = false;
+				}
+
+				//敵の行動ノーツだったら
+				if (note.nbf[i] == 2) {
+					if (Enemy.Attck == false) {
+						Enemy.MoveFlg = true;
+					}
+					else {
+						Enemy.AttckFlg = true;
+					}
+				}
+				player.protecJudge = note.hf;//ノーツの判定の保存する
+				judgeinit(i);//ノーツの初期化
 			}
 		}
 		else {	//真ん中来たら
-			if (nf[i] == 0) {
-				conbo = 0;
+			note.conbo = 0;
+			player.right = false;
+			player.left = false;
+			Enemy.MoveFlg = false;
+			player.speed = 1;
+			//敵の行動ノーツだったら
+			if (note.nbf[i] == 2) {
+				if (Enemy.Attck == false) {
+					Enemy.MoveFlg = true;
+				}
+				else {
+					Enemy.AttckFlg = true;
+				}
 			}
+
 			//BGM
-			if (bgmflg == 0) {
+			if (note.bgmflg == 0) {
 				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, FALSE);
-				bgmflg = 1;
+				note.bgmflg = 1;
 			}
 			PlaySoundMem(bpm, DX_PLAYTYPE_BACK, TRUE);
-			nx[i] = 300;	//初期位置に戻す
-			nf[i] = 0;
-			nbf[i] = 0;
-			nxf = 1;
+			player.protect = false;//防御終了
+			note.nx[i] = 300;	//初期位置に戻す
+			note.nf[i] = 0;
+			note.nbf[i] = 0;
+			note.nxf = 1;
 		}
 		//押したノーツの消え方
-		if (nf[i] == 1 || nf[maxn] == 1 && bcnt != 255) {
-			bcnt++;	//透明度用カウント
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - (bcnt));
-			DrawLine(nx[maxn], 760, nx[maxn], 850, 0x00FF00, 8);
-			DrawLine(1280 - nx[maxn], 760, 1280 - nx[maxn], 850, 0x00FF00, 8);
+		if (note.nf[note.maxn] == 1 && note.bcnt != 256) {
+			if (i == 0) {
+				note.bcnt += 4;	//透明度用カウント
+			}
 		}
 		else {
-			bcnt = 0;
-			nf[maxn] = 0;
+			note.bcnt = 0;
+			note.nf[note.maxn] = 0;
 		}
 	}
+	if (note.nf[note.maxn] == 1 && note.bcnt != 256) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - (note.bcnt));
+		DrawLine(note.nx[note.maxn], 760, note.nx[note.maxn], 850, 0x00FF00, 8);
+		DrawLine(1280 - note.nx[note.maxn], 760, 1280 - note.nx[note.maxn], 850, 0x00FF00, 8);
+	}
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);	//透明度の初期化
 }
 /********************
@@ -232,17 +415,56 @@ void notes() {
 void notesjudge() {
 
 	//パーフェクト
-	if (hf == 1 && (dc++) < 40) {
-		DrawGraph(540, 730, P[(dc) / 4 % 4], TRUE);
+	if (note.hf == 1 && (note.dc++) < 40) {
+		DrawGraph(540, 730, P[(note.dc) / 4 % 4], TRUE);
 	}
 	//グレート
-	if (hf == 2 && hf != 0 && (dc++) < 40) {
-		DrawGraph(540, 730, G[(dc) / 4 % 2], TRUE);
+	if (note.hf == 2 && note.hf != 0 && (note.dc++) < 40) {
+		DrawGraph(540, 730, G[(note.dc) / 4 % 2], TRUE);
 	}
-	if (dc >= 40) {
-		dc = 0;
-		hf = 0;
+	if (note.dc >= 40) {
+		note.dc = 0;
+		note.hf = 0;
 	}
+}
+/**************************
+*判定した時のノーツの初期化
+**************************/
+int judgeinit(int i) {
+	note.bcnt = 0;
+	note.nf[note.maxn] = 0;
+	note.dc = 0;
+	note.nf[i] = 1;	//フラグ
+	note.nf[note.maxn] = 1;	//判定用のフラグ
+	note.nx[note.maxn] = note.nx[i];	//判定用の変数
+	note.nbf[i] = 0;
+	note.nx[i] = 300;
+	note.nxf = 1;
+	return 0;
+}
+/**************************
+*ノーツ関数の初期化
+**************************/
+int notesinit(int i) {
+	note.nx[i] = 300;
+	note.nf[i] = 0;
+	note.nbf[i] = 0;
+	note.mcnt[i] = 300;
+	note.mcntf[i] = 0;
+	note.bcnt = 0;
+	note.hf = 0;
+	note.conbo = 0;
+	note.encnt = 0;
+	note.nxf = 0;
+	note.bgmflg = 0;
+	note.notesInitflg = 0;
+	note.min = 0;
+	note.nxbf = 0;
+	note.sbf = 0;
+	note.beatcnt = 0;
+	note.f = 0.0;
+	note.dc = 0;
+	return 0;
 }
 /********************
 *ノーツの座標の最小値
@@ -250,8 +472,8 @@ void notesjudge() {
 int nxmin(int max) {
 	int min = 600;
 	for (int i = 0; i < max; ++i) {
-		if (min > nx[i] && nx[i] != 300) {
-			min = nx[i];
+		if (min > note.nx[i] && note.nx[i] != 300) {
+			min = note.nx[i];
 		}
 	}
 
