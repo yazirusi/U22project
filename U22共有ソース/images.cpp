@@ -8,6 +8,8 @@ int P[4]; //Pefect判定（イラスト）
 int G[2]; //Great判定
 
 int Backimg;  //背景イラスト
+int Titleimg;
+int GameOverimg;
 
 /**********************************************
 *  画像読み込み
@@ -53,6 +55,10 @@ int LoadImages()
 	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
 
 	if ((Backimg = LoadGraph("images/backimg.bmp")) == -1)return -1;
+
+	if ((Titleimg = LoadGraph("images/kadaiTitle.png")) == -1)return -1;
+
+	if ((GameOverimg = LoadGraph("images/kuriahaikei.png")) == -1)return -1;
 
 	return 0;
 }

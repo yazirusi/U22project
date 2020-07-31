@@ -7,5 +7,7 @@ extern int G[2]; //Great”»’è
 
 
 extern int Backimg;  //”wŒiƒCƒ‰ƒXƒg
+extern int Titleimg;
+extern int GameOverimg;
 
 int LoadImages();	//‰æ‘œ“Ç‚İ‚İ

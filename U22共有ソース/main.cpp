@@ -14,12 +14,16 @@
 #include "main.h"
 #include <time.h>
 #include <stdio.h>
+#include "GameTitle.h"
+#include "GameOver.h"
 
 /***********************************************
  * 関数のプロトタイプ宣言
  ***********************************************/
 
+void DrawGameTitle(void);
 void GameMain(void);		//ゲームメイン処理
+void DrawGameOver(void);		//ゲームオーバー画面処理
 
 /***********************************************
  * プログラムの開始
@@ -83,11 +87,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		ClearDrawScreen();		// 画面の初期化
 		switch (g_GameState) {
+		case 0 :
+			DrawGameTitle();
+			break;
 		case 1:
 			GameInit();         //初期化
 			break;
 		case 2:
 			GameMain();			//ゲームメイン処理
+			break;
+		case 3:
+			DrawGameOver();			//ゲームオーバー処理
 			break;
 		}
 		//最終更新日の表示
@@ -130,4 +140,8 @@ void GameMain(void)
 	//DrawFormatString(50, 100, 0xffffff, "%d", p_y);
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
+				if (player.hp <= 0) {
+				StopSoundMem(rockBGM);
+				g_GameState = 3;   //ゲームオーバー画面へ
+			}
 }
