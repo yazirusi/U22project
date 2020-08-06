@@ -8,6 +8,14 @@ int P[4]; //Pefect判定（イラスト）
 int G[2]; //Great判定
 
 int Backimg;  //背景イラスト
+int Backimg2;  //背景イラスト
+int Backimg3;  //背景イラスト
+
+int roadimg;
+int roadimg2;
+int roadimg3;
+
+
 int Titleimg;
 int GameOverimg;
 
@@ -54,11 +62,22 @@ int LoadImages()
 
 	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
 
-	if ((Backimg = LoadGraph("images/backimg.bmp")) == -1)return -1;
+	if ((Backimg = LoadGraph("images/bac.bmp")) == -1)return -1;
 
-	if ((Titleimg = LoadGraph("images/kadaiTitle.png")) == -1)return -1;
+	if ((Backimg2 = LoadGraph("images/bac2.bmp")) == -1)return -1;
 
-	if ((GameOverimg = LoadGraph("images/kuriahaikei.png")) == -1)return -1;
+	if ((Backimg3 = LoadGraph("images/bac3.bmp")) == -1)return -1;
+
+	if ((roadimg = LoadGraph("images/road01.bmp")) == -1)return -1;
+
+	if ((roadimg2 = LoadGraph("images/road02.bmp")) == -1)return -1;
+
+	if ((roadimg3 = LoadGraph("images/road03.bmp")) == -1)return -1;
+
+
+//	if ((Titleimg = LoadGraph("images/kadaiTitle.png")) == -1)return -1;
+
+//	if ((GameOverimg = LoadGraph("images/kuriahaikei.png")) == -1)return -1;
 
 	return 0;
 }
