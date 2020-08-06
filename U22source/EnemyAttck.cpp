@@ -12,20 +12,47 @@ const int AttackSpeed = 5;//攻撃ｘ座標の移動量
 const int Gravity = 1;//重力
 int EnemyAttackX;//攻撃のｘ座標
 int EnemyAttackY;//攻撃のｙ座標
+int k;
+ENEMY Enemy;
+//Airman airman;
 
+/***************
+*Airmanの攻撃
+***************/
+void Airman::AirmanAttack() {
+
+	DrawFormatString(50, 130, 0xffffff, "%d", sx);//敵のｘ座標
+	DrawFormatString(50, 160, 0xffffff, "%d", k);//敵のｘ座標
+
+	for (int i = 0; i < Air_MAX; i++) {
+		if (Air.DispFlg[i] == true) {//フラグがtrueなら入る
+			DrawGraph(Airman::AttackX[i] - Airman::MoveD + sx, Airman::AttackY[i], Enemy.Attackimage[0], TRUE);//敵の攻撃の描画
+			Airman::AttackX[i] -= AttackSpeed;//敵の攻撃を移動
+
+			//攻撃の地面や壁の当たり判定
+			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i], Enemy.direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 20 - Enemy.MoveD - sx, Airman::AttackY[i], Enemy.direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] - Enemy.MoveD - sx, Airman::AttackY[i] + 20, Enemy.direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 20 - Enemy.MoveD - sx, Airman::AttackY[i] + 20, Enemy.direction, false) == 1 ||
+				0 > Airman::AttackX[i] || Airman::AttackX[i] > 1280 && Air.DispFlg[i] == true) {
+				Airman::AttackX[i] = Airman::x;//攻撃座標を初期化する
+				Airman::AttackY[i] = Airman::y;//攻撃の座標を初期化する
+				Air.DispFlg[i] = false;//フラグをoffにする
+			}
+			k = sx;
+		}
+	}
+}
 /***************************************
 *エネミーの攻撃
 ***************************************/
 void EnemyAttck(void) {
-	SetFontSize(30);
-	/*DrawFormatString(100, 100, 0xffffff, "%d", EnemyAttackX);
-	DrawFormatString(100, 130, 0xffffff, "%d", EnemyAttackY);
-	DrawFormatString(100, 160, 0xffffff, "%d", Enemy.Attck);*/
-	//DrawFormatString(50, 160, 0xffffff, "%d", EnemyAttackX);//敵のｘ座標
 	//敵の死亡判定	0:死亡　1:表示
 	if (Enemy.drawf == 0) {
 		return;
 	}
+	Enemy.Moveflg;
+	airman.AirmanAttack();
 
 	//攻撃が発動するか確認するためのもの
 	if (Enemy.x - Enemy.Move - Enemy.Perception < player.px + 40
@@ -37,7 +64,7 @@ void EnemyAttck(void) {
 	else {
 		Enemy.Attck = false;
 	}
-
+	//コメント化していいかも
 	if (Enemy.Attck == false) {//フラグがfalseの時プレイヤーの座標をいれる
 		EnemyAttackX = Enemy.x + sx;//敵のｘ座標を入れる
 		EnemyAttackY = Enemy.y;//敵のｙ座標を入れる
@@ -53,10 +80,10 @@ void EnemyAttck(void) {
 	}
 
 	//攻撃の地面や壁の当たり判定
-	if (Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY, Enemy.direction,false) == 1 ||
-		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY, Enemy.direction,false) == 1 ||
-		Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction,false) == 1 ||
-		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction,false) == 1 &&
+	if (Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY, Enemy.direction, false) == 1 ||
+		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY, Enemy.direction, false) == 1 ||
+		Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, false) == 1 ||
+		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, false) == 1 &&
 		Enemy.AttckFlg == true) {
 		Enemy.AttckFlg = false;//フラグをoffにする
 		EnemyAttackX = Enemy.x;//攻撃座標を初期化する
@@ -65,10 +92,10 @@ void EnemyAttck(void) {
 	}
 
 	//攻撃のプレイヤーとの当たり判定
-	if ((Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY, Enemy.direction,true) == 1 ||
-		 Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY, Enemy.direction,true) == 1 ||
-		 Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction,true) == 1 ||
-		 Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction,true) == 1) &&
+	if ((Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY, Enemy.direction, true) == 1 ||
+		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY, Enemy.direction, true) == 1 ||
+		Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, true) == 1 ||
+		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, true) == 1) &&
 		Enemy.AttckFlg == true && player.hit == false) {
 		//防御していたら
 		if (player.protect == true) {

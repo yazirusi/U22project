@@ -1,5 +1,8 @@
 #pragma once
 #include"DxLib.h"
+#define Attack_MAX 10
+#define Air_MAX 5
+#define Air_Speed 2
 
 //敵の構造体
 struct ENEMY
@@ -21,7 +24,25 @@ struct ENEMY
 	int drawf = 1;	//0非表示　１表示
 	int move = 0;	//敵のノーツ一回分の移動量
 	bool AttckFlg = false;	//敵のノーツの攻撃フラグ
-};extern ENEMY Enemy;
+	int AttackY[Attack_MAX], AttackX[Attack_MAX];//攻撃の座標
+}; extern ENEMY Enemy;
+
+//エアーマンの構造体
+struct Airman :public ENEMY
+{
+	void Airmaninit();
+	void AirmanMove();
+	void AirmanAttack();
+};
+
+struct AIR
+{
+	bool DispFlg[Air_MAX];
+	void AirInit();
+};
+
+extern Airman airman;
+extern AIR Air;
 
 void EnemyMove();
-int Hitcheck(int hx, int hy, int direction ,bool pf/*, int Move*/);
+int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/);

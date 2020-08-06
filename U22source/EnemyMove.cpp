@@ -3,14 +3,15 @@
 #include"player.h"
 #include"map.h"
 
-ENEMY Enemy;
+//エアーマンの変数
+Airman airman;
+AIR Air;
 
 /***************************************
 *エネミーの動き
 ***************************************/
 void EnemyMove(void) {
-	//DrawFormatString(50, 130, 0xffffff, "%d", Enemy.x);//敵のｘ座標
-
+	airman.AirmanMove();
 	//敵の死亡判定	0:死亡　1:表示
 	if (Enemy.drawf == 0) {
 		return;
@@ -43,7 +44,7 @@ void EnemyMove(void) {
 
 		//敵の座標とマップチップの当たり判定を調べる
 		if (Enemy.direction == false) {//左に移動してる時の処理
-			if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction,false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+			if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
 				Enemy.x -= (Enemy.speed);//おｋなら移動してくる
 				Enemy.move -= (Enemy.speed);
 			}
@@ -54,7 +55,7 @@ void EnemyMove(void) {
 		}
 
 		if (Enemy.direction == TRUE) {//右に移動してる時の処理
-			if (Hitcheck(Enemy.x + Enemy.size, Enemy.y, Enemy.direction,false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+			if (Hitcheck(Enemy.x + Enemy.size, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
 				Enemy.x += (Enemy.speed);//おｋなら移動してくる
 				Enemy.move -= (Enemy.speed);
 			}
@@ -65,6 +66,58 @@ void EnemyMove(void) {
 		}
 	}
 }
+/**************
+*Airmanの初期化
+**************/
+void Airman::Airmaninit() {
+	for (int y = 0; y < MAPHEIGHT; y++) {
+		for (int x = 0; x < MAPWIDTH; x++) {
+			if (g_StageData[0][y][x] == 4) {
+				Airman::MapX = x;//敵のマップ上のｘ座標を入れる
+				Airman::MapY = y;//敵のマップ上のy座標を入れる
+				Airman::x = (x * 40);//敵の初期x座標
+				Airman::y = (y * 40);//敵の初期y座標
+			}
+		}
+	}
+
+	for (int i = 0; i < Air_MAX; i++) {
+		Airman::AttackX[i] = 0;//攻撃座標ｘを初期化
+		Airman::AttackY[i] = 0;//攻撃座標ｙを初期化
+	}
+
+	Airman::Perception = 10 * 40;//感知範囲を初期化
+}
+/***************
+*Airmanの動き
+****************/
+void Airman::AirmanMove() {
+	DrawBox((Airman::x - Airman::Move + sx), (Airman::y),
+		(Airman::x + Airman::size - Airman::Move + sx), (Airman::y + Airman::size), 0xffffff, TRUE);//敵の描画
+
+	//エアーマンの左側の感知範囲
+	if (Airman::x - Airman::Perception < player.px + 40 && Air.DispFlg[0] == false) {
+		for (int i = 0; i < Air_MAX; i++)
+		{
+			Airman::AttackX[i] = Airman::x /*+ sx*/ - 40 - i * 80;//敵の攻撃座標xをいれる
+			Airman::AttackY[i] = Airman::y - (i % 2) * 120;//敵の攻撃座標yを入れる
+			Air.DispFlg[i] = true;//感知範囲に入ったらエネミー攻撃フラグをtrueにする
+		}
+	}
+	//エアーマンの右側の感知範囲
+	if (Airman::x + Airman::Perception < player.px) {
+
+	}
+}
+/*************
+*Airの初期化
+*************/
+void AIR::AirInit() {
+	for (int i = 0; i < Air_MAX; i++)
+	{
+		Air.DispFlg[i] = false;
+	}
+}
 /**************************************
 *当たり判定
 *hx:敵キャラのｘ座標
@@ -72,11 +125,11 @@ void EnemyMove(void) {
 *Move：画面のスクロール量
 *pf:プレイヤーとの判定フラグ
 ***************************************/
-int Hitcheck(int hx, int hy, int direction ,bool pf/*, int Move*/)
+int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/)
 {
 	if (pf == true) {
 		if (hx > player.px && hx < player.px + 40
-		&&  hy > player.py - 40 && hy < player.py + 40) {
+			&& hy > player.py - 40 && hy < player.py + 40) {
 			return 1;
 		}
 		else {
