@@ -13,7 +13,7 @@ struct NOTES
 	int bcnt = 0;	//ブレンドのカウント
 	int hf = 0;	//パーフェクト判定
 	int conbo = 0;	//コンボ数
-	int encnt = 0;
+	int encnt = 0;	//敵のノーツカウント
 	const int maxn = 20;	//表示するノーツ数の数
 	int nxf = 0;		//ループのフラグ
 	int bgmflg = 0;		//bgmを流すフラグ

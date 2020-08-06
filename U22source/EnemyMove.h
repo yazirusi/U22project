@@ -23,8 +23,10 @@ struct ENEMY
 	//int count = 0;
 	int drawf = 1;	//0非表示　１表示
 	int move = 0;	//敵のノーツ一回分の移動量
-	bool AttckFlg = false;	//敵のノーツの攻撃フラグ
 	int AttackY[Attack_MAX], AttackX[Attack_MAX];//攻撃の座標
+	int MaxHP = 100;		//敵の最大HP
+	int HP = MaxHP;			//敵のHP
+	int HPdrawf = false;	//敵のHP表示フラグ
 }; extern ENEMY Enemy;
 
 //エアーマンの構造体

@@ -70,9 +70,9 @@ void notes() {
 		if (note.nbf[i] == 0 && note.nxbf == 1) {//ビートフラグが１の時
 			note.nbf[i] = 1;
 			note.mcntf[i] = 1;
-			if(note.encnt % 3 == 0){
+			/*if(note.encnt % 3 == 0){
 				note.nbf[i] = 2;
-			}
+			}*/
 			note.encnt++;
 			note.nxbf = 0;//１個フラグを建てたら通らない
 		}
@@ -111,267 +111,53 @@ void notes() {
 				DrawLine(note.nx[i], 760, note.nx[i], 850, 0x99FFFF, 8);
 				DrawLine(1280 - note.nx[i], 760, 1280 - note.nx[i], 850, 0x99FFFF, 8);
 			}
-			else {
-				DrawLine(note.nx[i], 760, note.nx[i], 850, 0xFF3366, 8);
-				DrawLine(1280 - note.nx[i], 760, 1280 - note.nx[i], 850, 0xFF3366, 8);
-			}
 
-			//左方向キーを押したら
-			if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
-				|| CheckHitKey(KEY_INPUT_LEFT) == 1) && note.nx[i] >= 610) {
-				player.right = false;
+			//判定
+			if (g_NowKey & PAD_INPUT_5 && note.nx[i] >= 620) {
 				Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
-				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
+				if (abs(note.nx[i] - 640) <= 2 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
-					player.left = true;
 					note.hf = 1;
 					note.conbo++;
-					if (player.speed < 5 && note.conbo % 3 == 0) {
-						player.speed++;
-					}
+					player.col += 10;
 				}
 
 				//グレート(10F)
-				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
+				if (abs(note.nx[i] - 640) <= 5 * note.spd && abs(note.nx[i] - 640) > 2 * note.spd) {
 					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
-					player.left = true;
 					note.hf = 2;
 					note.conbo++;
+					player.col += 4;
 				}
 
 				//ミス
-				if (abs(note.nx[i] - 640) > 10 * note.spd) {
+				if (abs(note.nx[i] - 640) > 5 * note.spd) {
 					note.conbo = 0;
-					player.left = false;
-					player.speed = 1;
+					if (player.col > 1) {
+						player.col -= 4;
+					}
 				}
 
-				//敵の行動ノーツだったら
+				/*//敵の行動ノーツだったら
 				if (note.nbf[i] == 2) {
 					if (Enemy.Attck == false) {
 						Enemy.MoveFlg = true;
 					}
 					else {
 						Enemy.AttckFlg = true;
-					}
-				}
-				player.protect = false;//防御終了
-				judgeinit(i);//ノーツの初期化
-			}
-
-			//右方向キーを押したら
-			if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
-				|| CheckHitKey(KEY_INPUT_RIGHT) == 1) && note.nx[i] >= 610) {
-				player.left = false;
-				Enemy.MoveFlg = false;
-				//パーフェクト判定(+4F)
-				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
-					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
-					player.right = true;
-					note.hf = 1;
-					note.conbo++;
-					if (player.speed < 5 && note.conbo % 3 == 0) {
-						player.speed++;
-					}
-				}
-
-				//グレート(10F)
-				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
-					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
-					player.right = true;
-					player.move = 40;
-					note.hf = 2;
-					note.conbo++;
-				}
-
-				//ミス
-				if (abs(note.nx[i] - 640) > 10 * note.spd) {
-					note.conbo = 0;
-					player.right = false;
-					player.speed = 1;
-				}
-
-				//敵の行動ノーツだったら
-				if (note.nbf[i] == 2) {
-					if (Enemy.Attck == false) {
-						Enemy.MoveFlg = true;
-					}
-					else {
-						Enemy.AttckFlg = true;
-					}
-				}
-				player.protect = false;//防御終了
-				judgeinit(i);//ノーツの初期化
-			}
-
-			//ジャンプ(ZキーorBボタン)
-			if (g_NowKey & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && note.nx[i] >= 610) {
-				Enemy.MoveFlg = false;
-				//パーフェクト判定(+4F)
-				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
-					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
-					if (player.jflag == 0) {
-						player.jump = true;
-					}
-					note.hf = 1;
-					note.conbo++;
-				}
-
-				//グレート(10F)
-				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
-					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
-					if (player.jflag == 0) {
-						player.jump = true;
-					}
-					note.hf = 2;
-					note.conbo++;
-				}
-
-				//ミス
-				if (abs(note.nx[i] - 640) > 10 * note.spd) {
-					note.conbo = 0;
-					player.jump = false;
-					player.left = false;
-					player.right = false;
-					player.speed = 1;
-				}
-
-				//敵の行動ノーツだったら
-				if (note.nbf[i] == 2) {
-					if (Enemy.Attck == false) {
-						Enemy.MoveFlg = true;
-					}
-					else {
-						Enemy.AttckFlg = true;
-					}
-				}
-				player.protect = false;//防御終了
-				judgeinit(i);//ノーツの初期化
-			}
-
-			//DキーかR1を押したら(攻撃)
-			if (g_NowKey & PAD_INPUT_6 && note.nx[i] >= 610) {
-				player.right = false;
-				player.left = false;
-				Enemy.MoveFlg = false;
-				//パーフェクト判定(+4F)
-				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
-					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
-					//攻撃フラグ(最大５個同時描画)
-					for (int ai = 0; ai < 5; ai++) {
-						if (player.af[ai] == 0) {
-							player.af[ai] = 1;
-							player.ay[ai] = player.py;
-							player.apx[ai] = player.px;
-							player.adireF[ai] = player.direF;
-							player.ajudge[ai] = 0;
-							player.at[ai] = 20;
-							break;
-						}
-					}
-
-					note.hf = 1;
-					note.conbo++;
-				}
-
-				//グレート(10F)
-				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
-					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
-					//攻撃フラグ(最大５個同時描画)
-					for (int ai = 0; ai < 5; ai++) {
-						if (player.af[ai] == 0) {
-							player.af[ai] = 1;
-							player.ay[ai] = player.py;
-							player.apx[ai] = player.px;
-							player.adireF[ai] = player.direF;
-							player.ajudge[ai] = 1;
-							player.at[ai] = 20;
-							break;
-						}
-					}
-
-					note.hf = 2;
-					note.conbo++;
-				}
-
-				//ミス
-				if (abs(note.nx[i] - 640) > 10 * note.spd) {
-					note.conbo = 0;
-					player.speed = 1;
-				}
-
-				//敵の行動ノーツだったら
-				if (note.nbf[i] == 2) {
-					if (Enemy.Attck == false) {
-						Enemy.MoveFlg = true;
-					}
-					else {
-						Enemy.AttckFlg = true;
-					}
-				}
-				player.protect = false;//防御終了
-				judgeinit(i);//ノーツの初期化
-
-				//デバッグ用
-				//攻撃フラグ(最大５個同時描画)
-				/*for (int ai = 0; ai < 5; ai++) {
-					if (player.af[ai] == 0) {
-						player.af[ai] = 1;
-						player.ay[ai] = player.py;
-						player.apx[ai] = player.px;
-						player.adireF[ai] = player.direF;
-						break;
 					}
 				}*/
-			}
-			//Xキーを押したら防御
-			if (g_NowKey & PAD_INPUT_B && note.nx[i] >= 610) {
-				player.right = false;
-				player.left = false;
-				player.speed = 1;
-				//パーフェクト判定(+4F)
-				if (abs(note.nx[i] - 640) <= 4 * note.spd) {
-					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
-					player.protect = true;
-					note.hf = 1;
-					note.conbo++;
-				}
-
-				//グレート(10F)
-				if (abs(note.nx[i] - 640) <= 10 * note.spd && abs(note.nx[i] - 640) > 4 * note.spd) {
-					PlaySoundMem(grse, DX_PLAYTYPE_BACK, TRUE);
-					player.protect = true;
-					note.hf = 2;
-					note.conbo++;
-				}
-
-				//ミス
-				if (abs(note.nx[i] - 640) > 10 * note.spd) {
-					note.conbo = 0;
-					player.protect = false;
-				}
-
-				//敵の行動ノーツだったら
-				if (note.nbf[i] == 2) {
-					if (Enemy.Attck == false) {
-						Enemy.MoveFlg = true;
-					}
-					else {
-						Enemy.AttckFlg = true;
-					}
-				}
-				player.protecJudge = note.hf;//ノーツの判定の保存する
 				judgeinit(i);//ノーツの初期化
 			}
+			
 		}
 		else {	//判定しなかったら
 			note.conbo = 0;
 			player.right = false;
 			player.left = false;
 			Enemy.MoveFlg = false;
-			player.speed = 1;
-			//敵の行動ノーツだったら
+			/*//敵の行動ノーツだったら
 			if (note.nbf[i] == 2) {
 				if (Enemy.Attck == false) {
 					Enemy.MoveFlg = true;
@@ -379,14 +165,11 @@ void notes() {
 				else {
 					Enemy.AttckFlg = true;
 				}
+			}*/
+			if (player.col > 1) {
+				player.col -= 4;
 			}
-
-			//BGM
-			if (note.bgmflg == 0) {
-				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, FALSE);
-				note.bgmflg = 1;
-			}
-			player.protect = false;//防御終了
+			//player.protect = false;//防御終了
 			note.nx[i] = 300;	//初期位置に戻す
 			note.nf[i] = 0;
 			note.nbf[i] = 0;

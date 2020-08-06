@@ -4,6 +4,11 @@
 extern int p[12]; //プレイヤーのイラスト
 extern int P[4]; //Pefect判定（イラスト）
 extern int G[2]; //Great判定
+extern int pa[4];//プレイヤーの攻撃イラスト
+extern int pj[6];//プレイヤーのジャンプイラスト
+extern int pd[8];//プレイヤーの死亡イラスト
+extern int hpg;	 //HPゲージイラスト
+extern int ag;	 //攻撃力ゲージイラスト
 
 
 extern int Backimg;  //背景イラスト

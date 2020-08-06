@@ -8,6 +8,7 @@
 #include "PlayerAttack.h"
 #include "BackgroundMove.h"
 #include "sounds.h"
+#include "GameInit.h"
 
 //player構造体
 PLAYER player;
@@ -16,19 +17,70 @@ PLAYER player;
 *プレイヤーの移動処理
 ********************************/
 void PlayerMove() {
+	/*static int x, y;
+	GetMousePoint(&x, &y);
+	DrawFormatString(30, 400, 0xffffff, "%d", x);
+	DrawFormatString(30, 430, 0xffffff, "%d", y);*/
 
 	//プレイヤーのステータス描画
 	SetFontSize(24);
-	DrawFormatString(10, 770, 0xffffff, "モチベーション：%d", player.hp);
+	DrawFormatString(10, 770, 0xffffff, "HP");
 	SetFontSize(16);
 	//DrawFormatString(30, 200, 0xffffff, "px%d", player.px);
 	//DrawFormatString(30, 230, 0xffffff, "py%d", player.py);
 	//DrawFormatString(30, 260, 0xffffff, "jflag%d", player.jflag);
 
+	//HPゲージの描画
+	DrawGraph(50, 750, hpg, TRUE);
+	//攻撃ゲージの描画
+	DrawGraph(50, 790, ag, TRUE);
+
+	//ゲージの割合
+	static float hpgauge, colgauge;
+
+	hpgauge = (float)glen * ((float)player.hp / (float)100);
+
+	if (player.hp <= 0) {
+		hpgauge = 0.0;
+	}
+
+	if (player.col > 100) {
+		player.col = 100;
+	}
+
+	colgauge = (float)glen * ((float)player.col / (float)100);
+
+	//HPゲージの減少
+	DrawBox(65 + (int)hpgauge, 769, 283, 799, 0x000000, TRUE);
+
+	//攻撃ゲージの減少
+	DrawBox(65 + (int)colgauge, 810, 283, 839, 0x000000, TRUE);
+
+	if (player.px >= 640) {
+		player.ix = 595;
+		player.iy = player.py - 80;
+	}
+	else {
+		player.ix = player.px - 45;
+		player.iy = player.py - 80;
+	}
+
 	//hp０以下で死亡
 	if (player.hp <= 0) {
+		//死ぬイラスト
+		if (player.direF == 0) {	//右向き
+			DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pd[player.pcnt++ / 16 % 4], TRUE);
+		}
+		if (player.direF == 1) {	//左向き
+			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pd[player.pcnt++ / 16 % 4 + 4], TRUE);
+		}
+		if (player.pcnt == 64) {
+			StopSoundMem(rockBGM);
+			g_GameState = 3;   //ゲームオーバー画面へ
+		}
 		return;
 	}
+
 	//敵の攻撃を食らったら点滅用カウントを加算する
 	if (player.hit == true) {
 		player.hitcnt++;
@@ -39,9 +91,9 @@ void PlayerMove() {
 		player.hitcnt = 0;
 	}
 	//左移動
-	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
-		|| CheckHitKey(KEY_INPUT_LEFT) == 1) {*/
-	if(player.left == true){
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
+		|| CheckHitKey(KEY_INPUT_LEFT) == 1 && player.af[0] == 0) {
+		player.left = true;
 		//左端に来るまで
 		if (msx < 0) {
 			//ブロックとの当たり判定
@@ -61,27 +113,23 @@ void PlayerMove() {
 				}*/
 			}
 		}
-		else {
-			player.left = false;
-		}
 		player.direF = 1;
 		//攻撃を食らったら点滅させる
-		if ((player.hitcnt % 10) < 5) {
-			if (player.px >= 640) {
-				//プレイヤーの画像（左向き）
-				DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
-			}
-			else {
-				//プレイヤーの画像（左向き）
-				DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[player.pcnt++ / 8 % 5 + 7], TRUE);
-			}
+		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.af[0] == 0) {
+			//プレイヤーの画像（左向き）
+			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, p[player.pcnt++ / 8 % 5 + 7], TRUE);
 		}
+	}
+	else {
+		player.left = false;
 	}
 	//右移動
 	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
 		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) {*/
-
-	if (player.right == true) {
+	//右移動
+	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
+		|| CheckHitKey(KEY_INPUT_RIGHT) == 1 && player.af[0] == 0) {
+		player.right = true;
 		//ブロックとの当たり判定
 		if (CheckHitBlock(2, 0) == 0) {
 			msx -= player.speed;		//マップチップのスクロール
@@ -100,49 +148,42 @@ void PlayerMove() {
 				player.p_x = player.px / 40;
 			}*/
 		}
-		else {
-			printf("a");
-		}
 
 		player.direF = 0;
 		//攻撃を食らったら点滅させる
+		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.af[0] == 0) {
+			//プレイヤーの画像（右向き）
+			DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+		}
+	}
+	else {
+		player.right = false;
+	}
+
+	if (player.right == false && player.left == false && player.af[0] == 0 && player.jflag == 0) {
+		//攻撃を食らったら点滅させる
 		if ((player.hitcnt % 10) < 5) {
-			if (player.px >= 640) {
-				//プレイヤーの画像（右向き）
-				DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+			//立ち止まっているとき
+			if (player.direF == 0) {	//右向き
+				DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, p[0], TRUE);
 			}
-			else {
-				//プレイヤーの画像（右向き）
-				DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[player.pcnt++ / 8 % 5 + 1], TRUE);
+			if (player.direF == 1) {	//左向き
+				DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, p[6], TRUE);
 			}
 		}
 	}
-
-	if (player.right == false && player.left == false) {
-		//攻撃を食らったら点滅させる
-		if ((player.hitcnt % 10) < 5) {
-			if (player.px >= 640) {
-				//立ち止まっているとき
-				if (player.direF == 0) {	//右向き
-					DrawExtendGraph(640 - 45, player.py - 80, 640 + 151, player.py + 65, p[0], TRUE);
-				}
-				if (player.direF == 1) {	//左向き
-					DrawExtendGraph(640 - 45 - 65, player.py - 80, 640 + 151 - 65, player.py + 65, p[6], TRUE);
-				}
-			}
-			else {			//立ち止まっているとき
-				if (player.direF == 0) {	//右向き
-					DrawExtendGraph(player.px - 45, player.py - 80, player.px + 151, player.py + 65, p[0], TRUE);
-				}
-				if (player.direF == 1) {	//左向き
-					DrawExtendGraph(player.px - 45 - 65, player.py - 80, player.px + 151 - 65, player.py + 65, p[6], TRUE);
-				}
-			}
+	if (player.af[0] == 1) {
+		//攻撃イラスト
+		if ((player.hitcnt % 10) < 5 && player.direF == 0) {	//右向き
+			DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 135, pa[player.pcnt++ / 8 % 2], TRUE);
+		}
+		if ((player.hitcnt % 10) < 5 && player.direF == 1) {	//左向き
+			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 135, pa[player.pcnt++ / 8 % 2 + 2], TRUE);
 		}
 	}
 
 	//自由落下処理
-	if (player.jflag == 0 && CheckHitBlock(5, 0) == 1) {
+	if (player.jflag == 0 && CheckHitBlock(4, 0) == 0) {
 		player.jflag = 1;
 		player.dflag = 1;
 		player.hozonY = player.py;	//落ちる瞬間の座標
@@ -151,14 +192,14 @@ void PlayerMove() {
 	}
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (player.jump == true) {
+	if (g_KeyFlg & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && player.jflag == 0) {
 		PlaySoundMem(jpse, DX_PLAYTYPE_BACK, TRUE);
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
 		player.spy = player.py;		//640
 		player.sp_y = player.p_y;	//17
-		player.py = player.py - 20;	//ジャンプの加速度
-		player.jump = false;
+		player.py = player.py - 17;	//ジャンプの加速度
+		player.pcnt = 0;
 	}
 
 	//ジャンプ処理（放物線）
@@ -178,28 +219,70 @@ void PlayerMove() {
 				player.sp_y = player.p_y;
 			}
 
-			//ジャンプしながら移動した先のブロック
+			//ジャンプイラスト
+			if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+				DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[0], TRUE);
+			}
+			if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+				DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[3], TRUE);
+			}
+
+			/*//ジャンプしながら移動した先のブロック
 			if (g_StageData[0][player.p_y + 1][player.p_x] != 1)
 				g_StageData[0][player.p_y + 1][player.p_x] = 0;
 
-			g_StageData[0][player.p_y][player.p_x] = 2;
+			g_StageData[0][player.p_y][player.p_x] = 2;*/
 		}
 
 		//下降してるとき
 		if (player.py - player.hozonY > 0 && player.p_y != player.sp_y - 6 || player.dflag == 1) {
 			player.dflag = 1;
-			if (g_StageData[0][player.p_y - 1][player.p_x] != 1)
+			/*if (g_StageData[0][player.p_y - 1][player.p_x] != 1)
 				g_StageData[0][player.p_y - 1][player.p_x] = 0;
 			
 			if (g_StageData[0][player.p_y][player.p_x] != 1)
-				g_StageData[0][player.p_y][player.p_x] = 2;
+				g_StageData[0][player.p_y][player.p_x] = 2;*/
 
 			//真下にブロックがあったらジャンプ処理終了
 			if (CheckHitBlock(4,0) == 1) {
 				player.dflag = 0;
 				player.jflag = 0;
 			}
+
+			//ジャンプイラスト
+			if (player.py - player.hozonY < 9) {
+				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+					DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[1], TRUE);
+				}
+				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+					DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[4], TRUE);
+				}
+			}
+			else {
+				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+					DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[2], TRUE);
+				}
+				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+					DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[5], TRUE);
+				}
+			}
 		}
+	}
+	//攻撃(R1を押したら)
+	if (g_KeyFlg & PAD_INPUT_6 && player.at[0] == 0) {
+		//攻撃フラグ(最大５個同時描画)
+		for (int ai = 0; ai < 5; ai++) {
+			if (player.af[ai] == 0) {
+				player.af[ai] = 1;
+				player.ay[ai] = player.py - 20;
+				player.apx[ai] = player.px;
+				player.adireF[ai] = player.direF;
+				player.ajudge[ai] = 0;
+				player.at[ai] = 20;
+				break;
+			}
+		}
+		player.pcnt = 5;
 	}
 }
 

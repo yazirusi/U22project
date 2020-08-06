@@ -4,8 +4,13 @@
 
 //変数の定義
 int p[12];	//プレイヤーのイラスト
+int pa[4];//プレイヤーの攻撃イラスト
 int P[4]; //Pefect判定（イラスト）
 int G[2]; //Great判定
+int pj[6];//プレイヤーのジャンプイラスト
+int pd[8];//プレイヤーの死亡イラスト
+int hpg;  //HPゲージイラスト
+int ag;   //攻撃のゲージイラスト
 
 int Backimg;  //背景イラスト
 int Backimg2;  //背景イラスト
@@ -59,6 +64,46 @@ int LoadImages()
 	if ((p[10] = LoadGraph("images/Irun-5.png")) == -1) return -1;
 
 	if ((p[11] = LoadGraph("images/Irun-6.png")) == -1) return -1;
+
+	if ((pa[0] = LoadGraph("images/attack-1.png")) == -1) return -1;
+
+	if ((pa[1] = LoadGraph("images/attack-2.png")) == -1) return -1;
+
+	if ((pa[2] = LoadGraph("images/attack-1_m.png")) == -1) return -1;
+
+	if ((pa[3] = LoadGraph("images/attack-2_m.png")) == -1) return -1;
+
+	if ((pj[0] = LoadGraph("images/jump-1.png")) == -1) return -1;
+
+	if ((pj[1] = LoadGraph("images/jump-2.png")) == -1) return -1;
+
+	if ((pj[2] = LoadGraph("images/jump-3.png")) == -1) return -1;
+
+	if ((pj[3] = LoadGraph("images/jump-1_m.png")) == -1) return -1;
+
+	if ((pj[4] = LoadGraph("images/jump-2_m.png")) == -1) return -1;
+
+	if ((pj[5] = LoadGraph("images/jump-3_m.png")) == -1) return -1;
+
+	if ((pd[0] = LoadGraph("images/dead-1.png")) == -1) return -1;
+
+	if ((pd[1] = LoadGraph("images/dead-2.png")) == -1) return -1;
+
+	if ((pd[2] = LoadGraph("images/dead-3.png")) == -1) return -1;
+
+	if ((pd[3] = LoadGraph("images/dead-4.png")) == -1) return -1;
+
+	if ((pd[4] = LoadGraph("images/dead-1_m.png")) == -1) return -1;
+
+	if ((pd[5] = LoadGraph("images/dead-2_m.png")) == -1) return -1;
+
+	if ((pd[6] = LoadGraph("images/dead-3_m.png")) == -1) return -1;
+
+	if ((pd[7] = LoadGraph("images/dead-4_m.png")) == -1) return -1;
+
+	if ((hpg = LoadGraph("images/hg.png")) == -1)return -1;
+
+	if ((ag = LoadGraph("images/ag.png")) == -1)return -1;
 
 	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
 

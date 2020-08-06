@@ -1,6 +1,12 @@
 #pragma once
 #include "DxLib.h"
 
+//ゲージの長さ
+const int glen = 218;
+
+//攻撃ゲージの最大倍率(攻撃力の計算＝基礎攻撃力 * (最大倍率 * 溜めたゲージの量))
+const int maxpmag = 9;
+
 //プレイヤーの構造体
 struct PLAYER
 {
@@ -24,9 +30,12 @@ struct PLAYER
 	const int invit = 80;	//無敵時間
 	bool protect = false;	//防御フラグ
 	int protecJudge = 0;	//防御用にノーツの判定を保存する
-	int speed = 1;	//プレイヤーの速度
+	int speed = 2;	//プレイヤーの速度
+	int ix = 0, iy = 0;			//イラストの座標
+
 	//プレイヤーのステータス
 	int hp = 100;	//HP
+	int col = 0;	//ノーツに合わせた蓄積値
 
 	//playerattack用変数(最大５個同時描画)
 	int af[5] = { 0,0,0,0,0 };	//攻撃フラグ	0:なし 1:攻撃
@@ -38,6 +47,8 @@ struct PLAYER
 	int ajudge[5] = { 0,0,0,0,0 };	//0：パーフェクト	1:グレート
 	int acolor[5] = { 0xFF0000,0xFFFF00 };	//添え字　0:赤(perfect)　1:黄色(great)
 	int at[5] = { 0,0,0,0,0 };	//攻撃の当たり判定がある時間
+	int pow = 10;				//攻撃力(基礎値10)
+	int aHitflg = false;		//多段ヒットしないようにするフラグ
 
 }; extern PLAYER player;
 

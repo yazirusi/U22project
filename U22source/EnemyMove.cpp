@@ -40,30 +40,32 @@ void EnemyMove(void) {
 		Enemy.Moveflg = 0;
 	}*/
 
-	if (Enemy.MoveFlg == true) {
-
-		//敵の座標とマップチップの当たり判定を調べる
-		if (Enemy.direction == false) {//左に移動してる時の処理
-			if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
-				Enemy.x -= (Enemy.speed);//おｋなら移動してくる
-				Enemy.move -= (Enemy.speed);
-			}
-			else
-			{
-				Enemy.direction = true;//右にするためのフラグ
-			}
+	//敵の座標とマップチップの当たり判定を調べる
+	if (Enemy.direction == false) {//左に移動してる時の処理
+		if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+			Enemy.x -= (Enemy.speed);//おｋなら移動してくる
+			Enemy.move -= (Enemy.speed);
 		}
-
-		if (Enemy.direction == TRUE) {//右に移動してる時の処理
-			if (Hitcheck(Enemy.x + Enemy.size, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
-				Enemy.x += (Enemy.speed);//おｋなら移動してくる
-				Enemy.move -= (Enemy.speed);
-			}
-			else
-			{
-				Enemy.direction = false;//左にするためのフラグ
-			}
+		else
+		{
+			Enemy.direction = true;//右にするためのフラグ
 		}
+	}
+
+	if (Enemy.direction == TRUE) {//右に移動してる時の処理
+		if (Hitcheck(Enemy.x + Enemy.size, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+			Enemy.x += (Enemy.speed);//おｋなら移動してくる
+			Enemy.move -= (Enemy.speed);
+		}
+		else
+		{
+			Enemy.direction = false;//左にするためのフラグ
+		}
+	}
+	if (Enemy.HPdrawf == true) {
+		int barlen = (Enemy.size * (Enemy.HP * 100) / Enemy.MaxHP) / 100;
+		//敵のHPバー
+		DrawBox(Enemy.x + sx, Enemy.y - 30, Enemy.x + sx + barlen, Enemy.y - 20, 0xFF0000, TRUE);
 	}
 }
 /**************

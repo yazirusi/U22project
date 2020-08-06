@@ -129,9 +129,9 @@ void GameMain(void)
 {
 	BackScrool();
 	DrawMap();
+	EnemyMove();
 	//BackScrool();
 	PlayerMove();
-	EnemyMove();
 	//DrawMap();
 	EnemyAttck();
 	notesjudge();
