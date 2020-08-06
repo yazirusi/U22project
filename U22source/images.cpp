@@ -75,9 +75,9 @@ int LoadImages()
 	if ((roadimg3 = LoadGraph("images/road03.bmp")) == -1)return -1;
 
 
-//	if ((Titleimg = LoadGraph("images/kadaiTitle.png")) == -1)return -1;
+	if ((Titleimg = LoadGraph("images/Title03.png")) == -1)return -1;
 
-//	if ((GameOverimg = LoadGraph("images/kuriahaikei.png")) == -1)return -1;
+	if ((GameOverimg = LoadGraph("images/gameover.png")) == -1)return -1;
 
 	return 0;
 }

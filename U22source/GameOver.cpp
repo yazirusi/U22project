@@ -8,7 +8,7 @@
 
 
 void DrawGameOver(void) {
-	//DrawGraph(0, 0, GameOverimg, TRUE);
+	DrawGraph(0, 0, GameOverimg, TRUE);
 	if (g_KeyFlg & PAD_INPUT_1) {
 		g_GameState = 0;	// ƒQ[ƒ€ƒƒCƒ“ˆ—‚Ö
 
