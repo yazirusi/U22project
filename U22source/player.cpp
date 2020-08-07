@@ -101,7 +101,7 @@ void PlayerMove() {
 				msx += player.speed;		//マップチップのスクロール
 				player.px -= player.speed;	//プレイヤーの座標
 				if (player.px >= 640) {
-					spd += player.speed + 1;
+					spd += player.speed - 1;
 					scrool += player.speed;	//イラストのスクロール
 					sx += player.speed;
 				}
@@ -136,7 +136,7 @@ void PlayerMove() {
 			player.px += player.speed;	//プレイヤーの座標
 
 			if (player.px >= 640) {
-				spd -= player.speed + 1;
+				spd -= player.speed -1;
 				scrool -= player.speed;	//イラストのスクロール
 				sx -= player.speed;
 			}
