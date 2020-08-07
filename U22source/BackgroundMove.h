@@ -7,3 +7,4 @@ extern int spd; //プレイヤーの移動速度
 
 //関数の宣言
 void BackScrool();
+void ScroolInit();

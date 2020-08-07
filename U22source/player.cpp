@@ -76,6 +76,7 @@ void PlayerMove() {
 		}
 		if (player.pcnt == 64) {
 			StopSoundMem(rockBGM);
+
 			g_GameState = 3;   //ゲームオーバー画面へ
 		}
 		return;
@@ -136,7 +137,7 @@ void PlayerMove() {
 			player.px += player.speed;	//プレイヤーの座標
 
 			if (player.px >= 640) {
-				spd -= player.speed -1;
+				spd -= player.speed - 1;
 				scrool -= player.speed;	//イラストのスクロール
 				sx -= player.speed;
 			}
@@ -211,7 +212,7 @@ void PlayerMove() {
 		player.p_y = player.py / 40;
 
 		//上昇してるとき
-		if (player.py - player.hozonY < 0 && player.p_y != player.sp_y) {
+		if (player.py - player.hozonY <= 0 && player.p_y != player.sp_y) {
 			//頭上にブロックがあった場合
 			if (CheckHitBlock(3,0) == 1) {
 				player.hozonY = player.py;	//落ちる瞬間の座標
@@ -432,4 +433,26 @@ int CheckHitBlock(int j,int a) {
 	}
 
 	return 0;
+}
+
+/***********************************
+*プレイヤーの初期化
+***********************************/
+void PlayerInit() {
+	player.px = 40;
+	player.py = 680;
+	player.hp = 100;
+	player.pcnt = 0;	//イラストのカウント
+	player.jflag = 0;	//ジャンプフラグ
+	player.hozonY = 0; //ジャンプした瞬間の座標
+	player.tempY = 0;	//ジャンプ時に使う入れ替え処理の変数
+	player.dflag = 0;	//下降フラグ
+	player.direF = 0;	//向きフラグ 0:右向き　1:左向き
+	player.right = false;	//右移動のフラグ false:動かない　true:動く
+	player.left = false;	//左移動のフラグ false:動かない　true:動く
+	player.jump = false;  //ジャンプフラグ false:動かない　true:動く
+	player.hit = false;	//敵の攻撃を食らったフラグ(食らって点滅している間無敵)
+	player.hitcnt = 0;	//点滅させるカウント
+	/*protect = false;	//防御フラグ
+	protecJudge = 0;	//防御用にノーツの判定を保存する*/
 }

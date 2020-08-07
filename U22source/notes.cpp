@@ -89,7 +89,7 @@ void notes() {
 		//BGM‚ð—¬‚·
 		if (note.mcnt[i] == 640) {
 			if (note.bgmflg == 0) {
-				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, FALSE);
+				PlaySoundMem(rockBGM, DX_PLAYTYPE_BACK, TRUE);
 				note.bgmflg = 1;
 				note.mcnt[i] = 300;
 				note.mcntf[i] = 0;

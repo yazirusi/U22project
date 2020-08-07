@@ -2,6 +2,7 @@
 #include "images.h"
 #include "BackgroundMove.h"
 #include "player.h"
+#include "map.h"
 //#include "map.h"
 
 int spd = 2;         //スクロールスピード
@@ -22,4 +23,13 @@ void BackScrool(){
 	DrawGraph(scrool % 1280, 0, Backimg, TRUE);
 	SetDrawArea(0, 0, 1280, 850);
 
+}
+/***********************
+*スクロールの初期化
+***********************/
+void ScroolInit() {
+	spd = 2;
+	scrool = 0;
+	msx = 0;
+	sx = 0;
 }

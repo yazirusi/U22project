@@ -15,7 +15,7 @@ struct PLAYER
 	int px = 0, py = 0, spy = 0;	//プレイヤー描画の座標
 	int pcnt = 0;	//イラストのカウント
 	int jlong = 0;  //押した長さでジャンプ力を変える
-	int jlength = 0;//一回SHIFTを離してから入力を受け付ける
+	//int jlength = 0;//一回SHIFTを離してから入力を受け付ける
 	int jflag = 0;	//ジャンプフラグ
 	int hozonY = 0; //ジャンプした瞬間の座標
 	int tempY = 0;	//ジャンプ時に使う入れ替え処理の変数
@@ -55,3 +55,4 @@ struct PLAYER
 //関数の宣言
 void PlayerMove();	//プレイヤー移動
 int CheckHitBlock(int j,int a);	//ブロックとの当たり判定
+void PlayerInit();	//プレイヤーの初期化
