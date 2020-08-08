@@ -5,15 +5,18 @@
 #include"map.h"
 #include"main.h"
 #include"notes.h"
+#include"images.h"
 
-int Attackheight = 25;//UŒ‚‚™À•W‚ÌˆÚ“®—Ê
+int Attackheight[MAXAttack]; //= 25;//UŒ‚‚™À•W‚ÌˆÚ“®—Ê(GameInit‚Å25‘ã“ü)
 const int AttackSpeed = 5;//UŒ‚‚˜À•W‚ÌˆÚ“®—Ê
 //const int AttackAmount = 3;//
 const int Gravity = 1;//d—Í
-int EnemyAttackX;//UŒ‚‚Ì‚˜À•W
-int EnemyAttackY;//UŒ‚‚Ì‚™À•W
+int EnemyAttackX[MAXAttack];//UŒ‚‚Ì‚˜À•W
+int EnemyAttackY[MAXAttack];//UŒ‚‚Ì‚™À•W
+bool AttackFlg[MAXAttack];	//UŒ‚•\¦ƒtƒ‰ƒO
+bool AttackDir[MAXAttack];	//UŒ‚‚ÌŒü‚« 0F¶@‚P:‰E
 int k;
-ENEMY Enemy;
+ENEMY Enemy[MAXEnemy];
 //Airman airman;
 
 /***************
@@ -26,14 +29,14 @@ void Airman::AirmanAttack() {
 
 	for (int i = 0; i < Air_MAX; i++) {
 		if (Air.DispFlg[i] == true) {//ƒtƒ‰ƒO‚ªtrue‚È‚ç“ü‚é
-			DrawGraph(Airman::AttackX[i] - Airman::MoveD + sx, Airman::AttackY[i], Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
+			DrawGraph(Airman::AttackX[i] - Airman::MoveD + sx, Airman::AttackY[i], EnemyAttackImg, TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
 			Airman::AttackX[i] -= AttackSpeed;//“G‚ÌUŒ‚‚ğˆÚ“®
 
 			//UŒ‚‚Ì’n–Ê‚â•Ç‚Ì“–‚½‚è”»’è
-			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i], Enemy.direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 20 - Enemy.MoveD - sx, Airman::AttackY[i], Enemy.direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] - Enemy.MoveD - sx, Airman::AttackY[i] + 20, Enemy.direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 20 - Enemy.MoveD - sx, Airman::AttackY[i] + 20, Enemy.direction, false) == 1 ||
+			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i], Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD - sx, Airman::AttackY[i], Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD - sx, Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
 				0 > Airman::AttackX[i] || Airman::AttackX[i] > 1280 && Air.DispFlg[i] == true) {
 				Airman::AttackX[i] = Airman::x;//UŒ‚À•W‚ğ‰Šú‰»‚·‚é
 				Airman::AttackY[i] = Airman::y;//UŒ‚‚ÌÀ•W‚ğ‰Šú‰»‚·‚é
@@ -47,34 +50,141 @@ void Airman::AirmanAttack() {
 *ƒGƒlƒ~[‚ÌUŒ‚
 ***************************************/
 void EnemyAttck(void) {
-	//“G‚Ì€–S”»’è	0:€–S@1:•\¦
-	if (Enemy.drawf == 0) {
-		return;
-	}
-	Enemy.Moveflg;
+
 	airman.AirmanAttack();
 
-	//ƒRƒƒ“ƒg‰»‚µ‚Ä‚¢‚¢‚©‚ài‚²‚ß‚ñg‚í‚¹‚Ä‚à‚ç‚¢‚Ü‚·j
-	if (Enemy.Attck == false) {//ƒtƒ‰ƒO‚ªfalse‚ÌƒvƒŒƒCƒ„[‚ÌÀ•W‚ğ‚¢‚ê‚é
-		EnemyAttackX = Enemy.x;//“G‚Ì‚˜À•W‚ğ“ü‚ê‚é
-		EnemyAttackY = Enemy.y;//“G‚Ì‚™À•W‚ğ“ü‚ê‚é
-		Enemy.speed = 1;//“G‚ÌˆÚ“®—Ê‚ğ‰Šú‰»
+	for (int i = 0; i < MAXEnemy; i++) {
+		//Enemy.MoveFlg;
+
+		DrawFormatString(150, 200, 0x000000, "%d", Enemy[0].x);
+		DrawFormatString(150, 230, 0x000000, "%d", AttackFlg[0]);
+		DrawFormatString(150, 260, 0x000000, "%d", AttackFlg[1]);
+
+		Enemy[i].speed = 1;
+
+		//UŒ‚‚ª”­“®‚·‚é‚©Šm”F‚·‚é‚½‚ß‚Ì‚à‚Ì(¶)
+		if (Enemy[i].x - Enemy[i].Perception < player.px + 40
+			&& Enemy[i].x > player.px
+			&& Enemy[i].direction == false) {
+			Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			for (int a = 0; a < MAXAttack; a++) {
+				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
+					AttackFlg[a] = true;
+					EnemyAttackX[a] = Enemy[i].x;//“G‚Ì‚˜À•W‚ğ“ü‚ê‚é
+					EnemyAttackY[a] = Enemy[i].y;//“G‚Ì‚™À•W‚ğ“ü‚ê‚é
+					AttackDir[a] = Enemy[i].direction;	//“G‚ÌUŒ‚‚ÌŒü‚«
+					Enemy[i].AttackInterval = 90;	//“G‚ÌUŒ‚ŠÔŠu
+					break;
+				}
+			}
+		}
+		//‰E
+		if (Enemy[i].x + Enemy[i].Perception > player.px
+			&& Enemy[i].x < player.px
+			&& Enemy[i].direction == true) {
+			Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			for (int a = 0; a < MAXAttack; a++) {
+				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
+					AttackFlg[a] = true;
+					EnemyAttackX[a] = Enemy[i].x;//“G‚Ì‚˜À•W‚ğ“ü‚ê‚é
+					EnemyAttackY[a] = Enemy[i].y;//“G‚Ì‚™À•W‚ğ“ü‚ê‚é
+					AttackDir[a] = Enemy[i].direction;	//“G‚ÌUŒ‚‚ÌŒü‚«
+					Enemy[i].AttackInterval = 90;	//“G‚ÌUŒ‚ŠÔŠu
+					break;
+				}
+			}
+		}
+
+		//“G‚ÌUŒ‚ŠÔŠu
+		if (Enemy[i].AttackInterval > 0) {
+			Enemy[i].AttackInterval--;
+		}
+		/*//ˆêŒÂ‚àUŒ‚ƒtƒ‰ƒO‚ª–³‚©‚Á‚½‚ç“®‚­
+		for (int i = 0; i < MAXAttack; i++) {
+			if (Enemy.Attack[i] == true) {
+				break;
+			}
+			if (i == MAXAttack - 1) {
+				Enemy.speed = 1;
+			}
+		}*/
+
+		for (int a = 0; a < MAXAttack && i == 29; a++) {
+			if (AttackFlg[a] == true) {//ƒtƒ‰ƒO‚ªtrue‚È‚ç“ü‚é
+				DrawGraph(EnemyAttackX[a] + sx, EnemyAttackY[a], EnemyAttackImg, TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
+				EnemyAttackY[a] -= Attackheight[a];//UŒ‚‚ğã‚É“®‚©‚·
+				if (AttackDir[a] == false) {
+					EnemyAttackX[a] -= AttackSpeed;//UŒ‚‚ğ¶‚É“®‚©‚¹‚é
+				}
+				else {
+					EnemyAttackX[a] += AttackSpeed;//UŒ‚‚ğ¶‚É“®‚©‚¹‚é
+				}
+
+				Attackheight[a] -= Gravity;//d—Í‚ğ“ü‚ê‚é
+
+				//UŒ‚‚Ì’n–Ê‚â•Ç‚Ì“–‚½‚è”»’è
+				if (Hitcheck(EnemyAttackX[a], EnemyAttackY[a], AttackDir[a], false) == 1 ||
+					Hitcheck(EnemyAttackX[a] + 20, EnemyAttackY[a], AttackDir[a], false) == 1 ||
+					Hitcheck(EnemyAttackX[a], EnemyAttackY[a] + 20, AttackDir[a], false) == 1 ||
+					Hitcheck(EnemyAttackX[a] + 20, EnemyAttackY[a] + 20, AttackDir[a], false) == 1) {
+					AttackFlg[a] = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+					Attackheight[a] = 25;//UŒ‚‚ÌˆÚ“®—Ê‚ğ‰Šú‰»‚·‚é
+				}
+
+				//UŒ‚‚ÌƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
+				if ((Hitcheck(EnemyAttackX[a], EnemyAttackY[a], AttackDir[a], true) == 1 ||
+					Hitcheck(EnemyAttackX[a] + 20, EnemyAttackY[a], AttackDir[a], true) == 1 ||
+					Hitcheck(EnemyAttackX[a], EnemyAttackY[a] + 20, AttackDir[a], true) == 1 ||
+					Hitcheck(EnemyAttackX[a] + 20, EnemyAttackY[a] + 20, AttackDir[a], true) == 1)
+					&& player.hit == false) {
+					//–hŒä‚µ‚Ä‚¢‚½‚ç
+					if (player.protect == true) {
+						//Perfect
+						if (player.protecJudge == 1) {
+							Enemy[i].drawf = 0;	//“G‚ª”½Œ‚‚ğ‚à‚ç‚¤
+						}
+						player.protect = false;//–hŒäI—¹
+						AttackFlg[a] = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+					}
+					else {
+						AttackFlg[a] = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+						Attackheight[a] = 25;//UŒ‚‚ÌˆÚ“®—Ê‚ğ‰Šú‰»‚·‚é
+						player.hp -= 20;//ƒvƒŒƒCƒ„[‚Ìhp‚ªŒ¸‚é
+						player.hit = true;//UŒ‚‚ğH‚ç‚Á‚½ƒtƒ‰ƒO
+						if (player.hp <= 0) {
+							player.pcnt = 0;	//ˆê‰ñ‚¾‚¯‰Šú‰»
+						}
+					}
+				}
+			}
+		}
 	}
 
-	//UŒ‚‚ª”­“®‚·‚é‚©Šm”F‚·‚é‚½‚ß‚Ì‚à‚Ì
-	if (Enemy.x - Enemy.Move - Enemy.Perception < player.px + 40
-		&& Enemy.x - Enemy.Move + Enemy.Perception + Enemy.size>player.px) {
-		Enemy.Attck = true;
+	/*Enemy.Attack = false;
+	//UŒ‚‚ª”­“®‚·‚é‚©Šm”F‚·‚é‚½‚ß‚Ì‚à‚Ì(¶)
+	if (Enemy.x - Enemy.Perception < player.px + 40
+		&& Enemy.x > player.px
+		&& Enemy.direction == false) {
+		Enemy.Attack = true;
 	}
-	else {
-		Enemy.Attck = false;
+	//‰E
+	if (Enemy.x + Enemy.Perception > player.px
+		&& Enemy.x < player.px
+		&& Enemy.direction == true) {
+		Enemy.Attack = true;
 	}
 
-	if (Enemy.Attck == true) {//ƒtƒ‰ƒO‚ªtrue‚È‚ç“ü‚é
+	if (Enemy.Attack == true) {//ƒtƒ‰ƒO‚ªtrue‚È‚ç“ü‚é
 		Enemy.speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
 		DrawGraph(EnemyAttackX - Enemy.MoveD + sx, EnemyAttackY, Enemy.Attackimage[0], TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
 		EnemyAttackY -= Attackheight;//UŒ‚‚ğã‚É“®‚©‚·
-		EnemyAttackX -= AttackSpeed;//UŒ‚‚ğ¶‚É“®‚©‚¹‚é
+		if (Enemy.direction == false) {
+			EnemyAttackX -= AttackSpeed;//UŒ‚‚ğ¶‚É“®‚©‚¹‚é
+		}
+		else {
+			EnemyAttackX += AttackSpeed;//UŒ‚‚ğ¶‚É“®‚©‚¹‚é
+		}
+
 		Attackheight -= Gravity;//d—Í‚ğ“ü‚ê‚é
 	}
 
@@ -83,7 +193,7 @@ void EnemyAttck(void) {
 		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY, Enemy.direction, false) == 1 ||
 		Hitcheck(EnemyAttackX - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, false) == 1 ||
 		Hitcheck(EnemyAttackX + 20 - Enemy.MoveD, EnemyAttackY + 20, Enemy.direction, false) == 1) {
-		Enemy.Attck = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+		Enemy.Attack = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
 		Attackheight = 25;//UŒ‚‚ÌˆÚ“®—Ê‚ğ‰Šú‰»‚·‚é
 	}
 
@@ -100,10 +210,10 @@ void EnemyAttck(void) {
 				Enemy.drawf = 0;	//“G‚ª”½Œ‚‚ğ‚à‚ç‚¤
 			}
 			player.protect = false;//–hŒäI—¹
-			Enemy.Attck = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+			Enemy.Attack = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
 		}
 		else {
-			Enemy.Attck = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
+			Enemy.Attack = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
 			Attackheight = 25;//UŒ‚‚ÌˆÚ“®—Ê‚ğ‰Šú‰»‚·‚é
 			player.hp -= 20;//ƒvƒŒƒCƒ„[‚Ìhp‚ªŒ¸‚é
 			player.hit = true;//UŒ‚‚ğH‚ç‚Á‚½ƒtƒ‰ƒO
@@ -112,6 +222,7 @@ void EnemyAttck(void) {
 			}
 		}
 	}
+	*/
 
 	////ƒvƒŒƒCƒ„[‚ªˆê’è”ÍˆÍ‚É“ü‚Á‚Ä‚«‚½‚ç“®‚«‚ğ~‚ß‚é
 	//if (Enemy.x - Enemy.Move - Enemy.Perception < player.px + 40

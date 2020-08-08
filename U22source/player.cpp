@@ -106,12 +106,6 @@ void PlayerMove() {
 					scrool += player.speed;	//イラストのスクロール
 					sx += player.speed;
 				}
-				/*//マップチップの座標
-				if (player.px % 40 == 38) {
-					g_StageData[0][player.p_y][player.p_x - 1] = 2;
-					g_StageData[0][player.p_y][player.p_x] = 0;
-					player.p_x = player.px / 40;
-				}*/
 			}
 		}
 		player.direF = 1;
@@ -124,9 +118,6 @@ void PlayerMove() {
 	else {
 		player.left = false;
 	}
-	//右移動
-	/*if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
-		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) {*/
 	//右移動
 	if ((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
 		|| CheckHitKey(KEY_INPUT_RIGHT) == 1 && player.af[0] == 0) {
@@ -141,13 +132,6 @@ void PlayerMove() {
 				scrool -= player.speed;	//イラストのスクロール
 				sx -= player.speed;
 			}
-
-			/*//マップチップの座標
-			if (player.px % 40 == 0) {
-				g_StageData[0][player.p_y][player.p_x + 1] = 2;
-				g_StageData[0][player.p_y][player.p_x] = 0;
-				player.p_x = player.px / 40;
-			}*/
 		}
 
 		player.direF = 0;

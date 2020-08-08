@@ -2,6 +2,7 @@
 #include"EnemyMove.h"
 #include"player.h"
 #include"map.h"
+#include"main.h"
 
 //エアーマンの変数
 Airman airman;
@@ -12,60 +13,49 @@ AIR Air;
 ***************************************/
 void EnemyMove(void) {
 	airman.AirmanMove();
-	//敵の死亡判定	0:死亡　1:表示
-	if (Enemy.drawf == 0) {
-		return;
-	}
+	for (int i = 0; i < MAXEnemy; i++) {
 
-	if (Enemy.drawf == 1) {
-		DrawBox((Enemy.x - Enemy.Move + sx), (Enemy.y),
-			(Enemy.x + Enemy.size - Enemy.Move + sx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//敵の描画
-	}
+		//敵が画面外だったら非表示
+		if ((-sx) < Enemy[i].x + Enemy[i].size && (-sx) + WIDTH < Enemy[i].x) {
+			Enemy[i].drawf = 0;
+		}
+		else {
+			Enemy[i].drawf = 1;
+		}
 
-	/*//プレイヤーが動いたフラグ＆キーを押してるか
-	if (Enemy.Moveflg == 1 && CheckHitKey(KEY_INPUT_RIGHT) != 1) {
-		Enemy.Move -= 2;//敵キャラの移動に加算するスクロール量
-		if (Enemy.Attck == true) {
-			Enemy.MoveD -= 2;
+		//敵が死ぬか、表示フラグが非表示なら
+		if (Enemy[i].HP <= 0 || Enemy[i].drawf == 0) {
+			continue;	//ここから下の処理をしない
 		}
-		Enemy.Moveflg = 0;//フラグを初期化
-	}
-	//プレイヤーが動いたフラグ＆キーを押してるか
-	else if (Enemy.Moveflg == 2 && CheckHitKey(KEY_INPUT_LEFT) != 1)
-	{
-		Enemy.Move += 2;//敵キャラの移動に加算するスクロール量
-		if (Enemy.Attck == true) {
-			Enemy.MoveD += 2;
-		}
-		Enemy.Moveflg = 0;
-	}*/
 
-	//敵の座標とマップチップの当たり判定を調べる
-	if (Enemy.direction == false) {//左に移動してる時の処理
-		if (Hitcheck(Enemy.x, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
-			Enemy.x -= (Enemy.speed);//おｋなら移動してくる
-			Enemy.move -= (Enemy.speed);
-		}
-		else
-		{
-			Enemy.direction = true;//右にするためのフラグ
-		}
-	}
+		DrawBox((Enemy[i].x - Enemy[i].Move + sx), (Enemy[i].y),
+		(Enemy[i].x + Enemy[i].size - Enemy[i].Move + sx), (Enemy[i].y + Enemy[i].size), 0x00ffff, TRUE);//敵の描画
 
-	if (Enemy.direction == TRUE) {//右に移動してる時の処理
-		if (Hitcheck(Enemy.x + Enemy.size, Enemy.y, Enemy.direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
-			Enemy.x += (Enemy.speed);//おｋなら移動してくる
-			Enemy.move -= (Enemy.speed);
+		//敵の座標とマップチップの当たり判定を調べる
+		if (Enemy[i].direction == false) {//左に移動してる時の処理
+			if (Hitcheck(Enemy[i].x, Enemy[i].y, Enemy[i].direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+				Enemy[i].x -= (Enemy[i].speed);//おｋなら移動してくる
+			}
+			else
+			{
+				Enemy[i].direction = true;//右にするためのフラグ
+			}
 		}
-		else
-		{
-			Enemy.direction = false;//左にするためのフラグ
+
+		if (Enemy[i].direction == TRUE) {//右に移動してる時の処理
+			if (Hitcheck(Enemy[i].x + Enemy[i].size, Enemy[i].y, Enemy[i].direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
+				Enemy[i].x += (Enemy[i].speed);//おｋなら移動してくる
+			}
+			else
+			{
+				Enemy[i].direction = false;//左にするためのフラグ
+			}
 		}
-	}
-	if (Enemy.HPdrawf == true) {
-		int barlen = (Enemy.size * (Enemy.HP * 100) / Enemy.MaxHP) / 100;
-		//敵のHPバー
-		DrawBox(Enemy.x + sx, Enemy.y - 30, Enemy.x + sx + barlen, Enemy.y - 20, 0xFF0000, TRUE);
+		if (Enemy[i].HPdrawf == true) {
+			int barlen = (Enemy[i].size * (Enemy[i].HP * 100) / Enemy[i].MaxHP) / 100;
+			//敵のHPバー
+			DrawBox(Enemy[i].x + sx, Enemy[i].y - 30, Enemy[i].x + sx + barlen, Enemy[i].y - 20, 0xFF0000, TRUE);
+		}
 	}
 }
 /**************

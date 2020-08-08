@@ -69,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		key();
 
-		//Qキーを押したら敵とプレイヤーが復活(デバッグ用)
+		/*//Qキーを押したら敵とプレイヤーが復活(デバッグ用)
 		if (g_NowKey & PAD_INPUT_L) {
 			player.hp = 100;
 			Enemy.drawf = 1;
@@ -83,7 +83,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 					}
 				}
 			}
-		}
+		}*/
 
 		ClearDrawScreen();		// 画面の初期化
 		switch (g_GameState) {
@@ -130,10 +130,10 @@ void GameMain(void)
 	BackScrool();
 	DrawMap();
 	EnemyMove();
+	EnemyAttck();
 	//BackScrool();
 	PlayerMove();
 	//DrawMap();
-	EnemyAttck();
 	notesjudge();
 	notes();
 	PlayerAttack();

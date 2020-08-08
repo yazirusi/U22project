@@ -114,7 +114,7 @@ void notes() {
 
 			//判定
 			if (g_NowKey & PAD_INPUT_5 && note.nx[i] >= 620) {
-				Enemy.MoveFlg = false;
+				//Enemy.MoveFlg = false;
 				//パーフェクト判定(+4F)
 				if (abs(note.nx[i] - 640) <= 2 * note.spd) {
 					PlaySoundMem(prse, DX_PLAYTYPE_BACK, TRUE);
@@ -156,7 +156,7 @@ void notes() {
 			note.conbo = 0;
 			player.right = false;
 			player.left = false;
-			Enemy.MoveFlg = false;
+			//Enemy.MoveFlg = false;
 			/*//敵の行動ノーツだったら
 			if (note.nbf[i] == 2) {
 				if (Enemy.Attck == false) {

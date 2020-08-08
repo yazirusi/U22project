@@ -79,30 +79,36 @@ void PlayerAttack() {
 
 
 			//“G‚É“–‚½‚Á‚½ê‡
-			if ((a_x[i] + Xsize) > (Enemy.x - Enemy.Move + sx) && (Enemy.x - Enemy.Move + Enemy.size + sx) > a_x[i]
-				&& player.ay[i] < Enemy.y + Enemy.size && player.ay[i] + Ysize > Enemy.y && player.aHitflg == false) {
-				/*player.pa[i] = 0;
-				player.af[i] = 0;
-				player.ay[i] = 0;
-				player.apx[i] = 0;
-				player.at[i] = 0;*/
+			for (int j = 0; j < MAXEnemy; j++) {
+				//0:”ñ•\¦@1:•\¦
+				if (Enemy[j].drawf == 0) {
+					continue;	//”ñ•\¦‚È‚ç‚±‚±‚©‚ç‰º‚Ìˆ—‚ğ‚µ‚È‚¢
+				}
+				if ((a_x[i] + Xsize) > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > a_x[i]
+					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y && player.aHitflg == false) {
+					/*player.pa[i] = 0;
+					player.af[i] = 0;
+					player.ay[i] = 0;
+					player.apx[i] = 0;
+					player.at[i] = 0;*/
 
-				//ƒqƒbƒgƒtƒ‰ƒO
-				player.aHitflg = true;
+					//ƒqƒbƒgƒtƒ‰ƒO
+					player.aHitflg = true;
 
-				//Šî‘bUŒ‚—Í‚Éãæ‚¹‚·‚é”{—¦
-				//float bai = (float)maxpmag * ((float)player.col / (float)100);
-				int bai = 100 + (maxpmag * player.col);
+					//Šî‘bUŒ‚—Í‚Éãæ‚¹‚·‚é”{—¦
+					//float bai = (float)maxpmag * ((float)player.col / (float)100);
+					int bai = 100 + (maxpmag * player.col);
 
-				Enemy.HP -= (player.pow * bai) / 100;
-				Enemy.HPdrawf = true;
-				player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
+					Enemy[j].HP -= (player.pow * bai) / 100;
+					Enemy[j].HPdrawf = true;
+					player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
 
-				if (Enemy.HP <= 0) {
-					Enemy.HPdrawf = false;
-					Enemy.drawf = 0;
-					Enemy.x = 0;
-					Enemy.y = 0;//“G‚ÌÀ•W‚Ì‰Šú‰»
+					if (Enemy[j].HP <= 0) {
+						Enemy[j].HPdrawf = false;
+						Enemy[j].drawf = 0;
+						Enemy[j].x = 0;
+						Enemy[j].y = 0;//“G‚ÌÀ•W‚Ì‰Šú‰»
+					}
 				}
 			}
 			//UŒ‚‚Ì“–‚½‚è”»’èŠÔ(20F)‚É‚È‚Á‚½‚çÁ‚¦‚é

@@ -10,6 +10,7 @@ extern int pd[8];//プレイヤーの死亡イラスト
 extern int hpg;	 //HPゲージイラスト
 extern int ag;	 //攻撃力ゲージイラスト
 
+extern int EnemyAttackImg;	//敵の攻撃イラスト
 
 extern int Backimg;  //背景イラスト
 extern int Backimg2; //背景イラスト

@@ -12,6 +12,8 @@ int pd[8];//プレイヤーの死亡イラスト
 int hpg;  //HPゲージイラスト
 int ag;   //攻撃のゲージイラスト
 
+int EnemyAttackImg;
+
 int Backimg;  //背景イラスト
 int Backimg2;  //背景イラスト
 int Backimg3;  //背景イラスト
@@ -105,7 +107,7 @@ int LoadImages()
 
 	if ((ag = LoadGraph("images/ag.png")) == -1)return -1;
 
-	if ((Enemy.Attackimage[0] = LoadGraph("images/音符.png")) == -1) return -1;
+	if ((EnemyAttackImg = LoadGraph("images/音符.png")) == -1) return -1;
 
 	if ((Backimg = LoadGraph("images/bac.bmp")) == -1)return -1;
 
