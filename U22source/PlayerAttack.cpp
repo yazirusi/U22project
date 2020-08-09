@@ -81,7 +81,7 @@ void PlayerAttack() {
 			//敵に当たった場合
 			for (int j = 0; j < MAXEnemy; j++) {
 				//0:非表示　1:表示
-				if (Enemy[j].drawf == 0) {
+				if (Enemy[j].drawf == false) {
 					continue;	//非表示ならここから下の処理をしない
 				}
 				if ((a_x[i] + Xsize) > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > a_x[i]

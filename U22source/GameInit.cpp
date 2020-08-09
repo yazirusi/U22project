@@ -27,29 +27,8 @@ void GameInit()
 		notesinit(i);
 	}
 
-	for (int y = 0; y < MAPHEIGHT; y++) {
-		for (int x = 0; x < MAPWIDTH; x++) {
-			if (g_StageData[0][y][x] == 3) {
-				for (int i = 0; i < MAXEnemy; i++) {
-					if (Enemy[i].x == 0) {	//空きのある配列に代入する
-						Enemy[i].MapX = x;//敵のマップ上のｘ座標を入れる
-						Enemy[i].MapY = y;//敵のマップ上のy座標を入れる
-						Enemy[i].x = (x * 40);//敵の初期x座標
-						Enemy[i].y = (y * 40);//敵の初期y座標
-						Enemy[i].HP = Enemy[i].MaxHP;
-						Enemy[i].direction = 0;
-						Enemy[i].drawf = 1;	//0非表示　１表示
-						Enemy[i].HPdrawf = false;	//敵のHP表示フラグ
-						for (int a = 0; a < MAXAttack; a++) {
-							Attackheight[a] = 25;
-							AttackFlg[a] = false;//攻撃するためのフラグ:0なら範囲外：１なら範囲内
-						}
-						break;
-					}
-				}
-			}
-		}
-	}
+	EnemyInit();
+	
 	airman.Airmaninit();//エアーマンの初期化
 	Air.AirInit();//エアーマンの攻撃の初期化
 }

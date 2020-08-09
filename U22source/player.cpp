@@ -127,7 +127,7 @@ void PlayerMove() {
 			msx -= player.speed;		//マップチップのスクロール
 			player.px += player.speed;	//プレイヤーの座標
 
-			if (player.px >= 640) {
+			if (player.px > 640) {
 				spd -= player.speed - 1;
 				scrool -= player.speed;	//イラストのスクロール
 				sx -= player.speed;
@@ -437,6 +437,7 @@ void PlayerInit() {
 	player.jump = false;  //ジャンプフラグ false:動かない　true:動く
 	player.hit = false;	//敵の攻撃を食らったフラグ(食らって点滅している間無敵)
 	player.hitcnt = 0;	//点滅させるカウント
+	player.col = 0;
 	/*protect = false;	//防御フラグ
 	protecJudge = 0;	//防御用にノーツの判定を保存する*/
 }

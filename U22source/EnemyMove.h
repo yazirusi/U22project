@@ -24,13 +24,15 @@ struct ENEMY
 	//int ax[3] = { 0,0,0 };
 	//int Attackimage[1] = { 0 };
 	//int count = 0;
-	int drawf = 1;	//0”ñ•\¦@‚P•\¦
+	bool drawf = true;	//FALSE”ñ•\¦@TRUE•\¦
 	//int move = 0;	//“G‚Ìƒm[ƒcˆê‰ñ•ª‚ÌˆÚ“®—Ê
 	int AttackY[Attack_MAX], AttackX[Attack_MAX];//UŒ‚‚ÌÀ•W
-	int AttackInterval = 0;	//“G‚ÌUŒ‚ŠÔŠu
-	int MaxHP = 100;		//“G‚ÌÅ‘åHP
+	int AttackInterval = 0;	//“G‚ÌUŒ‚ŠÔŠu•Ï”
+	const int MAXAttackInterval[2] = { 90,150 };	//UŒ‚ŠÔŠu
+	int MaxHP[2] = {100,30};		//“G‚ÌÅ‘åHP
 	int HP = 0;			//“G‚ÌHP
 	bool HPdrawf = false;	//“G‚ÌHP•\¦ƒtƒ‰ƒO
+	int type = 0;	//“G‚Ìí—Ş
 }; extern ENEMY Enemy[MAXEnemy];
 
 //ƒGƒA[ƒ}ƒ“‚Ì\‘¢‘Ì
@@ -52,3 +54,4 @@ extern AIR Air;
 
 void EnemyMove();
 int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/);
+void EnemyInit();
