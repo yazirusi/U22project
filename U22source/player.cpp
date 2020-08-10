@@ -56,8 +56,13 @@ void PlayerMove() {
 	//攻撃ゲージの減少
 	DrawBox(65 + (int)colgauge, 810, 283, 839, 0x000000, TRUE);
 
-	if (player.px >= 640) {
+	//プレイヤー画像の描画位置
+	if (player.px >= 640 && player.px <= 4480) {
 		player.ix = 595;
+		player.iy = player.py - 80;
+	}
+	else if (player.px >= 4480) {
+		player.ix = player.px - 4480 + 595;
 		player.iy = player.py - 80;
 	}
 	else {
@@ -101,7 +106,7 @@ void PlayerMove() {
 			if (CheckHitBlock(1, 0) == 0) {
 				msx += player.speed;		//マップチップのスクロール
 				player.px -= player.speed;	//プレイヤーの座標
-				if (player.px >= 640) {
+				if (sx < 0 && player.px < 4480) {
 					spd += player.speed - 1;
 					scrool += player.speed;	//イラストのスクロール
 					sx += player.speed;
@@ -126,8 +131,7 @@ void PlayerMove() {
 		if (CheckHitBlock(2, 0) == 0) {
 			msx -= player.speed;		//マップチップのスクロール
 			player.px += player.speed;	//プレイヤーの座標
-
-			if (player.px > 640) {
+			if (player.px > 640 && (sx > -3840)) {
 				spd -= player.speed - 1;
 				scrool -= player.speed;	//イラストのスクロール
 				sx -= player.speed;

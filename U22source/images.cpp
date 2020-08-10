@@ -17,6 +17,7 @@ int EnemyAttackImg;
 int Backimg;  //”wŒiƒCƒ‰ƒXƒg
 int Backimg2;  //”wŒiƒCƒ‰ƒXƒg
 int Backimg3;  //”wŒiƒCƒ‰ƒXƒg
+int Backimg4;  //”wŒiƒCƒ‰ƒXƒg
 
 int roadimg;
 int roadimg2;
@@ -114,6 +115,8 @@ int LoadImages()
 	if ((Backimg2 = LoadGraph("images/bac2.bmp")) == -1)return -1;
 
 	if ((Backimg3 = LoadGraph("images/bac3.bmp")) == -1)return -1;
+
+	if ((Backimg4 = LoadGraph("images/bac_3_2.bmp")) == -1)return -1;
 
 	if ((roadimg = LoadGraph("images/road01.bmp")) == -1)return -1;
 
