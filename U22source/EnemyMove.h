@@ -1,7 +1,7 @@
 #pragma once
 #include"DxLib.h"
 #define Attack_MAX 10
-#define Air_MAX 5
+#define Air_MAX 4
 #define Air_Speed 2
 #include "EnemyAttck.h"
 
@@ -45,6 +45,8 @@ struct Airman :public ENEMY
 
 struct AIR
 {
+	int ReloadCount = 0;
+	int FlgCount = 0;
 	bool DispFlg[Air_MAX];
 	void AirInit();
 };

@@ -97,7 +97,7 @@ void Airman::Airmaninit() {
 		Airman::AttackY[i] = 0;//攻撃座標ｙを初期化
 	}
 
-	Airman::Perception = 10 * 40;//感知範囲を初期化
+	Airman::Perception = 12 * 40;//感知範囲を初期化
 }
 /***************
 *Airmanの動き
@@ -107,14 +107,35 @@ void Airman::AirmanMove() {
 		(Airman::x + Airman::size - Airman::Move + sx), (Airman::y + Airman::size), 0xffffff, TRUE);//敵の描画
 
 	//エアーマンの左側の感知範囲
-	if (Airman::x - Airman::Perception < player.px + 40 && Air.DispFlg[0] == false) {
+	if (Airman::x - Airman::Perception < player.px + 40) {
+		//敵の攻撃が描画されてるか見る
 		for (int i = 0; i < Air_MAX; i++)
 		{
-			Airman::AttackX[i] = Airman::x /*+ sx*/ - 40 - i * 80;//敵の攻撃座標xをいれる
-			Airman::AttackY[i] = Airman::y - (i % 2) * 120;//敵の攻撃座標yを入れる
-			Air.DispFlg[i] = true;//感知範囲に入ったらエネミー攻撃フラグをtrueにする
+			if (Air.DispFlg[i] == true) {
+				Air.FlgCount = 0;//描画されてるなら抜ける
+				break;
+			}
+			else
+			{
+				Air.FlgCount = 1;//描画されてないのなら１を入れる
+			}
+		}
+		//敵の攻撃がすべて消えていたのなら攻撃の情報を入れる
+		if (Air.FlgCount == 1)
+		{
+			Air.ReloadCount++;
+			if (Air.ReloadCount == 120) {
+				for (int i = 0; i < Air_MAX; i++)
+				{
+					Airman::AttackX[i] = Airman::x /*+ sx*/ - 40 - i * 120;//敵の攻撃座標xをいれる
+					Airman::AttackY[i] = Airman::y - (i % 2) * 120;//敵の攻撃座標yを入れる
+					Air.DispFlg[i] = true;//感知範囲に入ったらエネミー攻撃フラグをtrueにする
+					Air.ReloadCount = 0;
+				}
+			}
 		}
 	}
+
 	//エアーマンの右側の感知範囲
 	if (Airman::x + Airman::Perception < player.px) {
 

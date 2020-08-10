@@ -29,25 +29,27 @@ ENEMY Enemy[MAXEnemy];
 ***************/
 void Airman::AirmanAttack() {
 
-	//DrawFormatString(50, 130, 0xffffff, "%d", sx);//“G‚Ì‚˜À•W
-	//DrawFormatString(50, 160, 0xffffff, "%d", k);//“G‚Ì‚˜À•W
+	DrawFormatString(50, 130, 0xffffff, "%d", sx);//“G‚Ì‚˜À•W
+	for (int i = 0; i < Air_MAX; i++)
+	{
+		DrawFormatString(50, 160+30*i, 0xffffff, "%d", Airman::AttackX[i]);//“G‚Ì‚˜À•W
+	}
 
 	for (int i = 0; i < Air_MAX; i++) {
 		if (Air.DispFlg[i] == true) {//ƒtƒ‰ƒO‚ªtrue‚È‚ç“ü‚é
 			DrawGraph(Airman::AttackX[i] - Airman::MoveD + sx, Airman::AttackY[i], EnemyAttackImg, TRUE);//“G‚ÌUŒ‚‚Ì•`‰æ
-			Airman::AttackX[i] -= AttackSpeed;//“G‚ÌUŒ‚‚ğˆÚ“®
+			Airman::AttackX[i] -= 3;//“G‚ÌUŒ‚‚ğˆÚ“®
 
 			//UŒ‚‚Ì’n–Ê‚â•Ç‚Ì“–‚½‚è”»’è
-			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i], Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD - sx, Airman::AttackY[i], Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] - Airman::MoveD - sx, Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD - sx, Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
-				0 > Airman::AttackX[i] || Airman::AttackX[i] > 1280 && Air.DispFlg[i] == true) {
-				Airman::AttackX[i] = Airman::x;//UŒ‚À•W‚ğ‰Šú‰»‚·‚é
-				Airman::AttackY[i] = Airman::y;//UŒ‚‚ÌÀ•W‚ğ‰Šú‰»‚·‚é
+			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD , Airman::AttackY[i], Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 10 - Airman::MoveD , Airman::AttackY[i], Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] - Airman::MoveD , Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
+				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD , Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
+				0-sx > Airman::AttackX[i] || Airman::AttackX[i] > 1280-sx && Air.DispFlg[i] == true) {
+				//Airman::AttackX[i] = Airman::x;//UŒ‚À•W‚ğ‰Šú‰»‚·‚é
+				//Airman::AttackY[i] = Airman::y;//UŒ‚‚ÌÀ•W‚ğ‰Šú‰»‚·‚é
 				Air.DispFlg[i] = false;//ƒtƒ‰ƒO‚ğoff‚É‚·‚é
 			}
-			k = sx;
 		}
 	}
 }
