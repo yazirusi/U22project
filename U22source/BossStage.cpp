@@ -9,7 +9,12 @@
 #include "GameTitle.h"
 #include "GameOver.h"
 #include "BossStage.h"
+#include "map.h"
 
 void BossStage(void) {
-
+	DrawMap();
+	PlayerMove();
+	notesjudge();
+	notes();
+	PlayerAttack();
 }

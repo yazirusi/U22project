@@ -212,7 +212,7 @@ int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/)
 	y = hy / 40;//敵のｙ座標をマップチップに当てはめる
 	x = (hx /*+ Move*/) / 40;//敵のｘ座標をマップチップに当てはめる
 
-	return g_StageData[0][y][x];//マップチップ上での座標を返す
+	return g_StageData[g_stage][y][x];//マップチップ上での座標を返す
 
 	return 0;
 }

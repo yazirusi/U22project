@@ -3,6 +3,7 @@
 #include "BackgroundMove.h"
 #include "player.h"
 #include "map.h"
+#include "main.h"
 //#include "map.h"
 
 int spd = 2;         //スクロールスピード
@@ -24,6 +25,12 @@ void BackScrool() {
 	if (player.px > 3200) {
 		DrawGraph(scrool % 3840 + 3840, 0, Backimg4, TRUE);
 		DrawGraph(scrool % 3840, 0, Backimg4, TRUE);
+	}
+
+	//ボス戦のドア部分を黒くする
+	if (sx < -3540) {
+		int x = WIDTH + sx + 3540;
+		DrawBox(x, 600, x + 80, 680, 0x000000, TRUE);
 	}
 
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "DxLib.h"
-#define STAGE 1	//ステージ数
+#define STAGE 2	//ステージ数
 #define MAPHEIGHT 19	//マップチップの縦
 #define MAPWIDTH 200	//マップチップの横
 

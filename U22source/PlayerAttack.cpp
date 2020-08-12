@@ -5,6 +5,8 @@
 #include "map.h"
 #include "EnemyMove.h"
 
+int AttackExtend = 0;	//ƒQ[ƒW‚Ì—Ê‚ÅUŒ‚”ÍˆÍ‚ªL‚Ñ‚é—Ê
+
 /***************************************
 *ƒvƒŒƒCƒ„[‚ÌUŒ‚
 ***************************************/
@@ -19,7 +21,6 @@ void PlayerAttack() {
 	static int Xsize = 60;
 	static int Ysize = 60;
 	static int a_x[5] = { 0,0,0,0,0 };
-	static int AttackExtend = 0;	//ƒQ[ƒW‚Ì—Ê‚ÅUŒ‚”ÍˆÍ‚ªL‚Ñ‚é—Ê
 
 	//UŒ‚‚Ì•`‰æ
 	for (int i = 0; i < 5; i++) {

@@ -144,7 +144,17 @@ void GameMain(void)
 	//DrawFormatString(50, 100, 0xffffff, "%d", p_y);
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
-	if (g_KeyFlg & PAD_INPUT_3 || player.ix == 121, player.iy == 16) {
+	//4810 4860
+	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 4810 && player.px < 4860*/) {
+		g_stage = 1;	//マップチップ
+		StopSoundMem(rockBGM);
+		PlayerInit();
+		ScroolInit();
+
+		//ノーツの初期化
+		for (int i = 0; i < 100; i++) {
+			notesinit(i);
+		}
 		g_GameState = 4;
 	}
 }
