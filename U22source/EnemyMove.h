@@ -5,7 +5,7 @@
 #define Air_Speed 2
 #include "EnemyAttck.h"
 
-const int MAXEnemy = 30;
+const int MAXEnemy = 100;
 
 //敵の構造体
 struct ENEMY
@@ -33,6 +33,7 @@ struct ENEMY
 	int HP = 0;			//敵のHP
 	bool HPdrawf = false;	//敵のHP表示フラグ
 	int type = 0;	//敵の種類
+	int Imgcnt = 0;	//敵のイラストカウント	
 }; extern ENEMY Enemy[MAXEnemy];
 
 //エアーマンの構造体

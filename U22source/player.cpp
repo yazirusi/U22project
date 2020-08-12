@@ -70,6 +70,9 @@ void PlayerMove() {
 		player.iy = player.py - 80;
 	}
 
+	//プレイヤーの当たり判定描画
+	DrawBox(player.px + sx, player.py - 40, player.px + 40 + sx, player.py + 40, 0xFF0000, FALSE);
+
 	//hp０以下で死亡
 	if (player.hp <= 0) {
 		//死ぬイラスト

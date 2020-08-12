@@ -3,6 +3,7 @@
 #include"player.h"
 #include"map.h"
 #include"main.h"
+#include"images.h"
 
 //エアーマンの変数
 Airman airman;
@@ -13,7 +14,16 @@ AIR Air;
 ***************************************/
 void EnemyMove(void) {
 	airman.AirmanMove();
+
 	for (int i = 0; i < MAXEnemy; i++) {
+
+		//敵が動くときカウント
+		if (Enemy[i].MoveFlg == true) {
+			Enemy[i].Imgcnt++;
+		}
+		else {
+			Enemy[i].Imgcnt = 0;
+		}
 
 		//敵が画面外だったら非表示
 		if ((-sx) > Enemy[i].x + Enemy[i].size || (-sx) + WIDTH < Enemy[i].x) {
@@ -28,13 +38,40 @@ void EnemyMove(void) {
 			continue;	//ここから下の処理をしない
 		}
 
-		if (Enemy[i].type == 0) {//水色の敵
-			DrawBox((Enemy[i].x - Enemy[i].Move + sx), (Enemy[i].y),
-				(Enemy[i].x + Enemy[i].size - Enemy[i].Move + sx), (Enemy[i].y + Enemy[i].size), 0x00ffff, TRUE);//敵の描画
+		if (Enemy[i].type == 0) {//白い敵
+			DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+				(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);//敵の判定描画
+
+			//イラストの描画
+			if (Enemy[i].MoveFlg == true) {	//動いていたら
+				if (Enemy[i].direction == true) {
+					DrawGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg[Enemy[i].Imgcnt / 15 % 6 + 1], TRUE);
+				}
+				else {
+					DrawTurnGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg[Enemy[i].Imgcnt / 15 % 6 + 1], TRUE);
+				}
+			}
+			else {
+				if (Enemy[i].direction == true) {
+					DrawGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg[0], TRUE);
+				}
+				else {
+					DrawTurnGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg[0], TRUE);
+				}
+			}
 		}
-		if (Enemy[i].type == 1) {//赤色の敵
-			DrawBox((Enemy[i].x - Enemy[i].Move + sx), (Enemy[i].y),
-				(Enemy[i].x + Enemy[i].size - Enemy[i].Move + sx), (Enemy[i].y + Enemy[i].size), 0xff0000, TRUE);//敵の描画
+		if (Enemy[i].type == 1) {//赤い敵
+			//敵の判定描画
+			DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+				(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);
+
+			//イラストの反映
+			if (Enemy[i].direction == true) {
+				DrawGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg2[0], TRUE);
+			}
+			else {
+				DrawTurnGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg2[0], TRUE);
+			}
 		}
 
 		//プレイヤーの方に振り向く
@@ -50,7 +87,7 @@ void EnemyMove(void) {
 		//赤色の敵は動かない
 		if (Enemy[i].type != 1) {
 			//敵の座標とマップチップの当たり判定を調べる
-			if (Enemy[i].direction == false) {//左に移動してる時の処理
+			if (Enemy[i].direction == false && Enemy[i].MoveFlg == true) {//左に移動してる時の処理
 				if (Hitcheck(Enemy[i].x, Enemy[i].y, Enemy[i].direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
 					Enemy[i].x -= (Enemy[i].speed);//おｋなら移動してくる
 				}
@@ -60,7 +97,7 @@ void EnemyMove(void) {
 				}
 			}
 
-			if (Enemy[i].direction == TRUE) {//右に移動してる時の処理
+			if (Enemy[i].direction == TRUE && Enemy[i].MoveFlg == true) {//右に移動してる時の処理
 				if (Hitcheck(Enemy[i].x + Enemy[i].size, Enemy[i].y, Enemy[i].direction, false) != 1) {//当たり判定の関数に敵の座標とスクロール量を送る
 					Enemy[i].x += (Enemy[i].speed);//おｋなら移動してくる
 				}

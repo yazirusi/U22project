@@ -67,15 +67,18 @@ void EnemyAttck(void) {
 		DrawFormatString(150, 230, 0x000000, "%d", AttackFlg[0]);
 		DrawFormatString(150, 260, 0x000000, "%d", AttackFlg[1]);
 		DrawFormatString(150, 290, 0x000000, "%d", player.px);
-		DrawFormatString(150, 320, 0x000000, "%d", scrool);
 
-		Enemy[i].speed = 1;
+		//Enemy[i].speed = 1;
+		if (Enemy[i].type == 0) {
+			Enemy[i].MoveFlg = true;
+		}
 
 		//“G‚ÌË’ö”ÍˆÍ“à‚É‚¢‚½‚ç(¶)
 		if (Enemy[i].x - Enemy[i].Perception < player.px + 40
 			&& Enemy[i].x + 40 > player.px
 			&& Enemy[i].direction == false) {
-			Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			//Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			Enemy[i].MoveFlg = false;//“G‚Ì“®‚«‚ğ~‚ß‚é
 			for (int a = 0; a < MAXAttack; a++) {
 				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
 					AttackFlg[a] = true;
@@ -95,7 +98,8 @@ void EnemyAttck(void) {
 		if (Enemy[i].x + Enemy[i].Perception > player.px
 			&& Enemy[i].x < player.px
 			&& Enemy[i].direction == true) {
-			Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			//Enemy[i].speed = 0;//“G‚Ì“®‚«‚ğ~‚ß‚é
+			Enemy[i].MoveFlg = false;//“G‚Ì“®‚«‚ğ~‚ß‚é
 			for (int a = 0; a < MAXAttack; a++) {
 				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
 					AttackFlg[a] = true;
