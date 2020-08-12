@@ -24,6 +24,7 @@
 void DrawGameTitle(void);
 void GameMain(void);		//ゲームメイン処理
 void DrawGameOver(void);		//ゲームオーバー画面処理
+void BossStage(void);		//ボスステージへの移動
 
 /***********************************************
  * プログラムの開始
@@ -99,6 +100,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		case 3:
 			DrawGameOver();			//ゲームオーバー処理
 			break;
+		case 4:
+			BossStage();
+			break;
 		}
 		//最終更新日の表示
 		SetFontSize(32);
@@ -140,4 +144,7 @@ void GameMain(void)
 	//DrawFormatString(50, 100, 0xffffff, "%d", p_y);
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
+	if (g_KeyFlg & PAD_INPUT_3 || player.ix == 121, player.iy == 16) {
+		g_GameState = 4;
+	}
 }
