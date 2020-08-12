@@ -172,6 +172,11 @@ void PlayerMove() {
 		if ((player.hitcnt % 10) < 5 && player.direF == 1) {	//左向き
 			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 135, pa[player.pcnt++ / 8 % 2 + 2], TRUE);
 		}
+
+		//攻撃イラストの最後のシャウトしている状態を続かせる
+		if (player.pcnt > 8) {
+			player.pcnt = 8;
+		}
 	}
 
 	//自由落下処理
@@ -184,7 +189,7 @@ void PlayerMove() {
 	}
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (g_KeyFlg & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && player.jflag == 0) {
+	if (g_KeyFlg & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && player.jflag == 0 && player.af[0] == 0) {
 		PlaySoundMem(jpse, DX_PLAYTYPE_BACK, TRUE);
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
@@ -261,7 +266,7 @@ void PlayerMove() {
 		}
 	}
 	//攻撃(R1を押したら)
-	if (g_KeyFlg & PAD_INPUT_6 && player.at[0] == 0) {
+	if (g_KeyFlg & PAD_INPUT_6 && player.at[0] <= 0) {
 		//攻撃フラグ(最大５個同時描画)
 		for (int ai = 0; ai < 5; ai++) {
 			if (player.af[ai] == 0) {

@@ -19,12 +19,26 @@ void PlayerAttack() {
 	static int Xsize = 60;
 	static int Ysize = 60;
 	static int a_x[5] = { 0,0,0,0,0 };
+	static int AttackExtend = 0;	//ƒQ[ƒW‚Ì—Ê‚ÅUŒ‚”ÍˆÍ‚ªL‚Ñ‚é—Ê
 
 	//UŒ‚‚Ì•`‰æ
 	for (int i = 0; i < 5; i++) {
 		if (player.af[i] == 1) {
 			player.ay[i] = player.py - 20;
 			player.apx[i] = player.px;
+
+			if (abs(AttackExtend) < player.col * 2) {
+				if (player.adireF[0] == 0) {
+					AttackExtend += 2;
+				}
+				else {
+					AttackExtend -= 2;
+				}
+			}
+			else {
+				AttackExtend = 0;
+			}
+
 			if (player.px >= 640) {
 
 				if (player.adireF[i] == 0) {//‰EŒü‚«
@@ -45,12 +59,12 @@ void PlayerAttack() {
 
 			//‰EŒü‚«‚ÌUŒ‚‚Ì•`‰æ
 			if (player.af[i] == 1 && player.adireF[i] == 0) {
-				DrawBox(a_x[i], player.ay[i], a_x[i] + Xsize, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
+				DrawBox(a_x[i], player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
 				player.at[i]--;
 			}
 			//¶Œü‚«‚Ì•`‰æ
 			if (player.af[i] == 1 && player.adireF[i] == 1) {
-				DrawBox(a_x[i], player.ay[i], a_x[i] + Xsize, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
+				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
 				player.at[i]--;
 			}
 
@@ -84,7 +98,18 @@ void PlayerAttack() {
 				if (Enemy[j].drawf == false) {
 					continue;	//”ñ•\¦‚È‚ç‚±‚±‚©‚ç‰º‚Ìˆ—‚ğ‚µ‚È‚¢
 				}
-				if ((a_x[i] + Xsize) > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > a_x[i]
+				int ax1, ax2;
+				if (player.adireF[0] == 0) {
+					//‰E‚Ì“–‚½‚è”»’è—pÀ•W
+					ax1 = a_x[i];
+					ax2 = a_x[i] + Xsize + AttackExtend;
+				}
+				else {
+					//¶
+					ax1 = a_x[i] + AttackExtend;
+					ax2 = a_x[i] + Xsize;
+				}
+				if (ax2 > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > ax1
 					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y && player.aHitflg == false) {
 					/*player.pa[i] = 0;
 					player.af[i] = 0;
@@ -102,6 +127,7 @@ void PlayerAttack() {
 					Enemy[j].HP -= (player.pow * bai) / 100;
 					Enemy[j].HPdrawf = true;
 					player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
+					AttackExtend = 0;	//‰Šú‰»
 
 					if (Enemy[j].HP <= 0) {
 						Enemy[j].HPdrawf = false;
@@ -112,12 +138,13 @@ void PlayerAttack() {
 				}
 			}
 			//UŒ‚‚Ì“–‚½‚è”»’èŠÔ(20F)‚É‚È‚Á‚½‚çÁ‚¦‚é
-			if (player.at[i] == 0) {
+			if (player.at[i] < 0 && AttackExtend == 0) {
 				player.af[i] = 0;
 				player.pa[i] = 0;
 				player.ay[i] = 0;
 				player.apx[i] = 0;
 				player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
+				AttackExtend = 0;	//‰Šú‰»
 				player.aHitflg = false;
 			}
 		}

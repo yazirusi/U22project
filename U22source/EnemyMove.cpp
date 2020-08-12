@@ -110,7 +110,7 @@ void EnemyMove(void) {
 		if (Enemy[i].HPdrawf == true) {
 			int barlen = (Enemy[i].size * (Enemy[i].HP * 100) / Enemy[i].MaxHP[Enemy[i].type]) / 100;
 			//ìGÇÃHPÉoÅ[
-			DrawBox(Enemy[i].x + sx, Enemy[i].y - 30, Enemy[i].x + sx + barlen, Enemy[i].y - 20, 0xFF0000, TRUE);
+			DrawBox(Enemy[i].x + sx, Enemy[i].y - 70, Enemy[i].x + sx + barlen, Enemy[i].y - 60, 0xFF0000, TRUE);
 		}
 	}
 }
