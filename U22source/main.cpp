@@ -65,6 +65,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	fread(&Data, sizeof(Data), 1, fp);
 	fclose(fp);
 
+	double dNextTime = GetNowCount();
+
 	// ゲームループ
 	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 
@@ -110,9 +112,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
 		ScreenFlip();			// 裏画面の内容を表画面に反映
+		dNextTime += 16.66;
+		if (dNextTime > GetNowCount()) {
+			WaitTimer((int)dNextTime - GetNowCount());
+		}
 
 	}
-	//更新日を書き込む
+	/*//更新日を書き込む
 	Data = { imanojikan.tm_mon + 1, imanojikan.tm_mday,imanojikan.tm_hour,imanojikan.tm_min };
 
 	fopen_s(&fp, "time.txt", "wb");//ファイルを開く
@@ -120,7 +126,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return 0;
 	}
 	fwrite(&Data, sizeof(Data), 1, fp); // SaveData_t構造体の中身を出力
-	fclose(fp);//ファイルを閉じる
+	fclose(fp);//ファイルを閉じる*/
 
 	DxLib_End();	// DXライブラリ使用の終了処理
 
@@ -144,8 +150,8 @@ void GameMain(void)
 	//DrawFormatString(50, 100, 0xffffff, "%d", p_y);
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
-	//4810 4860
-	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 4810 && player.px < 4860*/) {
+	//4810 4860 7380 7420
+	if (g_KeyFlg & PAD_INPUT_3 && player.px > 7380 && player.px < 7420) {
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
 		PlayerInit();

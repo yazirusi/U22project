@@ -44,10 +44,10 @@ void PlayerAttack() {
 			DrawFormatString(0, 375, 0x000000, "1:%d", player.pa[i] + (player.px - 40) + player.apx[i] - player.px - 30);
 			if (abs(AttackExtend) < player.col * 2) {
 				if (player.adireF[0] == 0) {
-					AttackExtend += 2;
+					AttackExtend += 4;
 				}
 				else {
-					AttackExtend -= 2;
+					AttackExtend -= 4;
 				}
 			}
 			else {
