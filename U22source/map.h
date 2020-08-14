@@ -15,5 +15,7 @@ extern int sx;///マップ描画のスクロール変数
 
 extern int msx;	//マップスクロール用変数
 
+extern int sx_c;//背景スクロール回数
+
 //関数の宣言
 void DrawMap();      //マップ描画

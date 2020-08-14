@@ -22,14 +22,14 @@ void BackScrool() {
 	DrawGraph(scrool % 1280 + 1280, 0, Backimg, TRUE);
 	DrawGraph(scrool % 1280, 0, Backimg, TRUE);
 	//プレイヤーがスタートからどこまで離れたか
-	if (player.px > 3200) {
-		DrawGraph(scrool % 3840 + 3840, 0, Backimg4, TRUE);
-		DrawGraph(scrool % 3840, 0, Backimg4, TRUE);
+	if (player.px > (1280 * (sx_c - 1))) {
+		DrawGraph(scrool % (1280 * sx_c) + (1280 * sx_c), 0, Backimg4, TRUE);
+		DrawGraph(scrool % (1280 * sx_c), 0, Backimg4, TRUE);
 	}
 
 	//ボス戦のドア部分を黒くする
-	if (sx < -3540) {
-		int x = WIDTH + sx + 3540;
+	if (sx < (-1280 * sx_c) + 300) {
+		int x = WIDTH + sx + (1280 * sx_c) - 300;
 		DrawBox(x, 600, x + 80, 680, 0x000000, TRUE);
 	}
 
