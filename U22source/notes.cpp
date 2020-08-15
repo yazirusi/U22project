@@ -13,15 +13,21 @@ NOTES note;
 
 //BPM
 const double rockbgm = 182.03;
-const double fps = 1.0 / 60.0;	//１フレーム当たりの秒数
+
+/*double fps = 1.0 / 60.0;	//１フレーム当たりの秒数
 
 //1小節が来るまでの時間(ms)
-const double nps = (60.0 / rockbgm) * 2;
+double nps = (60.0 / rockbgm) * 2;*/
 
 /********************
 *ノーツ
 ********************/
 void notes() {
+
+	double fps = ave / 1000;	//１フレーム当たりの秒数
+
+	//1小節が来るまでの時間(ms)
+	double nps = (60.0 / rockbgm) * 2;
 	//1フレームをmsに変換
 	note.f += fps;
 

@@ -12,6 +12,12 @@ extern int g_KeyFlg;
 extern int g_OldKey;
 extern int g_NowKey;
 
+extern int counter, FpsTime[2], FpsTime_i;
+extern double Fps;
+
+extern double t, ave, f[60];
+extern int count;
+
 typedef struct {
 	int month;         //ŒŽ
 	int day;         //“ú

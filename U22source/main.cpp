@@ -26,9 +26,14 @@ void GameMain(void);		//ゲームメイン処理
 void DrawGameOver(void);		//ゲームオーバー画面処理
 void BossStage(void);		//ボスステージへの移動
 void FpsTimeFanction(void);
+void wait_fanc(void);
 
 int counter = 0, FpsTime[2] = { 0, }, FpsTime_i = 0;
 double Fps = 0.0;
+
+double t = 0, ave = 0, f[60];
+
+int count = 0;
 
 /***********************************************
  * プログラムの開始
@@ -93,23 +98,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 		}*/
 
+		RefreshTime = GetNowCount();            //今の時間を取得
+
 		ClearDrawScreen();		// 画面の初期化
-		switch (g_GameState) {
-		case 0 :
-			DrawGameTitle();
-			break;
-		case 1:
-			GameInit();         //初期化
-			break;
-		case 2:
-			GameMain();			//ゲームメイン処理
-			break;
-		case 3:
-			DrawGameOver();			//ゲームオーバー処理
-			break;
-		case 4:
-			BossStage();
-			break;
+		if (count > 120) {
+			switch (g_GameState) {
+			case 0:
+				DrawGameTitle();
+				break;
+			case 1:
+				GameInit();         //初期化
+				break;
+			case 2:
+				GameMain();			//ゲームメイン処理
+				break;
+			case 3:
+				DrawGameOver();			//ゲームオーバー処理
+				break;
+			case 4:
+				BossStage();
+				break;
+			}
 		}
 		//最終更新日の表示
 		SetFontSize(32);
@@ -117,18 +126,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
 
-		//RefreshTime = GetNowCount();            //今の時間を取得
+		for (int i = 0; i < 1000000; i++) {//わざと処理を重くするやつ
 
+		}
+
+		//RefreshTime = GetNowCount();            //今の時間を取得
 		FpsTimeFanction();	//フレームレート表示
+		count++;
+		ScreenFlip();			// 裏画面の内容を表画面に反映
+		//wait_fanc();
 
 		counter++;
-		while (GetNowCount() - RefreshTime < 17);//1周の処理が17ミリ秒になるまで待つ
 
-		ScreenFlip();			// 裏画面の内容を表画面に反映
-		dNextTime += 16.66;
+		//while (GetNowCount() - RefreshTime < 17);//1周の処理が17ミリ秒になるまで待つ
+
+		/*dNextTime += 16.66;
 		if (dNextTime > GetNowCount()) {
 			WaitTimer((int)dNextTime - GetNowCount());
-		}
+		}*/
 
 	}
 	/*//更新日を書き込む
@@ -179,9 +194,9 @@ void GameMain(void)
 }
 
 void FpsTimeFanction() {
-	if (FpsTime_i == 0)
+	/*if (FpsTime_i == 0)
 		FpsTime[0] = GetNowCount();               //1周目の時間取得
-	if (FpsTime_i == 49) {
+	if (FpsTime_i == 59) {
 		FpsTime[1] = GetNowCount();               //50周目の時間取得
 		Fps = 1000.0f / ((FpsTime[1] - FpsTime[0]) / 50.0f);//測定した値からfpsを計算
 		FpsTime_i = 0;//カウントを初期化
@@ -191,5 +206,32 @@ void FpsTimeFanction() {
 	if (Fps != 0)
 		SetFontSize(32);
 		DrawFormatString(565, 460, 0x000000, "FPS %.1f", Fps); //fpsを表示
+	return;*/
+
+	int i;
+
+	f[count % 60] = GetNowCount() - t;
+	t = GetNowCount();
+	if (count % 60 == 59) {
+		ave = 0;
+		for (i = 0; i < 60; i++)
+			ave += f[i];
+		ave /= 60;
+	}
+	if (ave != 0) {
+		SetFontSize(32);
+		DrawFormatString(565, 460, GetColor(255, 255, 255), "%.1fFPS", 1000.0 / (double)ave);
+		DrawFormatString(565, 480, GetColor(255, 255, 255), "%fms", ave);
+		//DrawFormatString(565, 480, GetColor(255, 255, 255), "%d", count);
+	}
+	return;
+}
+void wait_fanc() {
+	double term;
+	static double t = 0;
+	term = GetNowCount() - t;
+	if (16 - term > 0)
+		Sleep(16 - term);
+	t = GetNowCount();
 	return;
 }
