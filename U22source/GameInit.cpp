@@ -28,7 +28,9 @@ void GameInit()
 	}
 
 	EnemyInit();
-	
-	airman.Airmaninit();//エアーマンの初期化
-	Air.AirInit();//エアーマンの攻撃の初期化
+
+	for (int i = 0; i < MAXEnemy; i++) {
+		airman[i].Airmaninit();//エアーマンの初期化
+		Air[i].AirInit();//エアーマンの攻撃の初期化
+	}
 }

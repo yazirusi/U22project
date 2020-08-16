@@ -28,45 +28,85 @@ ENEMY Enemy[MAXEnemy];
 *Airmanの攻撃
 ***************/
 void Airman::AirmanAttack() {
-
-	DrawFormatString(50, 130, 0xffffff, "%d", sx);//敵のｘ座標
-	for (int i = 0; i < Air_MAX; i++)
-	{
-		DrawFormatString(50, 160+30*i, 0xffffff, "%d", Airman::AttackX[i]);//敵のｘ座標
+	//エアーマンの左側の感知範囲
+	if (x - Perception < player.px + 40 && x>player.px) {
+		AttackFlg[Air[1].ReloadCount] = true;
 	}
 
-	for (int i = 0; i < Air_MAX; i++) {
-		if (Air.DispFlg[i] == true) {//フラグがtrueなら入る
-			DrawGraph(Airman::AttackX[i] - Airman::MoveD + sx, Airman::AttackY[i], EnemyAttackImg, TRUE);//敵の攻撃の描画
-			Airman::AttackX[i] -= 3;//敵の攻撃を移動
+	//エアーマンの右側の感知範囲
+	if (x + Perception < player.px) {
 
-			//攻撃の地面や壁の当たり判定
-			if (Hitcheck(Airman::AttackX[i] - Airman::MoveD , Airman::AttackY[i], Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 10 - Airman::MoveD , Airman::AttackY[i], Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] - Airman::MoveD , Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
-				Hitcheck(Airman::AttackX[i] + 20 - Airman::MoveD , Airman::AttackY[i] + 20, Airman::direction, false) == 1 ||
-				0-sx > Airman::AttackX[i] || Airman::AttackX[i] > 1280-sx && Air.DispFlg[i] == true) {
-				//Airman::AttackX[i] = Airman::x;//攻撃座標を初期化する
-				//Airman::AttackY[i] = Airman::y;//攻撃の座標を初期化する
-				Air.DispFlg[i] = false;//フラグをoffにする
-			}
+	}
+
+	Air[Air[1].ReloadCount].AirMove(x, y);
+
+}
+/*************
+*
+**************/
+int AIR::AirMove(int X, int Y) {
+	if (AttackFlg[Air[1].ReloadCount] == true)
+	{
+		if (airman[Air[1].ReloadCount].Jump == 20 && DispFlg[0] == false
+			/*&& Downx != 0 && Downy != 0*/) {
+			Downx = X;
+			Downy = Y;
+			DispFlg[0] = true;
+		}
+		if (airman[Air[1].ReloadCount].Jump == 0 && DispFlg[1] == false
+			/*&& Upx != 0 && Upy != 0*/) {
+			Upx = X;
+			Upy = Y;
+			DispFlg[1] = true;
 		}
 	}
+
+	if (/*Downx != 0 && Downy != 0 && */DispFlg[0] == true) {
+		DrawGraph(Downx + sx, Downy, EnemyAttackImg, TRUE);//敵の攻撃の描画
+		Downx -= 3;
+		if (Hitcheck(Downx, Downy, 0, false) == 1 ||
+			Hitcheck(Downx + 20, Downy, 0, false) == 1 ||
+			Hitcheck(Downx, Downy + 20, 0, false) == 1 ||
+			Hitcheck(Downx + 20, Downy + 20, 0, false) == 1 ||
+			0 - sx >= Downx || Downx >= 1280 - sx && DispFlg[0] == true) {
+			DispFlg[0] = false;//フラグをoffにする
+			Downx = 0;
+			Downy = 0;
+		}
+	}
+	if (/*Upx != 0 && Upy != 0 &&*/ DispFlg[1] == true) {
+		DrawGraph(Upx + sx, Upy, EnemyAttackImg, TRUE);//敵の攻撃の描画
+		Upx -= 3;
+		if (Hitcheck(Upx, Upy, 0, false) == 1 ||
+			Hitcheck(Upx + 20, Upy, 0, false) == 1 ||
+			Hitcheck(Upx, Upy + 20, 0, false) == 1 ||
+			Hitcheck(Upx + 20, Upy + 20, 0, false) == 1 ||
+			0 - sx >= Upx || Upx >= 1280 - sx && DispFlg[1] == true) {
+			DispFlg[1] = false;//フラグをoffにする
+			Upx = 0;
+			Upy = 0;
+		}
+	}
+
+	return 0;
 }
 /***************************************
 *エネミーの攻撃
 ***************************************/
 void EnemyAttck(void) {
 
-	airman.AirmanAttack();
+	DrawFormatString(300, 200, 0x000000, "%d", Enemy[0].x);
+	DrawFormatString(300, 230, 0x000000, "%d", AttackFlg[0]);
+	DrawFormatString(300, 260, 0x000000, "%d", AttackFlg[1]);
+	DrawFormatString(300, 290, 0x000000, "%d", player.px);
+	DrawFormatString(300, 320, 0x000000, "%d", Air[0].Downx);
+	DrawFormatString(300, 350, 0x000000, "%d", Air[0].Upx);
 
 	for (int i = 0; i < MAXEnemy; i++) {
 		//Enemy.MoveFlg;
 
-		DrawFormatString(150, 200, 0x000000, "%d", Enemy[0].x);
-		DrawFormatString(150, 230, 0x000000, "%d", AttackFlg[0]);
-		DrawFormatString(150, 260, 0x000000, "%d", AttackFlg[1]);
-		DrawFormatString(150, 290, 0x000000, "%d", player.px);
+		Air[1].ReloadCount = i;
+		airman[i].AirmanAttack();
 
 		//Enemy[i].speed = 1;
 		if (Enemy[i].type == 0) {

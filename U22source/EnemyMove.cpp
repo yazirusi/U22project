@@ -6,16 +6,27 @@
 #include"images.h"
 
 //エアーマンの変数
-Airman airman;
-AIR Air;
+Airman airman[MAXEnemy];
+AIR Air[MAXEnemy];
 
 /***************************************
 *エネミーの動き
 ***************************************/
 void EnemyMove(void) {
-	airman.AirmanMove();
+	for (int i = 0; i < MAXEnemy; i++)
+	{
+		DrawFormatString(100, 100 + i * 30, 0xffffff, "%d", airman[i].x);
+	}
+
+	DrawFormatString(200, 130, 0xffffff, "%d", airman[0].x);
+	DrawFormatString(200, 160, 0xffffff, "%d", airman[0].y);
+	DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
+	DrawFormatString(200, 210, 0xffffff, "%d", airman[0].JumpFlg);
+	DrawFormatString(200, 240, 0xffffff, "%d", airman[0].JumpCount);
 
 	for (int i = 0; i < MAXEnemy; i++) {
+		Air[0].ReloadCount = i;
+		airman[i].AirmanMove();
 
 		//敵が動くときカウント
 		if (Enemy[i].MoveFlg == true) {
@@ -118,73 +129,76 @@ void EnemyMove(void) {
 *Airmanの初期化
 **************/
 void Airman::Airmaninit() {
-	for (int y = 0; y < MAPHEIGHT; y++) {
-		for (int x = 0; x < MAPWIDTH; x++) {
-			if (g_StageData[0][y][x] == 4) {
-				Airman::MapX = x;//敵のマップ上のｘ座標を入れる
-				Airman::MapY = y;//敵のマップ上のy座標を入れる
-				Airman::x = (x * 40);//敵の初期x座標
-				Airman::y = (y * 40);//敵の初期y座標
+
+	static int intt = 0;
+	static int innt = 0;
+
+	Perception = 12 * 40;//感知範囲を初期化
+
+	for (int j = intt; j < MAPHEIGHT; j++) {
+		for (int k = innt; k < MAPWIDTH; k++) {
+			if (g_StageData[0][j][k] == 4) {
+				/*MapX = k;
+				MapY = j;*/
+				x = (k * 40);
+				y = (j * 40);
+				intt = j;
+				innt = k + 1;
+				break;
 			}
 		}
 	}
-
-	for (int i = 0; i < Air_MAX; i++) {
-		Airman::AttackX[i] = 0;//攻撃座標ｘを初期化
-		Airman::AttackY[i] = 0;//攻撃座標ｙを初期化
-	}
-
-	Airman::Perception = 12 * 40;//感知範囲を初期化
 }
 /***************
 *Airmanの動き
 ****************/
 void Airman::AirmanMove() {
-	DrawBox((Airman::x - Airman::Move + sx), (Airman::y),
-		(Airman::x + Airman::size - Airman::Move + sx), (Airman::y + Airman::size), 0xffffff, TRUE);//敵の描画
 
-	//エアーマンの左側の感知範囲
-	if (Airman::x - Airman::Perception < player.px + 40) {
-		//敵の攻撃が描画されてるか見る
-		for (int i = 0; i < Air_MAX; i++)
-		{
-			if (Air.DispFlg[i] == true) {
-				Air.FlgCount = 0;//描画されてるなら抜ける
-				break;
-			}
-			else
-			{
-				Air.FlgCount = 1;//描画されてないのなら１を入れる
-			}
-		}
-		//敵の攻撃がすべて消えていたのなら攻撃の情報を入れる
-		if (Air.FlgCount == 1)
-		{
-			Air.ReloadCount++;
-			if (Air.ReloadCount == 120) {
-				for (int i = 0; i < Air_MAX; i++)
-				{
-					Airman::AttackX[i] = Airman::x /*+ sx*/ - 40 - i * 120;//敵の攻撃座標xをいれる
-					Airman::AttackY[i] = Airman::y - (i % 2) * 120;//敵の攻撃座標yを入れる
-					Air.DispFlg[i] = true;//感知範囲に入ったらエネミー攻撃フラグをtrueにする
-					Air.ReloadCount = 0;
-				}
-			}
+	const int Gravity = 1;
+
+	if (x != 0 && y != 0) {
+		DrawBox((x - Move + sx), (y), (x + size - Move + sx), (y + size), 0xffffff, TRUE);//敵の描画
+	}
+
+	//JumpCount++;
+
+	/*if (JumpCount == 180 && JumpFlg == false) {
+		JumpFlg = true;
+	}*/
+
+	if (JumpFlg == false) {
+		Jump -= Gravity;
+		y -= Jump;
+	}
+
+	if (Hitcheck(x, y + size - Jump, 0, false) == 1 && JumpFlg == false) {
+		//y -= Jump;
+		Jump = 20;
+		JumpFlg = true;
+	}
+	if (JumpFlg == true)
+	{
+		JumpCount++;
+		if (JumpCount == 180) {
+			JumpCount = 0;
+			JumpFlg = false;
 		}
 	}
 
-	//エアーマンの右側の感知範囲
-	if (Airman::x + Airman::Perception < player.px) {
-
-	}
+	/*else if (Hitcheck(x, y + size - Jump, 0, false) == 1 && JumpFlg == true)
+	{
+		y -= 0;
+		Jump = 20;
+		JumpCount = 0;
+		JumpFlg = false;
+	}*/
 }
 /*************
 *Airの初期化
 *************/
 void AIR::AirInit() {
-	for (int i = 0; i < Air_MAX; i++)
-	{
-		Air.DispFlg[i] = false;
+	for (int j = 0; j < Air_MAX; j++) {
+		DispFlg[j] = false;
 	}
 }
 /**************************************

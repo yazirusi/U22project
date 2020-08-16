@@ -29,11 +29,14 @@ struct ENEMY
 	int AttackY[Attack_MAX], AttackX[Attack_MAX];//攻撃の座標
 	int AttackInterval = 0;	//敵の攻撃間隔変数
 	const int MAXAttackInterval[2] = { 90,150 };	//攻撃間隔
-	int MaxHP[2] = {100,30};		//敵の最大HP
+	int MaxHP[2] = { 100,30 };		//敵の最大HP
 	int HP = 0;			//敵のHP
 	bool HPdrawf = false;	//敵のHP表示フラグ
 	int type = 0;	//敵の種類
-	int Imgcnt = 0;	//敵のイラストカウント	
+	int Imgcnt = 0;	//敵のイラストカウント
+	int Jump = 20;
+	bool JumpFlg = false;
+	int JumpCount = 0;
 }; extern ENEMY Enemy[MAXEnemy];
 
 //エアーマンの構造体
@@ -46,14 +49,17 @@ struct Airman :public ENEMY
 
 struct AIR
 {
+	int Downx, Downy;
+	int Upx, Upy;
 	int ReloadCount = 0;
 	int FlgCount = 0;
 	bool DispFlg[Air_MAX];
 	void AirInit();
+	int AirMove(int X, int Y);
 };
 
-extern Airman airman;
-extern AIR Air;
+extern Airman airman[MAXEnemy];
+extern AIR Air[MAXEnemy];
 
 void EnemyMove();
 int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/);
