@@ -25,23 +25,10 @@ void PlayerAttack() {
 	//UŒ‚‚Ì•`‰æ
 	for (int i = 0; i < 5; i++) {
 
-		player.ay[i] = player.py - 20;
-		player.apx[i] = player.px;
-		DrawFormatString(0, 450, 0x000000, "AX:%d", AttackExtend);
-		DrawFormatString(0, 400, 0x000000, "pa:%d", player.pa[i]);
-		DrawFormatString(0, 425, 0x000000, "apx:%d", player.apx[i]);
-		DrawFormatString(0, 300, 0x000000, "0:%d", player.pa[i] + 680 + player.apx[i] - player.px + 10);
-		DrawFormatString(0, 325, 0x000000, "1:%d", player.pa[i] + 600 + player.apx[i] - player.px - 30);
-		DrawFormatString(0, 350, 0x000000, "0:%d", player.pa[i] + (player.px + 40) + player.apx[i] - player.px + 10);
-		DrawFormatString(0, 375, 0x000000, "1:%d", player.pa[i] + (player.px - 40) + player.apx[i] - player.px - 30);
 		if (player.af[i] == 1) {
 			player.ay[i] = player.py - 20;
 			player.apx[i] = player.px;
 
-			DrawFormatString(0, 300, 0x000000, "0:%d", player.pa[i] + 680 + player.apx[i] - player.px + 10);
-			DrawFormatString(0, 325, 0x000000, "1:%d", player.pa[i] + 600 + player.apx[i] - player.px - 30);
-			DrawFormatString(0, 350, 0x000000, "0:%d", player.pa[i] + (player.px + 40) + player.apx[i] - player.px + 10);
-			DrawFormatString(0, 375, 0x000000, "1:%d", player.pa[i] + (player.px - 40) + player.apx[i] - player.px - 30);
 			if (abs(AttackExtend) < player.col * 2) {
 				if (player.adireF[0] == 0) {
 					AttackExtend += 4;
@@ -53,18 +40,8 @@ void PlayerAttack() {
 			else {
 				AttackExtend = 0;
 			}
-
-			if (player.px >= 640 && sx != -6400 ) {
-
-				if (player.adireF[i] == 0) {//‰EŒü‚«
-					a_x[i] = player.pa[i] + 680 + player.apx[i] - player.px + 10;	//UŒ‚‚ÌxÀ•W
-				}
-				if (player.adireF[i] == 1) {//¶Œü‚«
-					a_x[i] = player.pa[i] + 600 + player.apx[i] - player.px - 30;	//UŒ‚‚ÌxÀ•W
-				}
-			}
-			else if (sx == -6400) {
-
+			//UŒ‚‚ÌÀ•WŒvZ
+			if (g_stage == 1 || g_stage == 0) {
 				if (player.adireF[i] == 0) {//‰EŒü‚«
 					a_x[i] = player.px + 40 + sx + 10;	//UŒ‚‚ÌxÀ•W
 				}
@@ -72,14 +49,33 @@ void PlayerAttack() {
 					a_x[i] = player.px - 40 + sx - 30;	//UŒ‚‚ÌxÀ•W
 				}
 			}
-			else {
-				if (player.adireF[i] == 0) {//‰EŒü‚«
-					a_x[i] = player.pa[i] + (player.px + 40) + player.apx[i] - player.px + 10;	//UŒ‚‚ÌxÀ•W
-				}
-				if (player.adireF[i] == 1) {//¶Œü‚«
-					a_x[i] = player.pa[i] + (player.px - 40) + player.apx[i] - player.px - 30;	//UŒ‚‚ÌxÀ•W
-				}
-			}
+
+			//if (player.px >= 640 && sx != -6400 ) {
+
+			//	if (player.adireF[i] == 0) {//‰EŒü‚«
+			//		a_x[i] = player.pa[i] + 680 + player.apx[i] - player.px + 10;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//	if (player.adireF[i] == 1) {//¶Œü‚«
+			//		a_x[i] = player.pa[i] + 600 + player.apx[i] - player.px - 30;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//}
+			//else if (sx == -6400) {
+
+			//	if (player.adireF[i] == 0) {//‰EŒü‚«
+			//		a_x[i] = player.px + 40 + sx + 10;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//	if (player.adireF[i] == 1) {//¶Œü‚«
+			//		a_x[i] = player.px - 40 + sx - 30;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//}
+			//else {
+			//	if (player.adireF[i] == 0) {//‰EŒü‚«
+			//		a_x[i] = player.pa[i] + (player.px + 40) + player.apx[i] - player.px + 10;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//	if (player.adireF[i] == 1) {//¶Œü‚«
+			//		a_x[i] = player.pa[i] + (player.px - 40) + player.apx[i] - player.px - 30;	//UŒ‚‚ÌxÀ•W
+			//	}
+			//}
 
 			//‰EŒü‚«‚ÌUŒ‚‚Ì•`‰æ
 			if (player.af[i] == 1 && player.adireF[i] == 0) {
