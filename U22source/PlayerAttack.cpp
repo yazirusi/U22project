@@ -114,10 +114,6 @@ void PlayerAttack() {
 
 			//敵に当たった場合
 			for (int j = 0; j < MAXEnemy; j++) {
-				//0:非表示　1:表示
-				if (Enemy[j].drawf == false) {
-					continue;	//非表示ならここから下の処理をしない
-				}
 				int ax1, ax2;
 				if (player.adireF[0] == 0) {
 					//右の当たり判定用座標
@@ -128,6 +124,35 @@ void PlayerAttack() {
 					//左
 					ax1 = a_x[i] + AttackExtend;
 					ax2 = a_x[i] + Xsize;
+				}
+
+				//エアーマンの判定
+				if (ax2 > (airman[j].x + sx) && (airman[j].x + airman[j].size + sx) > ax1
+					&& player.ay[i] < airman[j].y + airman[j].size && player.ay[i] + Ysize > airman[j].y && player.aHitflg == false) {
+
+					//ヒットフラグ
+					player.aHitflg = true;
+
+					//基礎攻撃力に上乗せする倍率
+					//float bai = (float)maxpmag * ((float)player.col / (float)100);
+					int bai = 100 + (maxpmag * player.col);
+
+					airman[j].HP -= (player.pow * bai) / 100;
+					airman[j].HPdrawf = true;
+					player.col = 0;	//蓄積値の初期化
+					AttackExtend = 0;	//初期化
+
+					if (airman[j].HP <= 0) {
+						airman[j].HPdrawf = false;
+						airman[j].drawf = 0;
+						airman[j].x = 0;
+						airman[j].y = 0;//敵の座標の初期化
+					}
+				}
+
+				//0:非表示　1:表示
+				if (Enemy[j].drawf == false) {
+					continue;	//非表示ならここから下の処理をしない
 				}
 				if (ax2 > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > ax1
 					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y && player.aHitflg == false) {

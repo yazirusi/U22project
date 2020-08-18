@@ -14,6 +14,7 @@ extern int EnemyAttackImg;	//敵の攻撃イラスト
 
 extern int EnemyImg[7]; //敵イラスト
 extern int EnemyImg2[7];	//敵イラスト
+extern int EnemyImg3[7];	//敵イラスト
 
 extern int Backimg;  //背景イラスト
 extern int Backimg2; //背景イラスト

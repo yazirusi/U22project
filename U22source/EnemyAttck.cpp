@@ -30,63 +30,146 @@ ENEMY Enemy[MAXEnemy];
 void Airman::AirmanAttack() {
 	//ÉGÉAÅ[É}ÉìÇÃç∂ë§ÇÃä¥ímîÕàÕ
 	if (x - Perception < player.px + 40 && x>player.px) {
-		AttackFlg[Air[1].ReloadCount] = true;
+		direction = false;
+		for (int i = 0; i < MAXAttack; i++) {
+			if (AttackFlg[i] == false) {
+				if (airman[Air[1].ReloadCount].Jump == 20 && AttackInterval == 0) {
+					AttackFlg[i] = true;
+					EnemyAttackX[i] = x;
+					EnemyAttackY[i] = y - 40;
+					AttackType[i] = 2;
+					AttackInterval = 120;
+					AttackDir[i] = direction;
+				}
+				if (airman[Air[1].ReloadCount].Jump == 0) {
+					AttackFlg[i] = true;
+					EnemyAttackX[i] = x;
+					EnemyAttackY[i] = y - 40;
+					AttackType[i] = 2;
+					AttackInterval = 120;
+					AttackDir[i] = direction;
+				}
+				break;
+			}
+		}
 	}
 
 	//ÉGÉAÅ[É}ÉìÇÃâEë§ÇÃä¥ímîÕàÕ
-	if (x + Perception < player.px) {
-
+	if (x + Perception > player.px && x < player.px && x != 0) {
+		direction = true;
+		for (int i = 0; i < MAXAttack; i++) {
+			if (AttackFlg[i] == false) {
+				if (airman[Air[1].ReloadCount].Jump == 20 && AttackInterval == 0) {
+					AttackFlg[i] = true;
+					EnemyAttackX[i] = x;
+					EnemyAttackY[i] = y - 40;
+					AttackType[i] = 2;
+					AttackInterval = 120;
+					AttackDir[i] = direction;
+				}
+				if (airman[Air[1].ReloadCount].Jump == 0) {
+					AttackFlg[i] = true;
+					EnemyAttackX[i] = x;
+					EnemyAttackY[i] = y - 40;
+					AttackType[i] = 2;
+					AttackInterval = 120;
+					AttackDir[i] = direction;
+				}
+				break;
+			}
+		}
 	}
-
-	Air[Air[1].ReloadCount].AirMove(x, y);
 
 }
 /*************
 *
 **************/
 int AIR::AirMove(int X, int Y) {
-	if (AttackFlg[Air[1].ReloadCount] == true)
-	{
-		if (airman[Air[1].ReloadCount].Jump == 20 && DispFlg[0] == false
-			/*&& Downx != 0 && Downy != 0*/) {
-			Downx = X;
-			Downy = Y;
-			DispFlg[0] = true;
+	for (int i = 0; i < MAXAttack; i++) {
+		if (AttackFlg[i] == true && AttackType[i] == 2) {
+			/*if (airman[Air[1].ReloadCount].Jump == 20) {
+				EnemyAttackX[i] = X;
+				EnemyAttackY[i] = Y;
+			}
+			if (airman[Air[1].ReloadCount].Jump == 0 ) {
+				Upx = X;
+				Upy = Y;
+				DispFlg[1] = true;
+			}*/
+			DrawGraph(EnemyAttackX[i] + sx, EnemyAttackY[i], EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
+			if (AttackDir[i] == false) {
+				EnemyAttackX[i] -= 3;
+			}
+			else {
+				EnemyAttackX[i] += 3;
+			}
+			if (Hitcheck(EnemyAttackX[i], EnemyAttackY[i], 0, false) == 1 ||
+				Hitcheck(EnemyAttackX[i] + 20, EnemyAttackY[i], 0, false) == 1 ||
+				Hitcheck(EnemyAttackX[i], EnemyAttackY[i] + 20, 0, false) == 1 ||
+				Hitcheck(EnemyAttackX[i] + 20, EnemyAttackY[i] + 20, 0, false) == 1 ||
+				0 - sx >= EnemyAttackX[i] || EnemyAttackX[i] >= 1280 - sx) {
+				AttackFlg[i] = false;
+				AttackType[i] = 0;
+				EnemyAttackX[i] = 0;
+				EnemyAttackY[i] = 0;
+			}
 		}
-		if (airman[Air[1].ReloadCount].Jump == 0 && DispFlg[1] == false
-			/*&& Upx != 0 && Upy != 0*/) {
-			Upx = X;
-			Upy = Y;
-			DispFlg[1] = true;
-		}
-	}
-
-	if (/*Downx != 0 && Downy != 0 && */DispFlg[0] == true) {
-		DrawGraph(Downx + sx, Downy, EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
-		Downx -= 3;
-		if (Hitcheck(Downx, Downy, 0, false) == 1 ||
-			Hitcheck(Downx + 20, Downy, 0, false) == 1 ||
-			Hitcheck(Downx, Downy + 20, 0, false) == 1 ||
-			Hitcheck(Downx + 20, Downy + 20, 0, false) == 1 ||
-			0 - sx >= Downx || Downx >= 1280 - sx && DispFlg[0] == true) {
-			DispFlg[0] = false;//ÉtÉâÉOÇoffÇ…Ç∑ÇÈ
-			Downx = 0;
-			Downy = 0;
-		}
-	}
-	if (/*Upx != 0 && Upy != 0 &&*/ DispFlg[1] == true) {
-		DrawGraph(Upx + sx, Upy, EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
+		//if (/*EnemyAttackX[i] != 0 && EnemyAttackY[i] != 0 && */DispFlg[0] == true) {
+		/*DrawGraph(Upx + sx, Upy, EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
 		Upx -= 3;
 		if (Hitcheck(Upx, Upy, 0, false) == 1 ||
 			Hitcheck(Upx + 20, Upy, 0, false) == 1 ||
 			Hitcheck(Upx, Upy + 20, 0, false) == 1 ||
 			Hitcheck(Upx + 20, Upy + 20, 0, false) == 1 ||
-			0 - sx >= Upx || Upx >= 1280 - sx && DispFlg[1] == true) {
+			0 - sx >= Upx || Upx >= 1280 - sx) {
 			DispFlg[1] = false;//ÉtÉâÉOÇoffÇ…Ç∑ÇÈ
 			Upx = 0;
 			Upy = 0;
-		}
+		}*/
 	}
+
+	//if (AttackFlg[Air[1].ReloadCount] == true)
+	//{
+	//	if (airman[Air[1].ReloadCount].Jump == 20 && DispFlg[0] == false
+	//		/*&& Downx != 0 && Downy != 0*/) {
+	//		Downx = X;
+	//		Downy = Y;
+	//		DispFlg[0] = true;
+	//	}
+	//	if (airman[Air[1].ReloadCount].Jump == 0 && DispFlg[1] == false
+	//		/*&& Upx != 0 && Upy != 0*/) {
+	//		Upx = X;
+	//		Upy = Y;
+	//		DispFlg[1] = true;
+	//	}
+	//}
+
+	//if (/*Downx != 0 && Downy != 0 && */DispFlg[0] == true) {
+	//	DrawGraph(Downx + sx, Downy, EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
+	//	Downx -= 3;
+	//	if (Hitcheck(Downx, Downy, 0, false) == 1 ||
+	//		Hitcheck(Downx + 20, Downy, 0, false) == 1 ||
+	//		Hitcheck(Downx, Downy + 20, 0, false) == 1 ||
+	//		Hitcheck(Downx + 20, Downy + 20, 0, false) == 1 ||
+	//		0 - sx >= Downx || Downx >= 1280 - sx && DispFlg[0] == true) {
+	//		DispFlg[0] = false;//ÉtÉâÉOÇoffÇ…Ç∑ÇÈ
+	//		Downx = 0;
+	//		Downy = 0;
+	//	}
+	//}
+	//if (/*Upx != 0 && Upy != 0 &&*/ DispFlg[1] == true) {
+	//	DrawGraph(Upx + sx, Upy, EnemyAttackImg, TRUE);//ìGÇÃçUåÇÇÃï`âÊ
+	//	Upx -= 3;
+	//	if (Hitcheck(Upx, Upy, 0, false) == 1 ||
+	//		Hitcheck(Upx + 20, Upy, 0, false) == 1 ||
+	//		Hitcheck(Upx, Upy + 20, 0, false) == 1 ||
+	//		Hitcheck(Upx + 20, Upy + 20, 0, false) == 1 ||
+	//		0 - sx >= Upx || Upx >= 1280 - sx && DispFlg[1] == true) {
+	//		DispFlg[1] = false;//ÉtÉâÉOÇoffÇ…Ç∑ÇÈ
+	//		Upx = 0;
+	//		Upy = 0;
+	//	}
+	//}
 
 	return 0;
 }
@@ -101,11 +184,17 @@ void EnemyAttck(void) {
 	DrawFormatString(300, 290, 0x000000, "%d", player.px);
 	DrawFormatString(300, 320, 0x000000, "%d", Air[0].Downx);
 	DrawFormatString(300, 350, 0x000000, "%d", Air[0].Upx);
+	DrawFormatString(200, 270, 0xffffff, "a[0]%f", EnemyAttackX[0]);
+	DrawFormatString(200, 300, 0xffffff, "a[1]%f", EnemyAttackX[1]);
+
+	for (int i = 0; i < MAXAttack; i++)
+	{
+		DrawFormatString(300, 100 + i * 30, 0xff0000, "%d", AttackFlg[i]);
+	}
 
 	for (int i = 0; i < MAXEnemy; i++) {
 		//Enemy.MoveFlg;
 
-		Air[1].ReloadCount = i;
 		airman[i].AirmanAttack();
 
 		//Enemy[i].speed = 1;
@@ -226,6 +315,9 @@ void EnemyAttck(void) {
 			}
 		}
 	}
+
+	Air[Air[1].ReloadCount].AirMove(0, 0);
+
 }
 int EnemyAttackType(int i) {
 	if (AttackType[i] == 0) {	//ï˙ï®ê¸ÇÃçUåÇ

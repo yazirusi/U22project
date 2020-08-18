@@ -16,6 +16,7 @@ int EnemyAttackImg;
 
 int EnemyImg[7];	//“GƒCƒ‰ƒXƒg
 int EnemyImg2[7];	//“GƒCƒ‰ƒXƒg
+int EnemyImg3[7];	//“GƒCƒ‰ƒXƒg
 
 int Backimg;  //”wŒiƒCƒ‰ƒXƒg
 int Backimg2;  //”wŒiƒCƒ‰ƒXƒg
@@ -93,6 +94,7 @@ int LoadImages()
 	if ((EnemyImg2[4] = LoadGraph("images/e2_walk-4.png")) == -1) return -1;
 	if ((EnemyImg2[5] = LoadGraph("images/e2_walk-5.png")) == -1) return -1;
 	if ((EnemyImg2[6] = LoadGraph("images/e2_walk-6.png")) == -1) return -1;
+	if ((EnemyImg3[0] = LoadGraph("images/e3_idle-1.png")) == -1) return -1;
 
 	//”wŒi
 	if ((Backimg = LoadGraph("images/bac.bmp")) == -1)return -1;

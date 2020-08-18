@@ -23,6 +23,7 @@ void EnemyMove(void) {
 	DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
 	DrawFormatString(200, 210, 0xffffff, "%d", airman[0].JumpFlg);
 	DrawFormatString(200, 240, 0xffffff, "%d", airman[0].JumpCount);
+	DrawFormatString(200, 270, 0xffffff, "%d", Enemy[50].x);
 
 	for (int i = 0; i < MAXEnemy; i++) {
 		Air[0].ReloadCount = i;
@@ -142,6 +143,7 @@ void Airman::Airmaninit() {
 				MapY = j;*/
 				x = (k * 40);
 				y = (j * 40);
+				HP = 80;
 				intt = j;
 				innt = k + 1;
 				break;
@@ -156,8 +158,12 @@ void Airman::AirmanMove() {
 
 	const int Gravity = 1;
 
-	if (x != 0 && y != 0) {
-		DrawBox((x - Move + sx), (y), (x + size - Move + sx), (y + size), 0xffffff, TRUE);//ìGÇÃï`âÊ
+	if (x != 0 && y != 0 && direction == false) {
+		//DrawBox((x - Move + sx), (y), (x + size - Move + sx), (y + size), 0xffffff, TRUE);//ìGÇÃï`âÊ
+		DrawTurnGraph(x + sx + 3, y - size, EnemyImg3[0], TRUE);
+	}
+	if (x != 0 && y != 0 && direction == true){
+		DrawGraph(x + sx + 3, y - size, EnemyImg3[0], TRUE);
 	}
 
 	//JumpCount++;
@@ -183,6 +189,17 @@ void Airman::AirmanMove() {
 			JumpCount = 0;
 			JumpFlg = false;
 		}
+	}
+	//çUåÇä‘äu
+	if (AttackInterval > 0) {
+		AttackInterval--;
+	}
+
+	//HPï\é¶
+	if (HPdrawf == true) {
+		int barlen = (size * HP * 100 / 80) / 100;
+		//ìGÇÃHPÉoÅ[
+		DrawBox(x + sx, y - 70, x + sx + barlen, y - 60, 0xFF0000, TRUE);
 	}
 
 	/*else if (Hitcheck(x, y + size - Jump, 0, false) == 1 && JumpFlg == true)
@@ -246,7 +263,7 @@ void EnemyInit() {
 		for (int x = 0; x < MAPWIDTH; x++) {
 			if (g_StageData[0][y][x] == 3) {
 				for (int i = 0; i < MAXEnemy; i++) {
-					if (Enemy[i].x == 0) {	//ãÛÇ´ÇÃÇ†ÇÈîzóÒÇ…ë„ì¸Ç∑ÇÈ
+					if (Enemy[i].drawf == false) {	//ãÛÇ´ÇÃÇ†ÇÈîzóÒÇ…ë„ì¸Ç∑ÇÈ
 						Enemy[i].type = 0;	//è„Ç…çUåÇÇîÚÇŒÇ∑Ç‚Ç¬
 						Enemy[i].MapX = x;//ìGÇÃÉ}ÉbÉvè„ÇÃÇòç¿ïWÇì¸ÇÍÇÈ
 						Enemy[i].MapY = y;//ìGÇÃÉ}ÉbÉvè„ÇÃyç¿ïWÇì¸ÇÍÇÈ
@@ -262,7 +279,7 @@ void EnemyInit() {
 			}
 			if (g_StageData[0][y][x] == 5) {
 				for (int i = 0; i < MAXEnemy; i++) {
-					if (Enemy[i].x == 0) {	//ãÛÇ´ÇÃÇ†ÇÈîzóÒÇ…ë„ì¸Ç∑ÇÈ
+					if (Enemy[i].drawf == false) {	//ãÛÇ´ÇÃÇ†ÇÈîzóÒÇ…ë„ì¸Ç∑ÇÈ
 						Enemy[i].type = 1;	//é©ÉLÉÉÉâÇ…çUåÇîÚÇŒÇ∑Ç‚Ç¬
 						Enemy[i].MapX = x;//ìGÇÃÉ}ÉbÉvè„ÇÃÇòç¿ïWÇì¸ÇÍÇÈ
 						Enemy[i].MapY = y;//ìGÇÃÉ}ÉbÉvè„ÇÃyç¿ïWÇì¸ÇÍÇÈ
