@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include "GameTitle.h"
 #include "GameOver.h"
+#include "pause.h"
 
 /***********************************************
  * 関数のプロトタイプ宣言
@@ -27,6 +28,7 @@ void DrawGameOver(void);		//ゲームオーバー画面処理
 void BossStage(void);		//ボスステージへの移動
 void FpsTimeFanction(void);
 void wait_fanc(void);
+void Pause(void);
 
 int counter = 0, FpsTime[2] = { 0, }, FpsTime_i = 0;
 double Fps = 0.0;
@@ -118,6 +120,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			case 4:
 				BossStage();
 				break;
+			case 5:
+				Pause();	//pause画面への移動
+				break;
 			}
 		}
 		//最終更新日の表示
@@ -191,6 +196,12 @@ void GameMain(void)
 		}
 		g_GameState = 4;
 	}
+	SetFontSize(27);
+	DrawString(995, 780, "Yボタンで、操作説明", 0xffffff);
+	if (g_KeyFlg & PAD_INPUT_4) {
+		StopSoundMem(rockBGM);
+		g_GameState = 5;
+	}
 }
 
 void FpsTimeFanction() {
@@ -207,6 +218,7 @@ void FpsTimeFanction() {
 		SetFontSize(32);
 		DrawFormatString(565, 460, 0x000000, "FPS %.1f", Fps); //fpsを表示
 	return;*/
+
 
 	int i;
 
