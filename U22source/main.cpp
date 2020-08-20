@@ -131,7 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
 
-		/*for (int i = 0; i < 1000000; i++) {//わざと処理を重くするやつ
+		/*for (int i = 0; i < 5000000; i++) {//わざと処理を重くするやつ
 
 		}*/
 
@@ -143,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		counter++;
 
-		//while (GetNowCount() - RefreshTime < 17);//1周の処理が17ミリ秒になるまで待つ
+		while (GetNowCount() - RefreshTime < 20);//1周の処理が20ミリ秒(50fps)になるまで待つ
 
 		/*dNextTime += 16.66;
 		if (dNextTime > GetNowCount()) {
