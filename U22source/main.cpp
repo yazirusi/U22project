@@ -151,7 +151,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}*/
 
 	}
-	/*//更新日を書き込む
+	//更新日を書き込む
 	Data = { imanojikan.tm_mon + 1, imanojikan.tm_mday,imanojikan.tm_hour,imanojikan.tm_min };
 
 	fopen_s(&fp, "time.txt", "wb");//ファイルを開く
@@ -159,7 +159,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return 0;
 	}
 	fwrite(&Data, sizeof(Data), 1, fp); // SaveData_t構造体の中身を出力
-	fclose(fp);//ファイルを閉じる*/
+	fclose(fp);//ファイルを閉じる
 
 	DxLib_End();	// DXライブラリ使用の終了処理
 

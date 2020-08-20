@@ -28,6 +28,7 @@ void PlayerAttack() {
 	static int hozon_a_x = 0;
 	static int hozon_a_y = 0;
 	static int hozon_diref = 0;
+	static bool a_xf = false;
 	static int efcnt;
 
 	//攻撃の描画
@@ -47,16 +48,24 @@ void PlayerAttack() {
 				}
 			}
 			else {
-				AttackExtend = 0;
+				if (ExtendFlg == true) {
+					//消滅
+					player.aHitflg = true;
+					hozon_a_x = a_x[i] + AttackExtend;
+					hozon_a_y = player.ay[i];
+					hozon_diref = player.adireF[i];
+					AttackExtend = 0;
+				}
 			}
 			//攻撃の座標計算
-			if (g_stage == 1 || g_stage == 0) {
+			if (a_xf == false && (g_stage == 1 || g_stage == 0)) {
 				if (player.adireF[i] == 0) {//右向き
-					a_x[i] = player.px + 40 + sx + 10;	//攻撃のx座標
+					a_x[i] = player.px + 40 + 10;	//攻撃のx座標
 				}
 				if (player.adireF[i] == 1) {//左向き
-					a_x[i] = player.px - 40 + sx - 30;	//攻撃のx座標
+					a_x[i] = player.px - 40 - 30;	//攻撃のx座標
 				}
+				a_xf = true;
 			}
 
 			//if (player.px >= 640 && sx != -6400 ) {
@@ -115,13 +124,13 @@ void PlayerAttack() {
 				int ax1, ax2;
 				if (player.adireF[0] == 0) {
 					//右の当たり判定用座標
-					ax1 = a_x[i];
-					ax2 = a_x[i] + Xsize + AttackExtend;
+					ax1 = a_x[i] + sx;
+					ax2 = a_x[i] + sx + Xsize + AttackExtend;
 				}
 				else {
 					//左
-					ax1 = a_x[i] + AttackExtend;
-					ax2 = a_x[i] + Xsize;
+					ax1 = a_x[i] + sx + AttackExtend;
+					ax2 = a_x[i] + sx + Xsize;
 				}
 
 				//エアーマンの判定
@@ -190,46 +199,57 @@ void PlayerAttack() {
 			}
 			//攻撃の当たり判定時間(20F)になったら消える
 			if (player.at[i] <= 0) {
+				if (ExtendFlg == false) {
+					//消滅
+					player.aHitflg = true;
+					hozon_a_x = a_x[i] + sx + AttackExtend;
+					hozon_a_y = player.ay[i];
+					hozon_diref = player.adireF[i];
+					player.af[i] = 0;
+					player.col = 0;	//蓄積値の初期化
+					//AttackExtend = 0;	//初期化
+				}
 				player.at[i] = 0;
 				imgflg = false;
 			}
 			if (player.at[i] <= 0 || (AttackExtend == 0 && ExtendFlg == true)) {
-				player.af[i] = 0;
 				player.pa[i] = 0;
 				if (AttackExtend == 0 && ExtendFlg == true) {
+					player.af[i] = 0;
 					player.ay[i] = 0;
+					player.col = 0;	//蓄積値の初期化
 				}
 				player.apx[i] = 0;
-				player.col = 0;	//蓄積値の初期化
-				AttackExtend = 0;	//初期化
+				//player.col = 0;	//蓄積値の初期化
 				//player.aHitflg = false;
-				ExtendFlg = false;
+				//ExtendFlg = false;
 			}
 
 			//右向きの攻撃の描画
 			if (player.af[i] == 1 && player.adireF[i] == 0 && player.aHitflg == false) {
-				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
-				DrawGraph(a_x[i] + AttackExtend, player.ay[i], ef[0], TRUE);
+				DrawBox(a_x[i] + sx + AttackExtend, player.ay[i], a_x[i] + sx + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
+				DrawGraph(a_x[i] + sx + AttackExtend, player.ay[i], ef[0], TRUE);
 			}
 			//左向きの描画
 			if (player.af[i] == 1 && player.adireF[i] == 1 && player.aHitflg == false) {
-				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
-				DrawTurnGraph(a_x[i] + AttackExtend, player.ay[i], ef[0], TRUE);
+				DrawBox(a_x[i] + sx + AttackExtend, player.ay[i], a_x[i] + sx + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
+				DrawTurnGraph(a_x[i] + sx + AttackExtend, player.ay[i], ef[0], TRUE);
 			}
 		}
 
 		if (player.aHitflg == true) {
 			//右向きの攻撃の描画
 			if (hozon_diref == 0) {
-				DrawGraph(hozon_a_x, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
+				DrawGraph(hozon_a_x + sx, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
 			}
 			else {	//左向き
-				DrawTurnGraph(hozon_a_x, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
+				DrawTurnGraph(hozon_a_x + sx, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
 			}
 			if (efcnt == 24) {
 				player.aHitflg = false;
 				efcnt = 0;
 			}
+			a_xf = false;
 			
 		}
 
