@@ -193,9 +193,13 @@ void EnemyAttck(void) {
 	}
 
 	for (int i = 0; i < MAXEnemy; i++) {
-		//Enemy.MoveFlg;
-
 		airman[i].AirmanAttack();
+
+		//Enemy.MoveFlg;
+		//敵が死ぬか、表示フラグが非表示なら
+		if (Enemy[i].HP <= 0 || Enemy[i].drawf == false) {
+			continue;	//ここから下の処理をしない
+		}
 
 		//Enemy[i].speed = 1;
 		if (Enemy[i].type == 0) {

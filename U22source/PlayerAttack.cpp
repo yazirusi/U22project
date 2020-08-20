@@ -4,8 +4,10 @@
 #include "key.h"
 #include "map.h"
 #include "EnemyMove.h"
+#include "images.h"
 
 int AttackExtend = 0;	//ƒQ[ƒW‚Ì—Ê‚ÅUŒ‚”ÍˆÍ‚ªL‚Ñ‚é—Ê
+int imgflg;
 
 /***************************************
 *ƒvƒŒƒCƒ„[‚ÌUŒ‚
@@ -19,17 +21,24 @@ void PlayerAttack() {
 
 	//player.ax = player.p_x * 40;	//ƒ}ƒbƒvƒ`ƒbƒv‚É‡‚í‚¹‚½UŒ‚‚ÌÀ•W
 	static int Xsize = 60;
-	static int Ysize = 60;
+	static int Ysize = 33;
 	static int a_x[5] = { 0,0,0,0,0 };
+	static int a_y[5] = { 0,0,0,0,0 };
+	static bool ExtendFlg = false;
+	static int hozon_a_x = 0;
+	static int hozon_a_y = 0;
+	static int hozon_diref = 0;
+	static int efcnt;
 
 	//UŒ‚‚Ì•`‰æ
-	for (int i = 0; i < 5; i++) {
-
+	//for (int i = 0; i < 5; i++) {
+	static int i = 0;
 		if (player.af[i] == 1) {
-			player.ay[i] = player.py - 20;
+			//player.ay[i] = player.py - 20;
 			player.apx[i] = player.px;
 
 			if (abs(AttackExtend) < player.col * 2) {
+				ExtendFlg = true;
 				if (player.adireF[0] == 0) {
 					AttackExtend += 4;
 				}
@@ -77,17 +86,6 @@ void PlayerAttack() {
 			//	}
 			//}
 
-			//‰EŒü‚«‚ÌUŒ‚‚Ì•`‰æ
-			if (player.af[i] == 1 && player.adireF[i] == 0) {
-				DrawBox(a_x[i], player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
-				player.at[i]--;
-			}
-			//¶Œü‚«‚Ì•`‰æ
-			if (player.af[i] == 1 && player.adireF[i] == 1) {
-				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
-				player.at[i]--;
-			}
-
 			////ƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’è(‰EŒü‚«)
 			//if (player.af[i] == 1 && CheckHitBlock(6,i) == 0 && player.adireF[i] == 0) {
 			//	DrawBox(a_x[i], player.ay[i],a_x[i] + Xsize, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], TRUE);
@@ -128,10 +126,13 @@ void PlayerAttack() {
 
 				//ƒGƒA[ƒ}ƒ“‚Ì”»’è
 				if (ax2 > (airman[j].x + sx) && (airman[j].x + airman[j].size + sx) > ax1
-					&& player.ay[i] < airman[j].y + airman[j].size && player.ay[i] + Ysize > airman[j].y && player.aHitflg == false) {
+					&& player.ay[i] < airman[j].y + airman[j].size && player.ay[i] + Ysize > airman[j].y - airman[j].size && player.aHitflg == false) {
 
 					//ƒqƒbƒgƒtƒ‰ƒO
 					player.aHitflg = true;
+					hozon_a_x = a_x[i] + AttackExtend;
+					hozon_a_y = player.ay[i];
+					hozon_diref = player.adireF[i];
 
 					//Šî‘bUŒ‚—Í‚Éãæ‚¹‚·‚é”{—¦
 					//float bai = (float)maxpmag * ((float)player.col / (float)100);
@@ -141,6 +142,7 @@ void PlayerAttack() {
 					airman[j].HPdrawf = true;
 					player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
 					AttackExtend = 0;	//‰Šú‰»
+					player.ay[i] = 0;
 
 					if (airman[j].HP <= 0) {
 						airman[j].HPdrawf = false;
@@ -155,7 +157,7 @@ void PlayerAttack() {
 					continue;	//”ñ•\¦‚È‚ç‚±‚±‚©‚ç‰º‚Ìˆ—‚ğ‚µ‚È‚¢
 				}
 				if (ax2 > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > ax1
-					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y && player.aHitflg == false) {
+					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y - Enemy[j].size && player.aHitflg == false) {
 					/*player.pa[i] = 0;
 					player.af[i] = 0;
 					player.ay[i] = 0;
@@ -164,6 +166,9 @@ void PlayerAttack() {
 
 					//ƒqƒbƒgƒtƒ‰ƒO
 					player.aHitflg = true;
+					hozon_a_x = a_x[i] + AttackExtend;
+					hozon_a_y = player.ay[i];
+					hozon_diref = player.adireF[i];
 
 					//Šî‘bUŒ‚—Í‚Éãæ‚¹‚·‚é”{—¦
 					//float bai = (float)maxpmag * ((float)player.col / (float)100);
@@ -173,6 +178,7 @@ void PlayerAttack() {
 					Enemy[j].HPdrawf = true;
 					player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
 					AttackExtend = 0;	//‰Šú‰»
+					player.ay[i] = 0;
 
 					if (Enemy[j].HP <= 0) {
 						Enemy[j].HPdrawf = false;
@@ -183,16 +189,54 @@ void PlayerAttack() {
 				}
 			}
 			//UŒ‚‚Ì“–‚½‚è”»’èŠÔ(20F)‚É‚È‚Á‚½‚çÁ‚¦‚é
-			if (player.at[i] < 0 && AttackExtend == 0) {
+			if (player.at[i] <= 0) {
+				player.at[i] = 0;
+				imgflg = false;
+			}
+			if (player.at[i] <= 0 || (AttackExtend == 0 && ExtendFlg == true)) {
 				player.af[i] = 0;
 				player.pa[i] = 0;
-				player.ay[i] = 0;
+				if (AttackExtend == 0 && ExtendFlg == true) {
+					player.ay[i] = 0;
+				}
 				player.apx[i] = 0;
 				player.col = 0;	//’~Ï’l‚Ì‰Šú‰»
 				AttackExtend = 0;	//‰Šú‰»
-				player.aHitflg = false;
+				//player.aHitflg = false;
+				ExtendFlg = false;
+			}
+
+			//‰EŒü‚«‚ÌUŒ‚‚Ì•`‰æ
+			if (player.af[i] == 1 && player.adireF[i] == 0 && player.aHitflg == false) {
+				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
+				DrawGraph(a_x[i] + AttackExtend, player.ay[i], ef[0], TRUE);
+			}
+			//¶Œü‚«‚Ì•`‰æ
+			if (player.af[i] == 1 && player.adireF[i] == 1 && player.aHitflg == false) {
+				DrawBox(a_x[i] + AttackExtend, player.ay[i], a_x[i] + Xsize + AttackExtend, player.ay[i] + Ysize, player.acolor[player.ajudge[i]], FALSE);
+				DrawTurnGraph(a_x[i] + AttackExtend, player.ay[i], ef[0], TRUE);
 			}
 		}
+
+		if (player.aHitflg == true) {
+			//‰EŒü‚«‚ÌUŒ‚‚Ì•`‰æ
+			if (hozon_diref == 0) {
+				DrawGraph(hozon_a_x, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
+			}
+			else {	//¶Œü‚«
+				DrawTurnGraph(hozon_a_x, hozon_a_y, ef[efcnt++ / 8 % 3 + 1], TRUE);
+			}
+			if (efcnt == 24) {
+				player.aHitflg = false;
+				efcnt = 0;
+			}
+			
+		}
+
+		if (imgflg == true) {
+			player.at[i]--;
+		}
+
 
 		////Ë’ö‹——£(ƒ}ƒbƒvƒ`ƒbƒv‚RŒÂ•ª)‚É‚È‚Á‚½‚ç‰Šú‰»(‰EŒü‚«)
 		//if (player.pa[i] == 120 && player.adireF[i] == 0) {
@@ -213,5 +257,5 @@ void PlayerAttack() {
 		/*DrawFormatString(50, 190, 0xffffff, "a_x%d", a_x[0]);//“G‚Ì‚˜À•W
 		DrawFormatString(50, 260, 0xffffff, "/%d", a_x[0] / 40);//“G‚Ì‚˜À•W
 		DrawFormatString(50, 290, 0xffffff, "%d", player.pa[0] + 40 + player.px);//“G‚Ì‚˜À•W*/
-	}
+	//}
 }

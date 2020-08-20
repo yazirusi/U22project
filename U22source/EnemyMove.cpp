@@ -41,7 +41,7 @@ void EnemyMove(void) {
 		if ((-sx) > Enemy[i].x + Enemy[i].size || (-sx) + WIDTH < Enemy[i].x) {
 			Enemy[i].drawf = false;
 		}
-		else {
+		else if(Enemy[i].HP > 0){
 			Enemy[i].drawf = true;
 		}
 
@@ -84,6 +84,14 @@ void EnemyMove(void) {
 			else {
 				DrawTurnGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, EnemyImg2[0], TRUE);
 			}
+		}
+		if (Enemy[i].type == 2) {//ラスボス
+			//敵の判定描画
+			DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+				(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);
+
+			//イラストの反映
+			DrawGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, lasboss[0], TRUE);
 		}
 
 		//プレイヤーの方に振り向く
@@ -130,6 +138,7 @@ void EnemyMove(void) {
 *Airmanの初期化
 **************/
 void Airman::Airmaninit() {
+	x = 0;
 
 	static int intt = 0;
 	static int innt = 0;
@@ -138,7 +147,7 @@ void Airman::Airmaninit() {
 
 	for (int j = intt; j < MAPHEIGHT; j++) {
 		for (int k = innt; k < MAPWIDTH; k++) {
-			if (g_StageData[0][j][k] == 4) {
+			if (g_StageData[g_stage][j][k] == 4) {
 				/*MapX = k;
 				MapY = j;*/
 				x = (k * 40);
@@ -252,16 +261,25 @@ int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/)
 ***************************************/
 void EnemyInit() {
 
+	static int width;
+
 	//敵の初期化
 	for (int i = 0; i < MAXEnemy; i++) {
 		Enemy[i].x = 0;
 		Enemy[i].drawf = false;
+		Enemy[i].HP = 0;
+	}
+	//マップチップに合わせて座標を設定する
+	if (g_stage == 0) {
+		width = MAPWIDTH;
+	}
+	else {
+		width = 33;
 	}
 
-	//マップチップに合わせて座標を設定する
 	for (int y = 0; y < MAPHEIGHT; y++) {
-		for (int x = 0; x < MAPWIDTH; x++) {
-			if (g_StageData[0][y][x] == 3) {
+		for (int x = 0; x < width; x++) {
+			/*if (g_StageData[g_stage][y][x] == 3) {
 				for (int i = 0; i < MAXEnemy; i++) {
 					if (Enemy[i].drawf == false) {	//空きのある配列に代入する
 						Enemy[i].type = 0;	//上に攻撃を飛ばすやつ
@@ -277,7 +295,7 @@ void EnemyInit() {
 					}
 				}
 			}
-			if (g_StageData[0][y][x] == 5) {
+			if (g_StageData[g_stage][y][x] == 5) {
 				for (int i = 0; i < MAXEnemy; i++) {
 					if (Enemy[i].drawf == false) {	//空きのある配列に代入する
 						Enemy[i].type = 1;	//自キャラに攻撃飛ばすやつ
@@ -291,6 +309,23 @@ void EnemyInit() {
 						Enemy[i].HPdrawf = false;	//敵のHP表示フラグ
 						break;
 					}
+				}
+			}*/
+			for (int i = 0,e = g_StageData[g_stage][y][x];
+				i < MAXEnemy && (e == 3 || e == 5 || e == 6) ; i++) {
+				if (Enemy[i].drawf == false) {	//空きのある配列に代入する
+					if(e == 3)Enemy[i].type = 0;	//上に攻撃飛ばすやつ
+					if(e == 5)Enemy[i].type = 1;	//自キャラに攻撃飛ばすやつ
+					if(e == 6)Enemy[i].type = 2;	//ラスボス
+					Enemy[i].MapX = x;//敵のマップ上のｘ座標を入れる
+					Enemy[i].MapY = y;//敵のマップ上のy座標を入れる
+					Enemy[i].x = (x * 40);//敵の初期x座標
+					Enemy[i].y = (y * 40);//敵の初期y座標
+					Enemy[i].HP = Enemy[i].MaxHP[Enemy[i].type];
+					Enemy[i].direction = 0;
+					Enemy[i].drawf = true;
+					Enemy[i].HPdrawf = false;	//敵のHP表示フラグ
+					break;
 				}
 			}
 		}

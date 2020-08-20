@@ -9,12 +9,14 @@ extern int pj[6];//プレイヤーのジャンプイラスト
 extern int pd[8];//プレイヤーの死亡イラスト
 extern int hpg;	 //HPゲージイラスト
 extern int ag;	 //攻撃力ゲージイラスト
+extern int ef[4];
 
 extern int EnemyAttackImg;	//敵の攻撃イラスト
 
 extern int EnemyImg[7]; //敵イラスト
 extern int EnemyImg2[7];	//敵イラスト
 extern int EnemyImg3[7];	//敵イラスト
+extern int lasboss[4];
 
 extern int Backimg;  //背景イラスト
 extern int Backimg2; //背景イラスト

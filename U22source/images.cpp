@@ -11,12 +11,14 @@ int pj[6];//プレイヤーのジャンプイラスト
 int pd[8];//プレイヤーの死亡イラスト
 int hpg;  //HPゲージイラスト
 int ag;   //攻撃のゲージイラスト
+int ef[4];//攻撃のエフェクト
 
 int EnemyAttackImg;
 
 int EnemyImg[7];	//敵イラスト
 int EnemyImg2[7];	//敵イラスト
 int EnemyImg3[7];	//敵イラスト
+int lasboss[4];
 
 int Backimg;  //背景イラスト
 int Backimg2;  //背景イラスト
@@ -77,6 +79,10 @@ int LoadImages()
 	if ((pd[7] = LoadGraph("images/dead-4_m.png")) == -1) return -1;
 	if ((hpg = LoadGraph("images/hg.png")) == -1)return -1;
 	if ((ag = LoadGraph("images/ag.png")) == -1)return -1;
+	if ((ef[0] = LoadGraph("images/effect1.png")) == -1)return -1;
+	if ((ef[1] = LoadGraph("images/effect2.png")) == -1)return -1;
+	if ((ef[2] = LoadGraph("images/effect3.png")) == -1)return -1;
+	if ((ef[3] = LoadGraph("images/effect4.png")) == -1)return -1;
 
 	//敵のイラスト
 	if ((EnemyAttackImg = LoadGraph("images/音符.png")) == -1) return -1;
@@ -95,6 +101,10 @@ int LoadImages()
 	if ((EnemyImg2[5] = LoadGraph("images/e2_walk-5.png")) == -1) return -1;
 	if ((EnemyImg2[6] = LoadGraph("images/e2_walk-6.png")) == -1) return -1;
 	if ((EnemyImg3[0] = LoadGraph("images/e3_idle-1.png")) == -1) return -1;
+	if ((lasboss[0] = LoadGraph("images/g_enemy1.png")) == -1) return -1;
+	if ((lasboss[1] = LoadGraph("images/g_enemy2.png")) == -1) return -1;
+	if ((lasboss[2] = LoadGraph("images/g_enemy3.png")) == -1) return -1;
+	if ((lasboss[3] = LoadGraph("images/g_enemy4.png")) == -1) return -1;
 
 	//背景
 	if ((Backimg = LoadGraph("images/bac.bmp")) == -1)return -1;

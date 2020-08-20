@@ -103,7 +103,7 @@ void PlayerMove() {
 	}
 	//左移動
 	if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_LEFT) != 0
-		|| CheckHitKey(KEY_INPUT_LEFT) == 1) && player.af[0] == 0) {
+		|| CheckHitKey(KEY_INPUT_LEFT) == 1) && player.at[0] <= 0) {
 		player.left = true;
 		//左端に来るまで
 		if (msx < 0) {
@@ -120,7 +120,7 @@ void PlayerMove() {
 		}
 		player.direF = 1;
 		//攻撃を食らったら点滅させる
-		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.af[0] == 0) {
+		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.at[0] <= 0) {
 			//プレイヤーの画像（左向き）
 			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, p[player.pcnt++ / 8 % 5 + 7], TRUE);
 		}
@@ -130,7 +130,7 @@ void PlayerMove() {
 	}
 	//右移動
 	if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
-		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) && player.af[0] == 0) {
+		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) && player.at[0] <= 0) {
 		player.right = true;
 		//ブロックとの当たり判定
 		if (CheckHitBlock(2, 0) == 0) {
@@ -145,7 +145,7 @@ void PlayerMove() {
 
 		player.direF = 0;
 		//攻撃を食らったら点滅させる
-		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.af[0] == 0) {
+		if ((player.hitcnt % 10) < 5 && player.jflag == 0 && player.at[0] <= 0) {
 			//プレイヤーの画像（右向き）
 			DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, p[player.pcnt++ / 8 % 5 + 1], TRUE);
 		}
@@ -154,7 +154,7 @@ void PlayerMove() {
 		player.right = false;
 	}
 
-	if (player.right == false && player.left == false && player.af[0] == 0 && player.jflag == 0) {
+	if (player.right == false && player.left == false && player.at[0] <= 0 && player.jflag == 0) {
 		//攻撃を食らったら点滅させる
 		if ((player.hitcnt % 10) < 5) {
 			//立ち止まっているとき
@@ -166,7 +166,7 @@ void PlayerMove() {
 			}
 		}
 	}
-	if (player.af[0] == 1) {
+	if (player.at[0] > 0) {
 		//攻撃イラスト
 		if ((player.hitcnt % 10) < 5 && player.direF == 0) {	//右向き
 			DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 135, pa[player.pcnt++ / 8 % 2], TRUE);
@@ -191,7 +191,7 @@ void PlayerMove() {
 	}
 
 	//ジャンプフラグ（スペースキー）頭上にブロックがあったらジャンプできない
-	if (g_KeyFlg & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && player.jflag == 0 && player.af[0] == 0) {
+	if (g_KeyFlg & PAD_INPUT_1 && CheckHitBlock(3, 0) == 0 && player.jflag == 0 && player.at[0] <= 0) {
 		PlaySoundMem(jpse, DX_PLAYTYPE_BACK, TRUE);
 		player.jflag = 1;	//ジャンプフラグ
 		player.hozonY = player.py;	//ジャンプした瞬間の座標
@@ -219,10 +219,10 @@ void PlayerMove() {
 			}
 
 			//ジャンプイラスト
-			if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+			if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.at[0] <= 0) {	//右向き
 				DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[0], TRUE);
 			}
-			if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+			if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.at[0] <= 0) {	//左向き
 				DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[3], TRUE);
 			}
 
@@ -250,18 +250,18 @@ void PlayerMove() {
 
 			//ジャンプイラスト
 			if (player.py - player.hozonY < 9) {
-				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.at[0] <= 0) {	//右向き
 					DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[1], TRUE);
 				}
-				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.at[0] <= 0) {	//左向き
 					DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[4], TRUE);
 				}
 			}
 			else {
-				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.af[0] == 0) {	//右向き
+				if ((player.hitcnt % 10) < 5 && player.direF == 0 && player.at[0] <= 0) {	//右向き
 					DrawExtendGraph(player.ix, player.iy, player.ix + 196, player.iy + 145, pj[2], TRUE);
 				}
-				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.af[0] == 0) {	//左向き
+				if ((player.hitcnt % 10) < 5 && player.direF == 1 && player.at[0] <= 0) {	//左向き
 					DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pj[5], TRUE);
 				}
 			}
@@ -273,11 +273,12 @@ void PlayerMove() {
 		for (int ai = 0; ai < 5; ai++) {
 			if (player.af[ai] == 0) {
 				player.af[ai] = 1;
-				player.ay[ai] = player.py - 20;
+				player.ay[ai] = player.py - 40;
 				player.apx[ai] = player.px;
 				player.adireF[ai] = player.direF;
 				player.ajudge[ai] = 0;
 				player.at[ai] = 20;
+				imgflg = true;
 				break;
 			}
 		}

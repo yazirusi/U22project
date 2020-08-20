@@ -131,9 +131,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
 
-		for (int i = 0; i < 1000000; i++) {//わざと処理を重くするやつ
+		/*for (int i = 0; i < 1000000; i++) {//わざと処理を重くするやつ
 
-		}
+		}*/
 
 		//RefreshTime = GetNowCount();            //今の時間を取得
 		FpsTimeFanction();	//フレームレート表示
@@ -175,20 +175,24 @@ void GameMain(void)
 	EnemyMove();
 	EnemyAttck();
 	//BackScrool();
+	PlayerAttack();
 	PlayerMove();
 	//DrawMap();
 	notesjudge();
 	notes();
-	PlayerAttack();
 	//DrawFormatString(50, 100, 0xffffff, "%d", p_y);
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
 	//4810 4860 7380 7420
-	if (g_KeyFlg & PAD_INPUT_3 && player.px > 7380 && player.px < 7420) {
+	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 7380 && player.px < 7420*/) {	//ラスボス
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
 		PlayerInit();
 		ScroolInit();
+		EnemyInit();
+		for (int i = 0; i < MAXEnemy; i++) {
+			airman[i].Airmaninit();//エアーマンの初期化
+		}
 
 		//ノーツの初期化
 		for (int i = 0; i < 100; i++) {
