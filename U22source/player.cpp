@@ -17,10 +17,6 @@ PLAYER player;
 *プレイヤーの移動処理
 ********************************/
 void PlayerMove() {
-	static int x, y;
-	GetMousePoint(&x, &y);
-	DrawFormatString(30, 400, 0xffffff, "x%d", x);
-	DrawFormatString(30, 430, 0xffffff, "y%d", y);
 
 	//プレイヤーのステータス描画
 	SetFontSize(24);

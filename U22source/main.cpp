@@ -36,6 +36,7 @@ double Fps = 0.0;
 double t = 0, ave = 0, f[60];
 
 int count = 0;
+bool debug = false;
 
 /***********************************************
  * プログラムの開始
@@ -130,6 +131,44 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		DrawFormatString(50, 5, 0x000000, "更新日時　%d月 %d日 %d時　%d分", Data.month, Data.day, Data.hour, Data.min);
 		DrawFormatString(1000, 5, 0x000000, "ESC:終了");
 		SetFontSize(16);
+		if (debug == true) {
+			for (int i = 0; i < 10; i++)
+			{
+				DrawFormatString(100, 100 + i * 30, 0xffffff, "%d", airman[i].x);
+			}
+
+			DrawFormatString(200, 130, 0xffffff, "%d", airman[0].x);
+			DrawFormatString(200, 160, 0xffffff, "%d", airman[0].y);
+			DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
+			DrawFormatString(200, 210, 0xffffff, "%d", airman[0].JumpFlg);
+			DrawFormatString(200, 240, 0xffffff, "%d", airman[0].JumpCount);
+			DrawFormatString(200, 270, 0xffffff, "%d", Enemy[50].x);
+
+			DrawFormatString(300, 200, 0x000000, "%d", Enemy[0].x);
+			DrawFormatString(300, 230, 0x000000, "%d", AttackFlg[0]);
+			DrawFormatString(300, 260, 0x000000, "%d", AttackFlg[1]);
+			DrawFormatString(300, 290, 0x000000, "%d", player.px);
+			DrawFormatString(300, 320, 0x000000, "%d", Air[0].Downx);
+			DrawFormatString(300, 350, 0x000000, "%d", Air[0].Upx);
+			DrawFormatString(200, 270, 0xffffff, "a[0]%f", EnemyAttackX[0]);
+			DrawFormatString(200, 300, 0xffffff, "a[1]%f", EnemyAttackX[1]);
+
+			for (int i = 0; i < 5; i++)
+			{
+				DrawFormatString(300, 100 + i * 30, 0xff0000, "%d", AttackFlg[i]);
+			}
+
+			static int x, y;
+			GetMousePoint(&x, &y);
+			DrawFormatString(30, 400, 0xffffff, "x%d", x);
+			DrawFormatString(30, 430, 0xffffff, "y%d", y);
+
+			if (ave != 0) {
+				SetFontSize(32);
+				DrawFormatString(565, 460, GetColor(255, 255, 255), "%.1fFPS", 1000.0 / (double)ave);
+				DrawFormatString(565, 480, GetColor(255, 255, 255), "%fms", ave);
+			}
+		}
 
 		/*for (int i = 0; i < 5000000; i++) {//わざと処理を重くするやつ
 
@@ -233,12 +272,6 @@ void FpsTimeFanction() {
 		for (i = 0; i < 60; i++)
 			ave += f[i];
 		ave /= 60;
-	}
-	if (ave != 0) {
-		SetFontSize(32);
-		DrawFormatString(565, 460, GetColor(255, 255, 255), "%.1fFPS", 1000.0 / (double)ave);
-		DrawFormatString(565, 480, GetColor(255, 255, 255), "%fms", ave);
-		//DrawFormatString(565, 480, GetColor(255, 255, 255), "%d", count);
 	}
 	return;
 }

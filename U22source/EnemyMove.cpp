@@ -13,17 +13,6 @@ AIR Air[MAXEnemy];
 *エネミーの動き
 ***************************************/
 void EnemyMove(void) {
-	for (int i = 0; i < MAXEnemy; i++)
-	{
-		DrawFormatString(100, 100 + i * 30, 0xffffff, "%d", airman[i].x);
-	}
-
-	DrawFormatString(200, 130, 0xffffff, "%d", airman[0].x);
-	DrawFormatString(200, 160, 0xffffff, "%d", airman[0].y);
-	DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
-	DrawFormatString(200, 210, 0xffffff, "%d", airman[0].JumpFlg);
-	DrawFormatString(200, 240, 0xffffff, "%d", airman[0].JumpCount);
-	DrawFormatString(200, 270, 0xffffff, "%d", Enemy[50].x);
 
 	for (int i = 0; i < MAXEnemy; i++) {
 		Air[0].ReloadCount = i;

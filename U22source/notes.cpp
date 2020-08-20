@@ -24,7 +24,7 @@ double nps = (60.0 / rockbgm) * 2;*/
 ********************/
 void notes() {
 
-	double fps = ave / 1000;	//１フレーム当たりの秒数
+	double fps = 20.0 / 1000;	//１フレーム当たりの秒数
 
 	//1小節が来るまでの時間(ms)
 	double nps = (60.0 / rockbgm) * 2;

@@ -178,20 +178,6 @@ int AIR::AirMove(int X, int Y) {
 ***************************************/
 void EnemyAttck(void) {
 
-	DrawFormatString(300, 200, 0x000000, "%d", Enemy[0].x);
-	DrawFormatString(300, 230, 0x000000, "%d", AttackFlg[0]);
-	DrawFormatString(300, 260, 0x000000, "%d", AttackFlg[1]);
-	DrawFormatString(300, 290, 0x000000, "%d", player.px);
-	DrawFormatString(300, 320, 0x000000, "%d", Air[0].Downx);
-	DrawFormatString(300, 350, 0x000000, "%d", Air[0].Upx);
-	DrawFormatString(200, 270, 0xffffff, "a[0]%f", EnemyAttackX[0]);
-	DrawFormatString(200, 300, 0xffffff, "a[1]%f", EnemyAttackX[1]);
-
-	for (int i = 0; i < MAXAttack; i++)
-	{
-		DrawFormatString(300, 100 + i * 30, 0xff0000, "%d", AttackFlg[i]);
-	}
-
 	for (int i = 0; i < MAXEnemy; i++) {
 		airman[i].AirmanAttack();
 
@@ -199,6 +185,11 @@ void EnemyAttck(void) {
 		//ìGÇ™éÄÇ Ç©ÅAï\é¶ÉtÉâÉOÇ™îÒï\é¶Ç»ÇÁ
 		if (Enemy[i].HP <= 0 || Enemy[i].drawf == false) {
 			continue;	//Ç±Ç±Ç©ÇÁâ∫ÇÃèàóùÇÇµÇ»Ç¢
+		}
+
+		//ìGÇÃçUåÇä‘äu
+		if (Enemy[i].AttackInterval > 0) {
+			Enemy[i].AttackInterval--;
 		}
 
 		//Enemy[i].speed = 1;
@@ -247,11 +238,6 @@ void EnemyAttck(void) {
 					break;
 				}
 			}
-		}
-
-		//ìGÇÃçUåÇä‘äu
-		if (Enemy[i].AttackInterval > 0) {
-			Enemy[i].AttackInterval--;
 		}
 		/*//àÍå¬Ç‡çUåÇÉtÉâÉOÇ™ñ≥Ç©Ç¡ÇΩÇÁìÆÇ≠
 		for (int i = 0; i < MAXAttack; i++) {
