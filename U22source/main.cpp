@@ -17,6 +17,7 @@
 #include "GameTitle.h"
 #include "GameOver.h"
 #include "pause.h"
+#include "Ending.h"
 
 /***********************************************
  * 関数のプロトタイプ宣言
@@ -123,6 +124,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				break;
 			case 5:
 				Pause();	//pause画面への移動
+			case 6:
+				DrawEnding(); //エンディング処理
 				break;
 			}
 		}
