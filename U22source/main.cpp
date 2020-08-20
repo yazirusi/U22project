@@ -162,6 +162,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			GetMousePoint(&x, &y);
 			DrawFormatString(30, 400, 0xffffff, "x%d", x);
 			DrawFormatString(30, 430, 0xffffff, "y%d", y);
+			DrawFormatString(30, 460, 0xffffff, "px%d", player.px);
 
 			if (ave != 0) {
 				SetFontSize(32);
@@ -223,7 +224,7 @@ void GameMain(void)
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
 	//4810 4860 7380 7420
-	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 7380 && player.px < 7420*/) {	//ラスボス
+	if (g_KeyFlg & PAD_INPUT_3 && player.px > 7380 && player.px < 7420) {	//ラスボス
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
 		PlayerInit();

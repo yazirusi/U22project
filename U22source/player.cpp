@@ -128,14 +128,18 @@ void PlayerMove() {
 	if (((GetJoypadInputState(DX_INPUT_PAD1) & PAD_INPUT_RIGHT) != 0
 		|| CheckHitKey(KEY_INPUT_RIGHT) == 1) && player.at[0] <= 0) {
 		player.right = true;
-		//ブロックとの当たり判定
+		//ブロックとの当たり判定＆ラスボス戦なら障壁がある
 		if (CheckHitBlock(2, 0) == 0) {
-			msx -= player.speed;		//マップチップのスクロール
-			player.px += player.speed;	//プレイヤーの座標
-			if (player.px > 640 && (sx > (-1280 * sx_c)) && g_stage == 0) {
-				spd -= player.speed - 1;
-				scrool -= player.speed;	//イラストのスクロール
-				sx -= player.speed;
+			if (player.px > 638 && g_stage == 1) {
+			}
+			else {
+				msx -= player.speed;		//マップチップのスクロール
+				player.px += player.speed;	//プレイヤーの座標
+				if (player.px > 640 && (sx > (-1280 * sx_c)) && g_stage == 0) {
+					spd -= player.speed - 1;
+					scrool -= player.speed;	//イラストのスクロール
+					sx -= player.speed;
+				}
 			}
 		}
 

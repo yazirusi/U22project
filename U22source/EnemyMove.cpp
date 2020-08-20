@@ -40,9 +40,10 @@ void EnemyMove(void) {
 		}
 
 		if (Enemy[i].type == 0) {//白い敵
-			DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
-				(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);//敵の判定描画
-
+			if (debug == true) {
+				DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+					(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);//敵の判定描画
+			}
 			//イラストの描画
 			if (Enemy[i].MoveFlg == true) {	//動いていたら
 				if (Enemy[i].direction == true) {
@@ -76,9 +77,10 @@ void EnemyMove(void) {
 		}
 		if (Enemy[i].type == 2) {//ラスボス
 			//敵の判定描画
-			DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
-				(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size), 0xff0000, FALSE);
-
+			if (debug == true) {
+				DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+					(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size + 80), 0xff0000, FALSE);
+			}
 			//イラストの反映
 			DrawGraph(Enemy[i].x + sx + 3, Enemy[i].y - Enemy[i].size, lasboss[0], TRUE);
 		}
@@ -117,9 +119,15 @@ void EnemyMove(void) {
 			}
 		}
 		if (Enemy[i].HPdrawf == true) {
-			int barlen = (Enemy[i].size * (Enemy[i].HP * 100) / Enemy[i].MaxHP[Enemy[i].type]) / 100;
+			static int barlen;
+			if (Enemy[0].type == 2) {//らすぼすだったら
+				barlen = (200 * (Enemy[i].HP * 100) / Enemy[i].MaxHP[Enemy[i].type]) / 100;
+			}
+			else {
+				barlen = (Enemy[i].size * (Enemy[i].HP * 100) / Enemy[i].MaxHP[Enemy[i].type]) / 100;
+			}
 			//敵のHPバー
-			DrawBox(Enemy[i].x + sx, Enemy[i].y - 70, Enemy[i].x + sx + barlen, Enemy[i].y - 60, 0xFF0000, TRUE);
+			DrawBox(Enemy[i].x + sx, Enemy[i].y - 80, Enemy[i].x + sx + barlen, Enemy[i].y - 60, 0xFF0000, TRUE);
 		}
 	}
 }
@@ -195,9 +203,10 @@ void Airman::AirmanMove() {
 
 	//HP表示
 	if (HPdrawf == true) {
-		int barlen = (size * HP * 100 / 80) / 100;
+		int barlen;
+		barlen = (size * HP * 100 / 80) / 100;
 		//敵のHPバー
-		DrawBox(x + sx, y - 70, x + sx + barlen, y - 60, 0xFF0000, TRUE);
+		DrawBox(x + sx, y - 80, x + sx + barlen, y - 60, 0xFF0000, TRUE);
 	}
 
 	/*else if (Hitcheck(x, y + size - Jump, 0, false) == 1 && JumpFlg == true)
@@ -303,17 +312,20 @@ void EnemyInit() {
 			for (int i = 0,e = g_StageData[g_stage][y][x];
 				i < MAXEnemy && (e == 3 || e == 5 || e == 6) ; i++) {
 				if (Enemy[i].drawf == false) {	//空きのある配列に代入する
-					if(e == 3)Enemy[i].type = 0;	//上に攻撃飛ばすやつ
-					if(e == 5)Enemy[i].type = 1;	//自キャラに攻撃飛ばすやつ
-					if(e == 6)Enemy[i].type = 2;	//ラスボス
 					Enemy[i].MapX = x;//敵のマップ上のｘ座標を入れる
 					Enemy[i].MapY = y;//敵のマップ上のy座標を入れる
 					Enemy[i].x = (x * 40);//敵の初期x座標
 					Enemy[i].y = (y * 40);//敵の初期y座標
-					Enemy[i].HP = Enemy[i].MaxHP[Enemy[i].type];
 					Enemy[i].direction = 0;
 					Enemy[i].drawf = true;
 					Enemy[i].HPdrawf = false;	//敵のHP表示フラグ
+					if(e == 3)Enemy[i].type = 0;	//上に攻撃飛ばすやつ
+					if(e == 5)Enemy[i].type = 1;	//自キャラに攻撃飛ばすやつ
+					if (e == 6) {
+						Enemy[i].type = 2;	//ラスボス
+						Enemy[i].HPdrawf = true;	//敵のHP表示フラグ
+					}
+					Enemy[i].HP = Enemy[i].MaxHP[Enemy[i].type];
 					break;
 				}
 			}

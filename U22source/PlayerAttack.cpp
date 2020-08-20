@@ -65,6 +65,7 @@ void PlayerAttack() {
 				if (player.adireF[i] == 1) {//左向き
 					a_x[i] = player.px - 40 - 30;	//攻撃のx座標
 				}
+				if(AttackExtend != 0)
 				a_xf = true;
 			}
 
@@ -167,12 +168,32 @@ void PlayerAttack() {
 				}
 				if (ax2 > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > ax1
 					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y - Enemy[j].size && player.aHitflg == false) {
-					/*player.pa[i] = 0;
-					player.af[i] = 0;
-					player.ay[i] = 0;
-					player.apx[i] = 0;
-					player.at[i] = 0;*/
+					//ヒットフラグ
+					player.aHitflg = true;
+					hozon_a_x = a_x[i] + AttackExtend;
+					hozon_a_y = player.ay[i];
+					hozon_diref = player.adireF[i];
 
+					//基礎攻撃力に上乗せする倍率
+					//float bai = (float)maxpmag * ((float)player.col / (float)100);
+					int bai = 100 + (maxpmag * player.col);
+
+					Enemy[j].HP -= (player.pow * bai) / 100;
+					Enemy[j].HPdrawf = true;
+					player.col = 0;	//蓄積値の初期化
+					AttackExtend = 0;	//初期化
+					player.ay[i] = 0;
+
+					if (Enemy[j].HP <= 0) {
+						Enemy[j].HPdrawf = false;
+						Enemy[j].drawf = 0;
+						Enemy[j].x = 0;
+						Enemy[j].y = 0;//敵の座標の初期化
+					}
+				}
+
+				if (ax2 > (Enemy[j].x + sx) && player.ay[i] > Enemy[j].y - Ysize
+					&&  player.aHitflg == false && Enemy[j].type == 2) {//ラスボスの当たり判定
 					//ヒットフラグ
 					player.aHitflg = true;
 					hozon_a_x = a_x[i] + AttackExtend;

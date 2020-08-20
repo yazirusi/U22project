@@ -9,6 +9,7 @@ extern int Attackheight[MAXAttack];
 extern bool AttackFlg[MAXAttack];
 extern bool AttackDir[MAXAttack];	//UŒ‚‚ÌŒü‚« 0F¶@‚P:‰E
 extern int AttackType[MAXAttack];	//“G‚ÌUŒ‚‚Ìí—Ş
+extern int AttackBoss[3];
 
 void EnemyAttck();
 int EnemyAttackType(int i);
