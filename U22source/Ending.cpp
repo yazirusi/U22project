@@ -143,7 +143,4 @@ void DrawEnding() {
 	{
 		g_GameState = 0;
 	}
-
-	DrawFormatString(100, 100, 0xffffff, "%d", EndingCount);
-	DrawFormatString(100, 130, 0xffffff, "%d",pix);
 }
