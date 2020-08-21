@@ -5,6 +5,9 @@
 #include "map.h"
 #include "EnemyMove.h"
 #include "images.h"
+#include "GameInit.h"
+#include "sounds.h"
+#include "notes.h"
 
 int AttackExtend = 0;	//ゲージの量で攻撃範囲が伸びる量
 int imgflg;
@@ -65,8 +68,9 @@ void PlayerAttack() {
 				if (player.adireF[i] == 1) {//左向き
 					a_x[i] = player.px - 40 - 30;	//攻撃のx座標
 				}
-				if(AttackExtend != 0)
-				a_xf = true;
+				if (AttackExtend != 0) {
+					a_xf = true;
+				}
 			}
 
 			//if (player.px >= 640 && sx != -6400 ) {
@@ -160,6 +164,11 @@ void PlayerAttack() {
 						airman[j].x = 0;
 						airman[j].y = 0;//敵の座標の初期化
 					}
+
+					player.hp += note.conbo;
+					if (player.hp > 100) {
+						player.hp = 100;
+					}
 				}
 
 				//0:非表示　1:表示
@@ -190,6 +199,10 @@ void PlayerAttack() {
 						Enemy[j].x = 0;
 						Enemy[j].y = 0;//敵の座標の初期化
 					}
+					player.hp += note.conbo;
+					if (player.hp > 100) {
+						player.hp = 100;
+					}
 				}
 
 				if (ax2 > (Enemy[j].x + sx) && player.ay[i] > Enemy[j].y - Ysize
@@ -215,6 +228,9 @@ void PlayerAttack() {
 						Enemy[j].drawf = 0;
 						Enemy[j].x = 0;
 						Enemy[j].y = 0;//敵の座標の初期化
+						g_GameState = 6;	//ラスボスを倒したらエンディング
+						g_stage = 0;
+						StopSoundMem(rockBGM);
 					}
 				}
 			}
@@ -223,7 +239,7 @@ void PlayerAttack() {
 				if (ExtendFlg == false) {
 					//消滅
 					player.aHitflg = true;
-					hozon_a_x = a_x[i] + sx + AttackExtend;
+					hozon_a_x = a_x[i] + AttackExtend;
 					hozon_a_y = player.ay[i];
 					hozon_diref = player.adireF[i];
 					player.af[i] = 0;
@@ -239,6 +255,7 @@ void PlayerAttack() {
 					player.af[i] = 0;
 					player.ay[i] = 0;
 					player.col = 0;	//蓄積値の初期化
+					ExtendFlg = false;
 				}
 				player.apx[i] = 0;
 				//player.col = 0;	//蓄積値の初期化

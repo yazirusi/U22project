@@ -37,7 +37,7 @@ double Fps = 0.0;
 double t = 0, ave = 0, f[60];
 
 int count = 0;
-bool debug = false;
+bool debug = true;
 
 /***********************************************
  * プログラムの開始
@@ -124,6 +124,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				break;
 			case 5:
 				Pause();	//pause画面への移動
+				break;
 			case 6:
 				DrawEnding(); //エンディング処理
 				break;
@@ -139,7 +140,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			{
 				DrawFormatString(100, 100 + i * 30, 0xffffff, "%d", airman[i].x);
 			}
-
 			DrawFormatString(200, 130, 0xffffff, "%d", airman[0].x);
 			DrawFormatString(200, 160, 0xffffff, "%d", airman[0].y);
 			DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
@@ -227,7 +227,7 @@ void GameMain(void)
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
 	//4810 4860 7380 7420
-	if (g_KeyFlg & PAD_INPUT_3 && player.px > 7380 && player.px < 7420) {	//ラスボス
+	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 7380 && player.px < 7420*/) {	//ラスボス
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
 		PlayerInit();

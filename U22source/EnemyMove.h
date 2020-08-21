@@ -29,7 +29,7 @@ struct ENEMY
 	int AttackY[Attack_MAX], AttackX[Attack_MAX];//UŒ‚‚ÌÀ•W
 	int AttackInterval = 0;	//“G‚ÌUŒ‚ŠÔŠu•Ï”
 	const int MAXAttackInterval[3] = { 90,150,150 };	//UŒ‚ŠÔŠu
-	int MaxHP[3] = { 100,30 ,500};		//“G‚ÌÅ‘åHP
+	int MaxHP[3] = { 100,30 ,300};		//“G‚ÌÅ‘åHP
 	int HP = 0;			//“G‚ÌHP
 	bool HPdrawf = false;	//“G‚ÌHP•\¦ƒtƒ‰ƒO
 	int type = 0;	//“G‚Ìí—Ş

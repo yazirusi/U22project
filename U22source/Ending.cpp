@@ -55,8 +55,9 @@ void DrawEnding() {
 		}
 	}
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 190);
-
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 190);
+	// •`‰æ‹P“x‚ğˆÃ‚­‚·‚é
+	SetDrawBright(190, 190, 190);
 	DrawGraph(0, 0, Backimg3, TRUE);
 	//”wŒi‚ğƒXƒNƒ[ƒ‹•\¦
 	SetDrawArea(0, 0, 1280, 850);
@@ -114,7 +115,8 @@ void DrawEnding() {
 		px += playerspeed;
 	}
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+	// •`‰æ‹P“x‚ğˆÃ‚­‚·‚é
+	SetDrawBright(255, 255, 255);
 
 	DrawExtendGraph(pix, piy, pix + 196, piy + 145, p[pcnt++ / 8 % 5 + 1], TRUE);
 
