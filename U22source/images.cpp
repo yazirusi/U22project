@@ -29,6 +29,7 @@ int roadimg;
 int roadimg2;
 int roadimg3;
 
+int UI[2];
 
 int Titleimg;
 int GameOverimg;
@@ -118,6 +119,9 @@ int LoadImages()
 	//ƒ^ƒCƒgƒ‹‚Æ‚©
 	if ((Titleimg = LoadGraph("images/Title03.png")) == -1)return -1;
 	if ((GameOverimg = LoadGraph("images/gameover.png")) == -1)return -1;
+
+	if ((UI[0] = LoadGraph("images/button01_1.bmp")) == -1)return -1;
+	if ((UI[1] = LoadGraph("images/button01_2.bmp")) == -1)return -1;
 
 	return 0;
 }

@@ -27,6 +27,8 @@ extern int roadimg;  //足場イラスト上
 extern int roadimg2; //足場イラスト中
 extern int roadimg3; //足場イラスト下
 
+extern int UI[2];   //Xボタン誘導UI
+
 extern int Titleimg;
 extern int GameOverimg;
 

@@ -30,7 +30,7 @@ void BackScrool() {
 	//ボス戦のドア部分を黒くする
 	if (sx < (-1280 * sx_c) + 300) {
 		int x = WIDTH + sx + (1280 * sx_c) - 300;
-		DrawBox(x, 620, x + 80, 700, 0x000000, TRUE);
+		DrawBox(x, 620, x + 80, 720, 0x000000, TRUE);
 	}
 
 
