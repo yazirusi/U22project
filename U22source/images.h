@@ -22,6 +22,7 @@ extern int Backimg;  //背景イラスト
 extern int Backimg2; //背景イラスト
 extern int Backimg3; //背景イラスト
 extern int Backimg4; //背景イラスト
+extern int Backimg5;	//ラスボス
 
 extern int roadimg;  //足場イラスト上
 extern int roadimg2; //足場イラスト中

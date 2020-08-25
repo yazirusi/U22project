@@ -24,6 +24,7 @@ int Backimg;  //背景イラスト
 int Backimg2;  //背景イラスト
 int Backimg3;  //背景イラスト
 int Backimg4;  //背景イラスト
+int Backimg5;	//ラスボス
 
 int roadimg;
 int roadimg2;
@@ -115,6 +116,8 @@ int LoadImages()
 	if ((roadimg = LoadGraph("images/road01.bmp")) == -1)return -1;
 	if ((roadimg2 = LoadGraph("images/road02.bmp")) == -1)return -1;
 	if ((roadimg3 = LoadGraph("images/road03.bmp")) == -1)return -1;
+	if ((Backimg5 = LoadGraph("images/lassboss_stage.png")) == -1)return -1;
+
 
 	//タイトルとか
 	if ((Titleimg = LoadGraph("images/Title03.png")) == -1)return -1;

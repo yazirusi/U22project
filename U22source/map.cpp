@@ -78,7 +78,7 @@ void DrawMap() {
 	//マップ表示
 	for (int y = 0; y < MAPHEIGHT; y++) {
 		for (int x = 0; x < MAPWIDTH; x++) {
-			if ((g_StageData[g_stage][y + 1][x] == 1)&&(g_StageData[g_stage][y][x] != 1)) {//足場イラスト(上)表示
+			if ((g_StageData[g_stage][y + 1][x] == 1) && (g_StageData[g_stage][y][x] != 1)) {//足場イラスト(上)表示
 				DrawGraph((40 * x) + sx, 40 * y, roadimg, TRUE);
 
 			}
@@ -93,30 +93,30 @@ void DrawMap() {
 		}
 	}
 
-	if ((player.px > 7380 && player.px < 7420)&&(c++) < 120) {
+	if ((player.px > 7380 && player.px < 7420) && (c++) < 120) {
 		DrawGraph(998, 580, UI[c / 12 % 2], true);
 	}
 	if (c >= 120) {
 		c = 0;
 	}
-//	SetFontSize(10);
-//	DrawFormatString(995, 380, 0xffffff, "%d",c);
-	////ミニマップ表示
-	//for (int y = 0; y < MAPHEIGHT; y++) {
-	//	for (int x = 0; x < MAPWIDTH; x++) {
+	//	SetFontSize(10);
+	//	DrawFormatString(995, 380, 0xffffff, "%d",c);
+		////ミニマップ表示
+		//for (int y = 0; y < MAPHEIGHT; y++) {
+		//	for (int x = 0; x < MAPWIDTH; x++) {
 
-	//		if (g_StageData[g_stage][y][x] != 2 && g_StageData[g_stage][y][x] != 1 && g_StageData[g_stage][y][x] != 0) {
-	//			DrawBox((5 * x), 5 * y, (5 * x) + 5, 5 * y + 5, 0xff0000, TRUE);
-	//		}
-	//		//マップの足場表示
-	//		if (g_StageData[g_stage][y][x] == 1) {
-	//			DrawBox((5 * x), 5 * y, (5 * x) + 5, 5 * y + 5, 0x2222ff, TRUE);
-	//		}
-	//	}
-	//}
-	////プレイヤーの場所表示
-	//DrawBox(player.px / 8, (player.py / 8.5), (player.px / 8) + 5, (player.py / 8.5) + 10, 0x00ff00, TRUE);
-	////スクロールしたときのプレイヤーに関する数値の変動
+		//		if (g_StageData[g_stage][y][x] != 2 && g_StageData[g_stage][y][x] != 1 && g_StageData[g_stage][y][x] != 0) {
+		//			DrawBox((5 * x), 5 * y, (5 * x) + 5, 5 * y + 5, 0xff0000, TRUE);
+		//		}
+		//		//マップの足場表示
+		//		if (g_StageData[g_stage][y][x] == 1) {
+		//			DrawBox((5 * x), 5 * y, (5 * x) + 5, 5 * y + 5, 0x2222ff, TRUE);
+		//		}
+		//	}
+		//}
+		////プレイヤーの場所表示
+		//DrawBox(player.px / 8, (player.py / 8.5), (player.px / 8) + 5, (player.py / 8.5) + 10, 0x00ff00, TRUE);
+		////スクロールしたときのプレイヤーに関する数値の変動
 	SetFontSize(15);
 	//DrawFormatString(0, 100, 0x11ff11, "player");
 	//DrawFormatString(0, 125, 0x11ff11, "px:%d", player.px);
@@ -139,4 +139,8 @@ void DrawMap() {
 	//if(Enemy.drawf == 1)
 	//DrawBox((Enemy.x - Enemy.Move + msx), (Enemy.y),
 	//	(Enemy.x + Enemy.size - Enemy.Move + msx), (Enemy.y + Enemy.size), 0x00ffff, TRUE);//敵の描画
+
+	if (g_stage == 1) {
+		DrawGraph(0, 0, Backimg5, true);
+	}
 }
