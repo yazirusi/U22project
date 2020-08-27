@@ -7,6 +7,7 @@
 #include "BackgroundMove.h"
 #include "EnemyAttck.h"
 #include "sounds.h"
+#include "PlayerAttack.h"
 
 //定義
 int	g_GameState = 0;		// ゲームステータス
@@ -23,6 +24,8 @@ void GameInit()
 
 		PlayerInit();
 		ScroolInit();
+		PlayerAttackInit();
+		StopSoundMem(rockBGM);
 
 		//ノーツの初期化
 		for (int i = 0; i < 100; i++) {
@@ -41,6 +44,7 @@ void GameInit()
 		PlayerInit();
 		ScroolInit();
 		EnemyInit();
+		PlayerAttackInit();
 		for (int i = 0; i < MAXEnemy; i++) {
 			airman[i].Airmaninit();//エアーマンの初期化
 		}

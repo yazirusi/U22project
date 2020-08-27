@@ -12,6 +12,14 @@
 
 int AttackExtend = 0;	//ゲージの量で攻撃範囲が伸びる量
 int imgflg;
+int a_x[5] = { 0,0,0,0,0 };
+int a_y[5] = { 0,0,0,0,0 };
+bool ExtendFlg = false;
+int hozon_a_x = 0;
+int hozon_a_y = 0;
+int hozon_diref = 0;
+bool a_xf = false;
+int efcnt = 0;
 
 /***************************************
 *プレイヤーの攻撃
@@ -26,14 +34,6 @@ void PlayerAttack() {
 	//player.ax = player.p_x * 40;	//マップチップに合わせた攻撃の座標
 	static int Xsize = 60;
 	static int Ysize = 33;
-	static int a_x[5] = { 0,0,0,0,0 };
-	static int a_y[5] = { 0,0,0,0,0 };
-	static bool ExtendFlg = false;
-	static int hozon_a_x = 0;
-	static int hozon_a_y = 0;
-	static int hozon_diref = 0;
-	static bool a_xf = false;
-	static int efcnt;
 
 	//攻撃の描画
 	//for (int i = 0; i < 5; i++) {
@@ -144,6 +144,7 @@ void PlayerAttack() {
 					&& player.ay[i] < airman[j].y + airman[j].size && player.ay[i] + Ysize > airman[j].y - airman[j].size && player.aHitflg == false) {
 
 					//ヒットフラグ
+					PlaySoundMem(attackse2, DX_PLAYTYPE_BACK, TRUE);
 					player.aHitflg = true;
 					hozon_a_x = a_x[i] + AttackExtend;
 					hozon_a_y = player.ay[i];
@@ -180,6 +181,7 @@ void PlayerAttack() {
 				if (ax2 > (Enemy[j].x + sx) && (Enemy[j].x + Enemy[j].size + sx) > ax1
 					&& player.ay[i] < Enemy[j].y + Enemy[j].size && player.ay[i] + Ysize > Enemy[j].y - Enemy[j].size && player.aHitflg == false) {
 					//ヒットフラグ
+					PlaySoundMem(attackse2, DX_PLAYTYPE_BACK, TRUE);
 					player.aHitflg = true;
 					hozon_a_x = a_x[i] + AttackExtend;
 					hozon_a_y = player.ay[i];
@@ -208,9 +210,10 @@ void PlayerAttack() {
 					}
 				}
 
-				if (ax2 > (Enemy[j].x + sx) && player.ay[i] > Enemy[j].y - Ysize
+				if (ax2 > (Enemy[j].x + sx - 30) && player.ay[i] > Enemy[j].y - Ysize
 					&&  player.aHitflg == false && Enemy[j].type == 2) {//ラスボスの当たり判定
 					//ヒットフラグ
+					PlaySoundMem(attackse2, DX_PLAYTYPE_BACK, TRUE);
 					player.aHitflg = true;
 					hozon_a_x = a_x[i] + AttackExtend;
 					hozon_a_y = player.ay[i];
@@ -319,4 +322,22 @@ void PlayerAttack() {
 		DrawFormatString(50, 260, 0xffffff, "/%d", a_x[0] / 40);//敵のｘ座標
 		DrawFormatString(50, 290, 0xffffff, "%d", player.pa[0] + 40 + player.px);//敵のｘ座標*/
 	//}
+}
+
+/***************************************
+*プレイヤーの攻撃の初期化
+***************************************/
+void PlayerAttackInit() {
+	a_x[0] = 0;
+	a_y[0] = 0;
+	ExtendFlg = false;
+	hozon_a_x = 0;
+	hozon_a_y = 0;
+	hozon_diref = 0;
+	a_xf = false;
+	efcnt = 0;
+	AttackExtend = 0;	//ゲージの量で攻撃範囲が伸びる量
+	imgflg = false;
+	player.af[0] = 0;
+	player.at[0] = 0;
 }

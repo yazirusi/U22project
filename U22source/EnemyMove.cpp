@@ -78,7 +78,7 @@ void EnemyMove(void) {
 		if (Enemy[i].type == 2) {//ラスボス
 			//敵の判定描画
 			if (debug == true) {
-				DrawBox((Enemy[i].x + sx), (Enemy[i].y - Enemy[i].size),
+				DrawBox((Enemy[i].x + sx - 30), (Enemy[i].y - Enemy[i].size),
 					(Enemy[i].x + sx + Enemy[i].size), (Enemy[i].y + Enemy[i].size + 80), 0xff0000, FALSE);
 			}
 			//イラストの反映
@@ -322,8 +322,9 @@ void EnemyInit() {
 					if(e == 3)Enemy[i].type = 0;	//上に攻撃飛ばすやつ
 					if(e == 5)Enemy[i].type = 1;	//自キャラに攻撃飛ばすやつ
 					if (e == 6) {
+						Enemy[i].y -= 20;
 						Enemy[i].type = 2;	//ラスボス
-						Enemy[i].HPdrawf = true;	//敵のHP表示フラグ
+						Enemy[i].HPdrawf = true;//敵のHP表示フラグ
 					}
 					Enemy[i].HP = Enemy[i].MaxHP[Enemy[i].type];
 					break;

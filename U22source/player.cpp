@@ -80,9 +80,11 @@ void PlayerMove() {
 		if (player.direF == 1) {	//¶Œü‚«
 			DrawExtendGraph(player.ix - 65, player.iy, player.ix + 196 - 65, player.iy + 145, pd[player.pcnt++ / 16 % 4 + 4], TRUE);
 		}
+		if (player.pcnt == 32) {
+			PlaySoundMem(deathse, DX_PLAYTYPE_BACK, TRUE);
+		}
 		if (player.pcnt == 64) {
 			StopSoundMem(rockBGM);
-
 			g_GameState = 3;   //ƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚Ö
 		}
 		return;
@@ -268,7 +270,7 @@ void PlayerMove() {
 		}
 	}
 	//UŒ‚(R1‚ğ‰Ÿ‚µ‚½‚ç)
-	if (g_KeyFlg & PAD_INPUT_6 && player.at[0] <= 0 && AttackExtend == 0) {
+	if (g_KeyFlg & PAD_INPUT_6 && player.at[0] <= 0 && AttackExtend == 0 && player.aHitflg == false) {
 		//UŒ‚ƒtƒ‰ƒO(Å‘å‚TŒÂ“¯•`‰æ)
 		for (int ai = 0; ai < 5; ai++) {
 			if (player.af[ai] == 0) {
@@ -282,6 +284,7 @@ void PlayerMove() {
 				break;
 			}
 		}
+		PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 		player.pcnt = 5;
 	}
 }

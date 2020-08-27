@@ -5,11 +5,13 @@
 #include "GameInit.h"
 #include "player.h"
 #include "GameOver.h"
+#include "sounds.h"
 
 
 void DrawGameOver(void) {
 	DrawGraph(0, 0, GameOverimg, TRUE);
 	if (g_KeyFlg & PAD_INPUT_1) {
+		PlaySoundMem(dese, DX_PLAYTYPE_BACK, TRUE);
 		g_GameState = 0;	// ƒQ[ƒ€ƒƒCƒ“ˆ—‚Ö
 
 	}

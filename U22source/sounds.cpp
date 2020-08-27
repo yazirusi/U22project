@@ -6,6 +6,11 @@ int bpm;
 int prse;
 int grse;
 int jpse;
+int attackse;	//攻撃を出した瞬間のSE
+int attackse2;	//食らったときのSE
+int dese;	//シーケンスSE
+int deathse;	//死ぬときのSE
+int doorse;	//ドアSE
 
 
 /***************************************
@@ -28,16 +33,23 @@ int LoadSounds() {
 	// ジャンプの時の音
 	if ((jpse = LoadSoundMem("sounds/ジャンプ.mp3")) == -1)return -1;
 
+	if ((attackse = LoadSoundMem("sounds/se_maoudamashii_explosion06.mp3")) == -1)return -1;
+	if ((attackse2 = LoadSoundMem("sounds/se_maoudamashii_battle18.mp3")) == -1)return -1;
+	if ((dese = LoadSoundMem("sounds/decision9.mp3")) == -1)return -1;
+	if ((deathse = LoadSoundMem("sounds/down1.mp3")) == -1)return -1;
+	if ((doorse = LoadSoundMem("sounds/door-open1.mp3")) == -1)return -1;
+
 	//BGMの調整
 	ChangeVolumeSoundMem(80, rockBGM);
-
 	ChangeVolumeSoundMem(80, bpm);
-
 	ChangeVolumeSoundMem(100, prse);
-
 	ChangeVolumeSoundMem(90, grse);
-
 	ChangeVolumeSoundMem(100, jpse);
+	ChangeVolumeSoundMem(80, attackse);
+	ChangeVolumeSoundMem(80, attackse2);
+	ChangeVolumeSoundMem(100, dese);
+	ChangeVolumeSoundMem(150, deathse);
+	ChangeVolumeSoundMem(100, doorse);
 
 	return 0;
 }

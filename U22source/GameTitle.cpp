@@ -4,9 +4,11 @@
 #include "main.h"
 #include "GameInit.h"
 #include "GameTitle.h"
+#include "sounds.h"
 void DrawGameTitle(void) {
 	DrawGraph(0, 0, Titleimg, TRUE);
 	if (g_KeyFlg & PAD_INPUT_2) {
+		PlaySoundMem(dese, DX_PLAYTYPE_BACK, TRUE);
 		g_GameState = 1;	// ƒQ[ƒ€ƒƒCƒ“ˆ—‚Ö
 
 	}

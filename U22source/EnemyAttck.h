@@ -1,7 +1,7 @@
 #pragma once
 #include"DxLib.h"
 
-const int MAXAttack = 30;	//•\¦‚·‚éUŒ‚‚ÌÅ‘åŒÂ”
+const int MAXAttack = 15;	//•\¦‚·‚éUŒ‚‚ÌÅ‘åŒÂ”
 extern double EnemyAttackX[MAXAttack];//“G‚ÌUŒ‚‚Ì‚˜À•W
 extern double EnemyAttackY[MAXAttack];//“G‚ÌUŒ‚‚ÌYÀ•W
 extern double EnemyAttackRot[MAXAttack];	//“G‚ÌUŒ‚‚ªi‚ŞŠp“x

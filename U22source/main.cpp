@@ -37,7 +37,7 @@ double Fps = 0.0;
 double t = 0, ave = 0, f[60];
 
 int count = 0;
-bool debug = true;
+bool debug = false;
 
 /***********************************************
  * プログラムの開始
@@ -228,11 +228,13 @@ void GameMain(void)
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
 	//4810 4860 7380 7420
 	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 7380 && player.px < 7420*/) {	//ラスボス
+		PlaySoundMem(doorse, DX_PLAYTYPE_BACK, TRUE);
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
 		PlayerInit();
 		ScroolInit();
 		EnemyInit();
+		PlayerAttackInit();
 		for (int i = 0; i < MAXEnemy; i++) {
 			airman[i].Airmaninit();//エアーマンの初期化
 		}

@@ -5,7 +5,7 @@
 #define Air_Speed 2
 #include "EnemyAttck.h"
 
-const int MAXEnemy = 100;
+const int MAXEnemy = 20;
 
 //“G‚Ì\‘¢‘Ì
 struct ENEMY

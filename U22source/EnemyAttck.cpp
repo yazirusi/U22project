@@ -212,6 +212,7 @@ void EnemyAttck(void) {
 		if (Enemy[i].type == 2) {
 			for (int a = 0; a < MAXAttack; a++) {
 				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[a] = true;
 					EnemyAttackX[a] = Enemy[i].x;//“G‚Ì‚˜À•W‚ð“ü‚ê‚é
 					EnemyAttackY[a] = Enemy[i].y;//“G‚Ì‚™À•W‚ð“ü‚ê‚é
@@ -256,6 +257,7 @@ void EnemyAttck(void) {
 			Enemy[i].MoveFlg = false;//“G‚Ì“®‚«‚ðŽ~‚ß‚é
 			for (int a = 0; a < MAXAttack; a++) {
 				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[a] = true;
 					EnemyAttackX[a] = Enemy[i].x;//“G‚Ì‚˜À•W‚ð“ü‚ê‚é
 					EnemyAttackY[a] = Enemy[i].y;//“G‚Ì‚™À•W‚ð“ü‚ê‚é
@@ -277,6 +279,7 @@ void EnemyAttck(void) {
 			Enemy[i].MoveFlg = false;//“G‚Ì“®‚«‚ðŽ~‚ß‚é
 			for (int a = 0; a < MAXAttack; a++) {
 				if (AttackFlg[a] == false && Enemy[i].AttackInterval == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[a] = true;
 					EnemyAttackX[a] = Enemy[i].x;//“G‚Ì‚˜À•W‚ð“ü‚ê‚é
 					EnemyAttackY[a] = Enemy[i].y;//“G‚Ì‚™À•W‚ð“ü‚ê‚é
@@ -331,6 +334,7 @@ void EnemyAttck(void) {
 				Hitcheck((int)EnemyAttackX[i], (int)EnemyAttackY[i] + 20, AttackDir[i], true) == 1 ||
 				Hitcheck((int)EnemyAttackX[i] + 20, (int)EnemyAttackY[i] + 20, AttackDir[i], true) == 1)
 				&& player.hit == false) {
+				PlaySoundMem(attackse2, DX_PLAYTYPE_BACK, TRUE);
 				//–hŒä‚µ‚Ä‚¢‚½‚ç
 				if (player.protect == true) {
 					//Perfect
