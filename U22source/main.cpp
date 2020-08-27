@@ -37,6 +37,7 @@ int counter = 0, FpsTime[2] = { 0, }, FpsTime_i = 0;
 double Fps = 0.0;
 
 double t = 0, ave = 0, f[60];
+bool soundsf = false;
 
 int count = 0;
 bool debug = false;
@@ -105,8 +106,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}*/
 
 		RefreshTime = GetNowCount();            //今の時間を取得
-
-		ClearDrawScreen();		// 画面の初期化
+		if (g_GameState != 5) {
+			ClearDrawScreen();		// 画面の初期化
+		}
 		if (count > 120) {
 			switch (g_GameState) {
 			case 0:
@@ -150,7 +152,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			DrawFormatString(200, 190, 0xffffff, "%d", airman[0].Jump);
 			DrawFormatString(200, 210, 0xffffff, "%d", airman[0].JumpFlg);
 			DrawFormatString(200, 240, 0xffffff, "%d", airman[0].JumpCount);
-			DrawFormatString(200, 270, 0xffffff, "%d", Enemy[50].x);
+			//DrawFormatString(200, 270, 0xffffff, "%d", Enemy[50].x);
 
 			DrawFormatString(300, 200, 0x000000, "%d", Enemy[0].x);
 			DrawFormatString(300, 230, 0x000000, "%d", AttackFlg[0]);
@@ -232,7 +234,7 @@ void GameMain(void)
 	//DrawFormatString(50, 150, 0xffffff, "%d", player.p_x);
 	//DrawBox(39 * player.p_x, 39 * p_y, 39 * player.p_x + 39, 39 * p_y + 39, 0xffffff, TRUE); //プレイヤーのbox
 	//4810 4860 7380 7420
-	if (g_KeyFlg & PAD_INPUT_3 /*&& player.px > 7380 && player.px < 7420*/) {	//ラスボス
+	if (g_KeyFlg & PAD_INPUT_3 && player.px > 7380 && player.px < 7420) {	//ラスボス
 		PlaySoundMem(doorse, DX_PLAYTYPE_BACK, TRUE);
 		g_stage = 1;	//マップチップ
 		StopSoundMem(rockBGM);
@@ -253,10 +255,17 @@ void GameMain(void)
 	//SetFontSize(27);
 	//DrawString(995, 780, "Yボタンで、操作説明", 0xffffff);
 	//if (g_KeyFlg & PAD_INPUT_4) {
-	//	StopSoundMem(rockBGM);
-	//	g_GameState = 5;
+	//StopSoundMem(rockBGM);
+	//g_GameState = 5;
 	//}
 	if (g_KeyFlg & PAD_INPUT_8) {
+		if (CheckSoundMem(rockBGM) == 1) {
+			soundsf = true;
+		}
+		else {
+			soundsf = false;
+		}
+		StopSoundMem(rockBGM);
 		g_GameState = 5;
 	}
 }
@@ -275,7 +284,6 @@ void FpsTimeFanction() {
 		SetFontSize(32);
 		DrawFormatString(565, 460, 0x000000, "FPS %.1f", Fps); //fpsを表示
 	return;*/
-
 
 	int i;
 

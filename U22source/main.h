@@ -18,6 +18,7 @@ extern double Fps;
 extern double t, ave, f[60];
 extern int count;
 extern bool debug;
+extern bool soundsf;
 
 typedef struct {
 	int month;         //ŒŽ

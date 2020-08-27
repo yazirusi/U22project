@@ -19,7 +19,6 @@ void DrawGameTitle(void) {
 	}
 	SetFontSize(45);
 		DrawString(250, 550, "B ボ タ ン を 押 し て く だ さ い", 0x0000ff);
-	SetFontSize(27);
-		DrawString(250, 300, "Yボタンで、操作説明", 0xffffff);
-		
+	SetFontSize(45);
+		DrawString(405, 620, "Y ボタンで、操作説明", 0x0000ff);
 }

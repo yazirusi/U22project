@@ -85,6 +85,8 @@ void PlayerMove() {
 		}
 		if (player.pcnt == 64) {
 			StopSoundMem(rockBGM);
+			player.hit = false;
+			player.hitcnt = 0;
 			g_GameState = 3;   //ゲームオーバー画面へ
 		}
 		return;
@@ -209,10 +211,10 @@ void PlayerMove() {
 		player.tempY = player.py;
 		player.py += (player.py - player.hozonY) + 1;
 		player.hozonY = player.tempY;
-		player.p_y = player.py / 40;
+		//player.p_y = player.py / 40;
 
 		//上昇してるとき
-		if (player.py - player.hozonY <= 0 && player.p_y != player.sp_y) {
+		if (player.py - player.hozonY <= 0 /*&& player.p_y != player.sp_y*/) {
 			//頭上にブロックがあった場合
 			if (CheckHitBlock(3,0) == 1) {
 				player.hozonY = player.py;	//落ちる瞬間の座標
@@ -236,7 +238,7 @@ void PlayerMove() {
 		}
 
 		//下降してるとき
-		if (player.py - player.hozonY > 0 && player.p_y != player.sp_y - 6 || player.dflag == 1) {
+		if (player.py - player.hozonY > 0 /*&& player.p_y != player.sp_y - 6*/ || player.dflag == 1) {
 			player.dflag = 1;
 			/*if (g_StageData[0][player.p_y - 1][player.p_x] != 1)
 				g_StageData[0][player.p_y - 1][player.p_x] = 0;
