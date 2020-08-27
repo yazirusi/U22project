@@ -8,6 +8,7 @@
 #include "GameInit.h"
 #include "sounds.h"
 #include "notes.h"
+#include "Ending.h"
 
 int AttackExtend = 0;	//ƒQ[ƒW‚Ì—Ê‚ÅUŒ‚”ÍˆÍ‚ªL‚Ñ‚é—Ê
 int imgflg;
@@ -163,6 +164,7 @@ void PlayerAttack() {
 						airman[j].drawf = 0;
 						airman[j].x = 0;
 						airman[j].y = 0;//“G‚ÌÀ•W‚Ì‰Šú‰»
+						EnemyFascinationCount++;
 					}
 
 					player.hp += note.conbo;
@@ -198,6 +200,7 @@ void PlayerAttack() {
 						Enemy[j].drawf = 0;
 						Enemy[j].x = 0;
 						Enemy[j].y = 0;//“G‚ÌÀ•W‚Ì‰Šú‰»
+						EnemyFascinationCount++;
 					}
 					player.hp += note.conbo;
 					if (player.hp > 100) {

@@ -6,6 +6,8 @@
 #include "GameInit.h"
 #include "key.h"
 
+int EnemyFascinationCount;
+
 void DrawEnding() {
 
 	SetFontSize(50);
@@ -43,6 +45,7 @@ void DrawEnding() {
 	static int playerspeed = 2;//プレイヤーの移動量
 	static int EndingCount = 0;//文字の描画用のフレームをカウントする変数
 
+	
 	if (px == 0 && py == 0)
 	{
 		for (int y = 0; y < MAPHEIGHT; y++) {
@@ -118,12 +121,12 @@ void DrawEnding() {
 	// 描画輝度を暗くする
 	SetDrawBright(255, 255, 255);
 
-	DrawExtendGraph(pix, piy, pix + 196, piy + 145, p[pcnt++ / 8 % 5 + 1], TRUE);
-
+	//エンディング文字描画用のカウント
 	if (EndingCount < 1201) {
 		EndingCount++;
 	}
 
+	//エンディングの文字描画
 	if (EndingCount <= 300) {
 		DrawFormatString(320, 100, 0xffffff, "メンバー紹介\n内間　光哉\n高安　正志\n山城　悠碧\n大城　秀人\n譜久村　聖");
 	}
@@ -140,7 +143,29 @@ void DrawEnding() {
 	{
 		DrawFormatString(320, 100, 0xffffff, "Xボタンでタイトルに戻ります");
 	}
+	
+	//EnemyFascinationCount = 3;
 
+	//敵の画像を描画用の配列に入れる
+	int Enemy[3]={ EnemyImg[0],EnemyImg2[0],EnemyImg3[0]};
+
+	//倒した敵の数によって描画する
+	for (int i = 0; i < EnemyFascinationCount*2; i++) {
+		for (int y = 1; y < MAPHEIGHT; y++) {
+			for (int x = 1; x < MAPWIDTH; x++) {
+				if (g_StageData[g_stage][y][x] == 1 && g_StageData[g_stage][y - 1][x] == 0) {
+					//DrawBox(x * 40 + (i * 80)+sx, (y - 1) * 40, x * 40 + (i * 80) + 40+sx, (y - 1) * 40 + 40, 0xffffff, true);
+					DrawGraph((40 * x) + sx + (i * (1280 / EnemyFascinationCount)), 40 * (y - 2), Enemy[i%3], TRUE);
+					break;
+				}
+			}
+		}
+	}
+
+	//主人公描画
+	DrawExtendGraph(pix, piy, pix + 196, piy + 145, p[pcnt++ / 8 % 5 + 1], TRUE);
+
+	//タイトルに戻る
 	if (EndingCount > 1200 && g_KeyFlg & PAD_INPUT_3)
 	{
 		g_GameState = 0;
