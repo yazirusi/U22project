@@ -18,6 +18,7 @@
 #include "GameOver.h"
 #include "pause.h"
 #include "Ending.h"
+#include "sousa.h"
 
 /***********************************************
  * 関数のプロトタイプ宣言
@@ -30,6 +31,7 @@ void BossStage(void);		//ボスステージへの移動
 void FpsTimeFanction(void);
 void wait_fanc(void);
 void Pause(void);
+void Sousa(void);
 
 int counter = 0, FpsTime[2] = { 0, }, FpsTime_i = 0;
 double Fps = 0.0;
@@ -127,6 +129,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				break;
 			case 6:
 				DrawEnding(); //エンディング処理
+				break;
+			case 7:
+				Sousa(); //操作説明
 				break;
 			}
 		}
@@ -245,10 +250,13 @@ void GameMain(void)
 		}
 		g_GameState = 4;
 	}
-	SetFontSize(27);
-	DrawString(995, 780, "Yボタンで、操作説明", 0xffffff);
-	if (g_KeyFlg & PAD_INPUT_4) {
-		StopSoundMem(rockBGM);
+	//SetFontSize(27);
+	//DrawString(995, 780, "Yボタンで、操作説明", 0xffffff);
+	//if (g_KeyFlg & PAD_INPUT_4) {
+	//	StopSoundMem(rockBGM);
+	//	g_GameState = 5;
+	//}
+	if (g_KeyFlg & PAD_INPUT_8) {
 		g_GameState = 5;
 	}
 }
