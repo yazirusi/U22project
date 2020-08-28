@@ -9,6 +9,9 @@
 Airman airman[MAXEnemy];
 AIR Air[MAXEnemy];
 
+int intt = 0;
+int innt = 0;
+
 /***************************************
 *エネミーの動き
 ***************************************/
@@ -136,9 +139,6 @@ void EnemyMove(void) {
 **************/
 void Airman::Airmaninit() {
 	x = 0;
-
-	static int intt = 0;
-	static int innt = 0;
 
 	Perception = 12 * 40;//感知範囲を初期化
 

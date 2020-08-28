@@ -60,6 +60,8 @@ struct AIR
 
 extern Airman airman[MAXEnemy];
 extern AIR Air[MAXEnemy];
+extern int intt;
+extern int innt;
 
 void EnemyMove();
 int Hitcheck(int hx, int hy, int direction, bool pf/*, int Move*/);

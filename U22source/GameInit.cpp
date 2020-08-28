@@ -33,7 +33,8 @@ void GameInit()
 		}
 
 		EnemyInit();
-
+		intt = 0;
+		innt = 0;
 		for (int i = 0; i < MAXEnemy; i++) {
 			airman[i].Airmaninit();//エアーマンの初期化
 			Air[i].AirInit();//エアーマンの攻撃の初期化
@@ -45,6 +46,8 @@ void GameInit()
 		ScroolInit();
 		EnemyInit();
 		PlayerAttackInit();
+		intt = 0;
+		innt = 0;
 		for (int i = 0; i < MAXEnemy; i++) {
 			airman[i].Airmaninit();//エアーマンの初期化
 		}

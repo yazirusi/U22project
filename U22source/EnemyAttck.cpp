@@ -36,6 +36,7 @@ void Airman::AirmanAttack() {
 		for (int i = 0; i < MAXAttack; i++) {
 			if (AttackFlg[i] == false) {
 				if (airman[Air[1].ReloadCount].Jump == 20 && AttackInterval == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[i] = true;
 					EnemyAttackX[i] = x;
 					EnemyAttackY[i] = y - 40;
@@ -44,6 +45,7 @@ void Airman::AirmanAttack() {
 					AttackDir[i] = direction;
 				}
 				if (airman[Air[1].ReloadCount].Jump == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[i] = true;
 					EnemyAttackX[i] = x;
 					EnemyAttackY[i] = y - 40;
@@ -62,6 +64,7 @@ void Airman::AirmanAttack() {
 		for (int i = 0; i < MAXAttack; i++) {
 			if (AttackFlg[i] == false) {
 				if (airman[Air[1].ReloadCount].Jump == 20 && AttackInterval == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[i] = true;
 					EnemyAttackX[i] = x;
 					EnemyAttackY[i] = y - 40;
@@ -70,6 +73,7 @@ void Airman::AirmanAttack() {
 					AttackDir[i] = direction;
 				}
 				if (airman[Air[1].ReloadCount].Jump == 0) {
+					PlaySoundMem(attackse, DX_PLAYTYPE_BACK, TRUE);
 					AttackFlg[i] = true;
 					EnemyAttackX[i] = x;
 					EnemyAttackY[i] = y - 40;
