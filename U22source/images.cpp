@@ -87,7 +87,7 @@ int LoadImages()
 	if ((ef[3] = LoadGraph("images/effect4.png")) == -1)return -1;
 
 	//“G‚ÌƒCƒ‰ƒXƒg
-	if ((EnemyAttackImg = LoadGraph("images/‰¹•„.png")) == -1) return -1;
+	if ((EnemyAttackImg = LoadGraph("images/note.bmp")) == -1) return -1;
 	if ((EnemyImg[0] = LoadGraph("images/e_idle-1.png")) == -1) return -1;
 	if ((EnemyImg[1] = LoadGraph("images/e_walk-1.png")) == -1) return -1;
 	if ((EnemyImg[2] = LoadGraph("images/e_walk-2.png")) == -1) return -1;
