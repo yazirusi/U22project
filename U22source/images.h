@@ -17,6 +17,7 @@ extern int EnemyImg[7]; //敵イラスト
 extern int EnemyImg2[7];	//敵イラスト
 extern int EnemyImg3[7];	//敵イラスト
 extern int lasboss[4];
+extern int baria;
 
 extern int Backimg;  //背景イラスト
 extern int Backimg2; //背景イラスト

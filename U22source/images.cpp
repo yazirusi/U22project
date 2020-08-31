@@ -19,6 +19,7 @@ int EnemyImg[7];	//敵イラスト
 int EnemyImg2[7];	//敵イラスト
 int EnemyImg3[7];	//敵イラスト
 int lasboss[4];
+int baria;
 
 int Backimg;  //背景イラスト
 int Backimg2;  //背景イラスト
@@ -117,6 +118,7 @@ int LoadImages()
 	if ((roadimg2 = LoadGraph("images/road02.bmp")) == -1)return -1;
 	if ((roadimg3 = LoadGraph("images/road03.bmp")) == -1)return -1;
 	if ((Backimg5 = LoadGraph("images/lassboss_stage.png")) == -1)return -1;
+	if ((baria = LoadGraph("images/baria.png")) == -1)return -1;
 
 
 	//タイトルとか

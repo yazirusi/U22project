@@ -9,6 +9,7 @@
 #include "BackgroundMove.h"
 #include "sounds.h"
 #include "GameInit.h"
+#include "main.h"
 
 //player\‘¢‘Ì
 PLAYER player;
@@ -69,7 +70,9 @@ void PlayerMove() {
 	}
 
 	//ƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è•`‰æ
-	DrawBox(player.px + sx, player.py - 40, player.px + 40 + sx, player.py + 40, 0xFF0000, FALSE);
+	if (debug == true) {
+		DrawBox(player.px + sx, player.py - 40, player.px + 40 + sx, player.py + 40, 0xFF0000, FALSE);
+	}
 
 	//hp‚OˆÈ‰º‚Å€–S
 	if (player.hp <= 0) {

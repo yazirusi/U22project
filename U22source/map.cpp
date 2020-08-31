@@ -141,5 +141,6 @@ void DrawMap() {
 
 	if (g_stage == 1) {
 		DrawGraph(0, 0, Backimg5, true);
+		DrawGraph(670, 210, baria, true);
 	}
 }
