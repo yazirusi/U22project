@@ -169,5 +169,14 @@ void DrawEnding() {
 	if (EndingCount > 1200 && g_KeyFlg & PAD_INPUT_3)
 	{
 		g_GameState = 0;
+		spd = 0;//背景画像のスクロール量
+		scrool = 0;//背景画像２のスクロール量
+		px = 0, py = 0;//主人公のｘ、ｙ座標
+		pcnt = 0;//画像用の変数
+		piy = 0, pix = 0;//主人公の描画用のｘ、ｙ座標
+		sx = 0;//マップのスクロール量
+		playerspeed = 2;//プレイヤーの移動量
+		EndingCount = 0;//文字の描画用のフレームをカウントする変数
+		EnemyFascinationCount = 0;//倒した敵の数
 	}
 }
