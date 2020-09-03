@@ -5,7 +5,7 @@
 #include "player.h"
 #include "GameInit.h"
 #include "key.h"
-
+#include "sounds.h"
 int EnemyFascinationCount;
 
 void DrawEnding() {
@@ -164,10 +164,11 @@ void DrawEnding() {
 
 	//主人公描画
 	DrawExtendGraph(pix, piy, pix + 196, piy + 145, p[pcnt++ / 8 % 5 + 1], TRUE);
-
+	//PlaySoundMem(clearbgm, DX_PLAYTYPE_BACK, TRUE);
 	//タイトルに戻る
 	if (EndingCount > 1200 && g_KeyFlg & PAD_INPUT_3)
 	{
+		StopSoundMem(clearbgm);
 		g_GameState = 0;
 		spd = 0;//背景画像のスクロール量
 		scrool = 0;//背景画像２のスクロール量
@@ -178,5 +179,6 @@ void DrawEnding() {
 		playerspeed = 2;//プレイヤーの移動量
 		EndingCount = 0;//文字の描画用のフレームをカウントする変数
 		EnemyFascinationCount = 0;//倒した敵の数
+		PlaySoundMem(Titlebgm, DX_PLAYTYPE_BACK, TRUE);
 	}
 }

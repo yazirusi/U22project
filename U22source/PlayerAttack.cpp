@@ -230,6 +230,7 @@ void PlayerAttack() {
 					player.ay[i] = 0;
 
 					if (Enemy[j].HP <= 0) {
+						PlaySoundMem(clearbgm, DX_PLAYTYPE_BACK, TRUE);
 						Enemy[j].HPdrawf = false;
 						Enemy[j].drawf = 0;
 						Enemy[j].x = 0;

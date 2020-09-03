@@ -10,6 +10,7 @@ void DrawGameTitle(void) {
 	if (g_KeyFlg & PAD_INPUT_2) {
 		PlaySoundMem(dese, DX_PLAYTYPE_BACK, TRUE);
 		g_GameState = 1;	// ƒQ[ƒ€ƒƒCƒ“ˆ—‚Ö
+		StopSoundMem(Titlebgm);
 
 	}
 

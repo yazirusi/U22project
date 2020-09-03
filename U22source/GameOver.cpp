@@ -11,9 +11,10 @@
 void DrawGameOver(void) {
 	DrawGraph(0, 0, GameOverimg, TRUE);
 	if (g_KeyFlg & PAD_INPUT_1) {
+		StopSoundMem(GObgm);
 		PlaySoundMem(dese, DX_PLAYTYPE_BACK, TRUE);
 		g_GameState = 0;	// ƒQ[ƒ€ƒƒCƒ“ˆ—‚Ö
-
+		PlaySoundMem(Titlebgm, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	SetFontSize(40);

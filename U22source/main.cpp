@@ -83,7 +83,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	double dNextTime = GetNowCount();
 	int RefreshTime = 0;
-
+	PlaySoundMem(Titlebgm, DX_PLAYTYPE_BACK, TRUE);
 	// ÉQÅ[ÉÄÉãÅ[Év
 	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 

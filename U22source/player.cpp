@@ -87,6 +87,7 @@ void PlayerMove() {
 			PlaySoundMem(deathse, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (player.pcnt == 64) {
+			PlaySoundMem(GObgm, DX_PLAYTYPE_BACK, TRUE);
 			StopSoundMem(rockBGM);
 			player.hit = false;
 			player.hitcnt = 0;

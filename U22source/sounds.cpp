@@ -11,7 +11,9 @@ int attackse2;	//食らったときのSE
 int dese;	//シーケンスSE
 int deathse;	//死ぬときのSE
 int doorse;	//ドアSE
-
+int Titlebgm;
+int clearbgm;
+int GObgm;
 
 /***************************************
 * サウンド読み込み
@@ -39,6 +41,10 @@ int LoadSounds() {
 	if ((deathse = LoadSoundMem("sounds/down1.mp3")) == -1)return -1;
 	if ((doorse = LoadSoundMem("sounds/door-open1.mp3")) == -1)return -1;
 
+	if ((Titlebgm = LoadSoundMem("sounds/game_maoudamashii_7_rock52.mp3")) == -1)return -1;
+	if ((clearbgm = LoadSoundMem("sounds/n12.mp3")) == -1)return -1;
+	if ((GObgm = LoadSoundMem("sounds/tomoshibi.mp3")) == -1)return -1;
+
 	//BGMの調整
 	ChangeVolumeSoundMem(80, rockBGM);
 	ChangeVolumeSoundMem(80, bpm);
@@ -50,6 +56,9 @@ int LoadSounds() {
 	ChangeVolumeSoundMem(100, dese);
 	ChangeVolumeSoundMem(150, deathse);
 	ChangeVolumeSoundMem(100, doorse);
+	ChangeVolumeSoundMem(100, Titlebgm);
+	ChangeVolumeSoundMem(100, clearbgm);
+	ChangeVolumeSoundMem(100, GObgm);
 
 	return 0;
 }
